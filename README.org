@@ -1,0 +1,22 @@
+#+TITLE: README
+#+TEXT:                                           Create:      2013-09-16
+#+TEXT:                                           Last Update: 2013-10-11
+#+STARTUP: showall
+
+* profile
+
+My Configurations for Emacs, Zsh, and more.
+
+* iTerm
+
+It just fits me on "MacBook Air 13-inch". 
+Maybe, you feel small characters if you use a mac larger than this model.
+
+** Text
+
+| Font           | 14pt MigMix 2M Regular |
+| Cursor         | Box                    |
+
+** Color
+
+I'm looking for color style.
