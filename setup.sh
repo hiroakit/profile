@@ -1,12 +1,10 @@
 #!/bin/sh
 
+readonly EMACS_CONF_DIR=${HOME}/.emacs.d
+readonly EMACS_CONF_ORG=$(cd $(dirname ${0});pwd)/emacs
+
 echo "シンボリックリンクを作成します"
 echo ""
-
-cd ./emacs
-EMACS_CONF_DIR=${HOME}/.emacs.d
-EMACS_CONF_ORG=`dirname ${0}`
-expr "${0}" : "/.*" > /dev/null || EMACS_CONF_ORG=`(cd "${cwd}" && pwd)`
 
 echo ".emacs.d \t\t: シンボリックリンク判定"
 if [ -L ${EMACS_CONF_DIR} ] ; then
