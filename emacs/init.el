@@ -8,6 +8,7 @@
         (expand-file-name "~/.emacs.d/site-lisp/")
         (expand-file-name "~/.emacs.d/site-lisp/auto-install/")
         (expand-file-name "~/.emacs.d/site-lisp/auto-complete/")
+        (expand-file-name "~/.emacs.d/site-lisp/scala-mode2/")
         ;; (expand-file-name "~/.emacs.d/site-lisp/mew/")
         ;; (expand-file-name "~/.emacs.d/site-lisp/org/")
 
