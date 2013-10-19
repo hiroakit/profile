@@ -30,3 +30,17 @@
 ;; buffer-nameを識別しやすくする設定
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;; Emacsの配色
+(custom-set-faces
+ '(default ((t
+             (:background "black" :foreground "#CCCCCC")
+             )))
+ '(cursor ((((class color)
+             (background dark))
+            (:background "#00AA00"))
+           (((class color)
+             (background light))
+            (:background "#999999"))
+           (t ())
+           )))
