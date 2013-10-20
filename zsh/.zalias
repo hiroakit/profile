@@ -1,0 +1,54 @@
+#!/usr/local/bin/zsh
+
+#
+# Command Alias
+#
+
+alias -g G='| grep'
+alias -g H='| head'
+alias -g T='| tail'
+
+alias la="ls -a"
+alias lf="ls -F"
+alias ll="ls -l"
+alias du="du -h"
+alias df="df -h"
+alias mv='nocorrect mv'
+alias cp='nocorrect cp'
+alias mkdir='nocorrect mkdir'
+alias h='history'
+alias ha='history-all'
+alias su="su -l"
+
+#
+# SSH Alias
+#
+alias cloudcore="ssh -2 hiroaki@180.235.229.57 -i ~/.ssh/id_rsa"
+
+#
+# GUI Application
+# emacs, excel, Autodesk Maya
+#
+case "${OSTYPE}" in
+    darwin*)
+	alias e="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+	alias maya="open -a /Applications/Autodesk/maya2013/Maya.app/Contents/bin/maya"
+	alias excel="open -a /Applications/Microsoft\ Office\ 2011/Microsoft\ Excel.app/"
+    # 以下の3つのApacheを操作するエイリアスは危険である．
+    # Appleの用意した環境設定にある「Web共有」で起動と終了を行うべきである．
+    # これに従わない場合，Apacheの動作が不安定になる．
+    #alias apacheStart="sudo /usr/sbin/apachectl start"
+    #alias apacheStop="sudo /usr/sbin/apachectl stop"
+    #alias apacheReStart="sudo /usr/sbin/apachectl restart"
+	;;
+    linux*)
+	alias e="/usr/bin/emacs"
+	;;
+    cygwin*)
+	alias e="/usr/bin/emacs"
+    # alias MSBuild="cygdrive/c/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe"
+    # zsh: no such file or directory: cygdrive/c/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe と出るので，このエイリアスはコメントにする
+
+
+	;;    
+esac

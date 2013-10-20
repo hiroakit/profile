@@ -1,0 +1,44 @@
+#+TITLE: README
+#+TEXT:                                           Create:      2013-09-16
+#+TEXT:                                           Last Update: 2013-10-20
+#+STARTUP: showall
+
+* profile
+
+My Configurations for Emacs, Zsh, and more.
+
+* How to install
+
+#+BEGIN_SRC sh
+$ git clone https://github.com/hiroakit/profile
+$ sh /path/to/profile/setup.sh # Seek confirmation as to create symbolic link on $HOME
+#+END_SRC
+
+* Emacs
+
+I'll write later about Emacs's config.
+
+* Zsh
+
+|-----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------|
+| Event                       | Flow                                                                                                                                       |
+|-----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------|
+| ログインシェル起動時        | /etc/zshenv -> $ZDOTDIR/.zshenv -> /etc/zprofile -> $ZDOTDIR/.zprofile -> /etc/zshrc -> $ZDOTDIR/.zshrc -> /etc/zlogin -> $ZDOTDIR/.zlogin |
+| 対話型シェル起動時 　　　　 | /etc/zshenv -> $ZDOTDIR/.zshenv -> /etc/zshrc -> $ZDOTDIR/.zshrc                                                                           |
+| シェルスクリプト実行時など  | /etc/zshenv -> $ZDOTDIR/.zshenv                                                                                                            |
+|-----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------|
+
+* iTerm
+
+It just fits me on "MacBook Air 13-inch". 
+Maybe, you feel small characters if you use a mac larger than this model.
+
+** Text
+
+| Font           | 14pt MigMix 2M Regular |
+| Cursor         | Box                    |
+
+** Color
+
+I'm looking for color style.
+
