@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: PlayControllerResultTodo
+# key: ResultTodo
+# --
+public static Result ${1:method name}() {
+    return TODO;
+}    
