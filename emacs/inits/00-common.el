@@ -44,3 +44,7 @@
             (:background "#999999"))
            (t ())
            )))
+
+;; 矩形選択
+(cua-mode t)
+(setq cua-enable-cua-keys nil)
