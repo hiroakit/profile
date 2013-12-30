@@ -14,6 +14,7 @@
     foreign-regexp
     web-mode
     csharp-mode
+    cmake-mode
     ))
 
 (let ((not-installed (loop for x in installing-package-list
