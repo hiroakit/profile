@@ -13,6 +13,7 @@
     auto-complete
     foreign-regexp
     web-mode
+    csharp-mode
     ))
 
 (let ((not-installed (loop for x in installing-package-list
