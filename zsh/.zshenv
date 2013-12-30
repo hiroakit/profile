@@ -78,3 +78,8 @@ export GTAGSLABEL=exuberant-ctags
 
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
+
+## rbenv (on Mac OS X Mountain Lion)
+export RBENV_ROOT=$HOME/.rbenv
+export PATH="$RBENV_ROOT/bin:$PATH"
+eval "$(rbenv init -)"
