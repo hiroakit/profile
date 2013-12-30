@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ArrayList  
+# key: Ar
+# java.util.*のimportが必要;
+# --
+
+List<${1:class}> ${2:name} = new ArrayList<${3:class}>();

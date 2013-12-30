@@ -3,7 +3,7 @@
 #+TEXT:                                           Last Update: 2013-10-20
 #+STARTUP: showall
 
-* profile
+* What's this?
 
 My Configurations for Emacs, Zsh, and more.
 
@@ -17,6 +17,15 @@ $ sh /path/to/profile/setup.sh # Seek confirmation as to create symbolic link on
 * Emacs
 
 I'll write later about Emacs's config.
+This config will get many elisp as below from ELPA on first launch.
+
+- scala-mode2
+- yasnippet
+- auto-complete
+- foreign-regexp
+- web-mode
+- csharp-mode
+- cmake-mode
 
 * Zsh
 

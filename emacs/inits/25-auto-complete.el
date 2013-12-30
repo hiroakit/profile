@@ -1,6 +1,14 @@
-(when (require 'auto-complete-config nil t) ;auto-complete-config.elがある場合に以下を実行する.
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/site-lisp/auto-complete/ac-dict") ;辞書ファイルがあるフォルダを設定する．
-  (ac-config-default)) ;補完候補の情報源の読み込み．
+; auto-complete-config.elがある場合に以下を実行する
+(when 
+  (require 'auto-complete-config nil t) 
+) 
+
+;(ac-config-default)                   ; 補完候補の情報源の読み込み   
+;(add-to-list 'ac-dictionary-directories "~/.emacs.d/site-lisp/auto-complete/ac-dict") ;辞書ファイルがあるフォルダを設定する．
+  ;; (add-to-list 'ac-sources 'ac-source-yasnippet) ;; 常にYASnippetを補完候補に
+  ;; (delq 'ac-source-yasnippet ac-sources)
+;;(setq ac-comphist-file "~/.emacs.d/site-lisp/auto-complete/ac-comphist.dat") ; 補完履歴のキャッシュ先
+
 
 ;; auto-completeの初期化設定
 (when (require 'ac-company nil t) ;ac-company.elがある場合に以下を実行する.
