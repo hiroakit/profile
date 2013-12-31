@@ -15,6 +15,10 @@
     web-mode
     csharp-mode
     cmake-mode
+    ruby-mode
+    ruby-additional
+    ;; ruby-electric ELPAのバージョンは調子が良くない模様
+    ruby-block
     ))
 
 (let ((not-installed (loop for x in installing-package-list
