@@ -2,7 +2,7 @@
 (when (require 'org-habit nil t))
 
 ;; ファイルは折り畳んだ状態で開く
-;; (setq org-startup-truncated nil) 
+(setq org-startup-truncated nil) 
 
 ;; return でリンクを追う
 ;; (setq org-return-follows-link t) 
