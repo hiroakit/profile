@@ -1,17 +1,23 @@
 #+TITLE: README
 #+TEXT:                                           Create:      2013-09-16
-#+TEXT:                                           Last Update: 2013-10-20
+#+TEXT:                                           Last Update: 2014-02-15
 #+STARTUP: showall
+#+OPTIONS: \n:t
 
 * What's this?
 
-My Configurations for Emacs, Zsh, and more.
+My Configurations for Emacs, Zsh, rbenv, and more.
 
 * How to install
-
 #+BEGIN_SRC sh
 $ git clone https://github.com/hiroakit/profile
 $ sh /path/to/profile/setup.sh # Seek confirmation as to create symbolic link on $HOME
+#+END_SRC
+If you want to use the ruby, you could set up running rubyInstallUsingRbenv.sh.
+In this file, It's to write about installing program of rbenv.
+#+BEGIN_SRC sh
+$ cd /path/to/profile
+$ sh ./rubyInstallUsingRbenv.sh
 #+END_SRC
 
 * Emacs
