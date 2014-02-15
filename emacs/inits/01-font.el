@@ -1,5 +1,7 @@
 ;;; フォント設定
 
+(defvar HEDefaultFontSize 12 "フォントサイズの初期値を返します")
+
 (defun my-ja-font-setter (spec)
   (set-fontset-font nil 'japanese-jisx0208 spec)
   (set-fontset-font nil 'katakana-jisx0201 spec)
@@ -19,7 +21,7 @@
           ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
           ;; 2) Inconsolata, Migu 2M     : font-size=14, 
           ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
-          ((font-size 14)
+          ((font-size HEDefaultFontSize)
 ;           (ascii-font "Inconsolata")
            (ascii-font "Monaco")
 	   (ja-font "MigMix 2M"))
@@ -46,7 +48,7 @@
       (setq mac-allow-anti-aliasing t)))
    ((eq window-system 'w32) ; windows7
     (let
-        ((font-size 14)
+        ((font-size HEDefaultFontSize)
          (font-height 100)
          (ascii-font "Inconsolata")
          ;; (ja-font "Meiryo UI"))
