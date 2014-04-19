@@ -43,22 +43,22 @@ Your emacs will download packages from ELPA in the first, if you set up this pro
 | yasnippet       | ELPA                                           |
 
 ** How to use?
-|                                    | command                                         |
-|------------------------------------+-------------------------------------------------|
-| Show recent (anything)             | C-x C-x                                         |
-| Show command menu (anything)       | M-x                                             |
-| Do completion                      | TAB (After your type)                           |
-| Show completion menu               | TAB (After your type and there are candidates ) |
-| Hide completion menu               | ESC                                             |
-| Select up on completion menu       | C-p or up arrow key                             |
-| Select down on completion menu     | C-n or down arrow key                           |
-| Insert snippet (yasnippet)         | C-x i i                                         |
-| Create snippet (yasnippet)         | C-x i n                                         |
-| Edit registerd snippet (yasnippet) | C-x i v                                         |
-| Show agend command menu (org)      | C-c a                                           |
-| Capture task (org)                 | C-c c                                           |
-| Go to region select mode (cua)     | C RET  (Ctrl + RET)                             |
-| Cancel                             | C-g                                             |
+|                                                | command                                         |
+|------------------------------------------------+-------------------------------------------------|
+| Show recent (anything)                         | C-x C-x                                         |
+| Show command menu (anything)                   | M-x                                             |
+| Do completion (auto-complete)                  | TAB (After your type)                           |
+| Show completion menu (auto-complete)           | TAB (After your type and there are candidates ) |
+| Hide completion menu (auto-complete)           | ESC                                             |
+| Select up on completion menu (auto-complete)   | C-p or up arrow key                             |
+| Select down on completion menu (auto-complete) | C-n or down arrow key                           |
+| Insert snippet (yasnippet)                     | C-x i i                                         |
+| Create snippet (yasnippet)                     | C-x i n                                         |
+| Edit registerd snippet (yasnippet)             | C-x i v                                         |
+| Show agend command menu (org)                  | C-c a                                           |
+| Capture task (org)                             | C-c c                                           |
+| Go to region select mode (cua)                 | C RET  (Ctrl + RET)                             |
+| Cancel                                         | C-g                                             |
 
 * Zsh
 
