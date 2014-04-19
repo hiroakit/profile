@@ -23,15 +23,42 @@ $ sh ./rubyInstallUsingRbenv.sh
 * Emacs
 
 I'll write later about Emacs's config.
-This config will get many elisp as below from ELPA on first launch.
+Your emacs will download packages from ELPA in the first, if you set up this profile. The downloading packages are as follows.
 
-- scala-mode2
-- yasnippet
-- auto-complete
-- foreign-regexp
-- web-mode
-- csharp-mode
-- cmake-mode
+#+CAPTION: Using packages
+| package         | source                                         |
+|-----------------+------------------------------------------------|
+| auto-install    | http://www.emacswiki.org/emacs/auto-install.el |
+| anything        | auto-install.el                                |
+| auto-complete   | ELPA                                           |
+| cmake-mode      | ELPA                                           |
+| csharp-mode     | ELPA                                           |
+| foreign-regexp  | ELPA                                           |
+| js2-mode        | ELPA                                           |
+| ruby-additional | ELPA                                           |
+| ruby-block      | ELPA                                           |
+| ruby-mode       | ELPA                                           |
+| scala-mode2     | ELPA                                           |
+| web-mode        | ELPA                                           |
+| yasnippet       | ELPA                                           |
+
+** How to use?
+|                                    | command                                         |
+|------------------------------------+-------------------------------------------------|
+| Show recent (anything)             | C-x C-x                                         |
+| Show command menu (anything)       | M-x                                             |
+| Do completion                      | TAB (After your type)                           |
+| Show completion menu               | TAB (After your type and there are candidates ) |
+| Hide completion menu               | ESC                                             |
+| Select up on completion menu       | C-p or up arrow key                             |
+| Select down on completion menu     | C-n or down arrow key                           |
+| Insert snippet (yasnippet)         | C-x i i                                         |
+| Create snippet (yasnippet)         | C-x i n                                         |
+| Edit registerd snippet (yasnippet) | C-x i v                                         |
+| Show agend command menu (org)      | C-c a                                           |
+| Capture task (org)                 | C-c c                                           |
+| Go to region select mode (cua)     | C RET  (Ctrl + RET)                             |
+| Cancel                             | C-g                                             |
 
 * Zsh
 
