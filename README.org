@@ -22,8 +22,9 @@ $ sh ./rubyInstallUsingRbenv.sh
 
 * Emacs
 
-I'll write later about Emacs's config.
-Your emacs will download packages from ELPA in the first, if you set up this profile. The downloading packages are as follows.
+I use Emacs 24.3. I'll write later about Emacs's config.
+Your emacs will download packages from ELPA in the first, if you set up this profile. 
+The downloading packages are as follows.
 
 #+CAPTION: Using packages
 | package         | source                                         |
@@ -32,18 +33,23 @@ Your emacs will download packages from ELPA in the first, if you set up this pro
 | anything        | auto-install.el                                |
 | auto-complete   | ELPA                                           |
 | cmake-mode      | ELPA                                           |
+| cua-mode        | Built in                                       |
 | csharp-mode     | ELPA                                           |
 | foreign-regexp  | ELPA                                           |
+| init-loader     | auto-install.el                                |
 | js2-mode        | ELPA                                           |
+| org-mode        | Built in                                       |
 | ruby-additional | ELPA                                           |
 | ruby-block      | ELPA                                           |
 | ruby-mode       | ELPA                                           |
 | scala-mode2     | ELPA                                           |
 | web-mode        | ELPA                                           |
 | yasnippet       | ELPA                                           |
-
+ 
 ** How to use?
-|                                                | command                                         |
+
+#+CAPTION: Key bindings
+| action                                         | command                                         |
 |------------------------------------------------+-------------------------------------------------|
 | Show recent (anything)                         | C-x C-x                                         |
 | Show command menu (anything)                   | M-x                                             |
@@ -60,6 +66,47 @@ Your emacs will download packages from ELPA in the first, if you set up this pro
 | Go to region select mode (cua)                 | C RET  (Ctrl + RET)                             |
 | Cancel                                         | C-g                                             |
 
+#+CAPTION: Resources path
+| resource                                    | path (finished setup.sh)         |
+|---------------------------------------------+----------------------------------|
+| Dictionary files for auto-complete          | $HOME/.emacs.d/dict/ac-dict      |
+| User defined dictionaries for auto-complete | $HOME/.emacs.d/dict/ac-user-dict |
+| Snippet for yasnippet                       | $HOME/.emacs.d/snippets          |
+
+#+CAPTION: Config files
+| config for                                  | path                                         |
+|---------------------------------------------+----------------------------------------------|
+| for init-loader and expand load-path        | $HOME/.emacs.d/init.el                       |
+| Font and more                               | $HOME/.emacs.d/inits/00-common.el            |
+| Global key assign                           | $HOME/.emacs.d/inits/02-global-keybinding.el |
+| for auto-install.el                         | $HOME/.emacs.d/inits/03-auto-install.el      |
+| for cmake-mode                              | $HOME/.emacs.d/inits/04-cmake.el             |
+| for package.el                              | $HOME/.emacs.d/inits/20-package.el           |
+| for anything.el                             | $HOME/.emacs.d/inits/21-anything.el          |
+| for auto-complete-mode                      | $HOME/.emacs.d/inits/25-auto-complete.el     |
+| for org-mode                                | $HOME/.emacs.d/inits/30-org.el               |
+| for yasnippet                               | $HOME/.emacs.d/inits/35-yasnippet.el         |
+| for ruby-mode                               | $HOME/.emacs.d/inits/40-ruby.el              |
+| for javascript-mode and j2-mode             | $HOME/.emacs.d/inits/41-javascript.el        |
+| for scala2-mode                             | $HOME/.emacs.d/inits/71-scala.el             |
+| for web-mode (including asp)                | $HOME/.emacs.d/inits/72-web-mode.el          |
+| for csharp-mode                             | $HOME/.emacs.d/inits/73-csharp.el                               |
+
+** How to build Emacs ?
+I will make build script for Emacs.
+This code was including inline-patch.
+#+BEGIN_SRC sh
+$ cd ~/your/working/dir
+$ git clone git://git.savannah.gnu.org/emacs.git
+$ svn co http://svn.sourceforge.jp/svnroot/macemacsjp/inline_patch/trunk inline_patch
+$ cd ~/~/your/working/dir/emacs
+$ ./autogen.sh 
+$ patch -p0 < ../inline_patch/emacs-inline.patch
+$ ./configure --with-ns --without-x --enable-locallisppath=/usr/local/share/emacs/site-lisp <-- may need --without-selinux option
+$ make bootstrap
+$ make install
+$ mv nextstep/Emacs.app /Applications/Emacs.app
+#+END_SRC
 * Zsh
 
 |-----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------|
