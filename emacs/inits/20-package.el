@@ -19,6 +19,7 @@
     js2-mode
     csharp-mode
     cmake-mode
+    helm
     ruby-mode
     ruby-additional
     ;; ruby-electric ELPAのバージョンは調子が良くない模様

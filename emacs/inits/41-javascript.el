@@ -1,4 +1,21 @@
-;; j2-mode
+;; LICENSE
+;;
+;; j2mode configration
+;; Copyright (C) 2013-2014 Hiroaki ENDOH
+;;
+;; This program is free software; you can redistribute it and/or modify 
+;; it under the terms of the GNU General Public License as published 
+;; by the Free Software Foundation; either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, 
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of 
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+;; See the GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License 
+;; along with this program. 
+;; If not, see <http://www.gnu.org/licenses/>.
 
 ;; ELPAを使っている場合は, autoloadを明示的に設定しなくてよい
 ;; (autoload 'js2-mode "js2-mode" 
@@ -22,8 +39,3 @@
            (back-to-indentation)
            (point))))
     (skip-chars-forward "\s " point-of-indentation)))
-
-(add-hook 'hoge-mode-hook ;; 適用先のモード
-  '(lambda ()
-    
-))

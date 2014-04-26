@@ -10,10 +10,12 @@ My Configurations for Emacs, Zsh, rbenv, and more.
 
 * Requirements
 
-- System
-  - Mac OS X 10.8.5 and later
-  - Intel 64bit CPU
-  - Installed apple command line tools
+Computer below system requirements
+
+| system   | version          | note                            |
+|----------+------------------+---------------------------------|
+| Mac OS X | 10.8.5 and later | needed apple command line tools |
+| Windows  | 8.1              | maybe to run emacs              |
 
 ** Software dependencies
 
@@ -23,6 +25,8 @@ My Configurations for Emacs, Zsh, rbenv, and more.
 | Zsh      | zsh 5.0.2 (x86_64-apple-darwin12.4.0) | [[http://sourceforge.net/p/zsh/code/ci/zsh-5.0.2/tree/][git commit daa828b]] |
 | rbenv    | 0.4.0-89-g14bc162                     | [[https://github.com/sstephenson/rbenv/commit/14bc162ca606e0c61da8d82e1b99b0946d7be13f][git commit 14bc162]] |
 | iTerm2   | 1.0.0.20140421                        | [[https://github.com/gnachman/iTerm2/commit/4cf1808a903ca5f185f35c4d775f1bd7b4ac4e79][git commit 4cf1808]] |
+
+If you export a Libra-Office style's document by org-mode, you should install Libra-Office.
 
 *** How to build Emacs ?
 I will make build script for Emacs.
@@ -39,7 +43,6 @@ $ make bootstrap
 $ make install
 $ mv nextstep/Emacs.app /Applications/Emacs.app
 #+END_SRC
-
 
 * How to install?
 #+BEGIN_SRC sh
@@ -65,12 +68,12 @@ The downloading packages are as follows.
 | package         | source                                         |
 |-----------------+------------------------------------------------|
 | auto-install    | http://www.emacswiki.org/emacs/auto-install.el |
-| anything        | auto-install.el                                |
 | auto-complete   | ELPA                                           |
 | cmake-mode      | ELPA                                           |
 | cua-mode        | Built in                                       |
 | csharp-mode     | ELPA                                           |
 | foreign-regexp  | ELPA                                           |
+| helm            | ELPA                                           |
 | init-loader     | auto-install.el                                |
 | js2-mode        | ELPA                                           |
 | org-mode        | Built in                                       |
@@ -84,22 +87,31 @@ The downloading packages are as follows.
 ** Key bindings
 
 #+CAPTION: Key bindings
-| action                                         | command                                         |
-|------------------------------------------------+-------------------------------------------------|
-| Show recent (anything)                         | C-x C-x                                         |
-| Show command menu (anything)                   | M-x                                             |
-| Do completion (auto-complete)                  | TAB (After your type)                           |
-| Show completion menu (auto-complete)           | TAB (After your type and there are candidates ) |
-| Hide completion menu (auto-complete)           | ESC                                             |
-| Select up on completion menu (auto-complete)   | C-p or up arrow key                             |
-| Select down on completion menu (auto-complete) | C-n or down arrow key                           |
-| Insert snippet (yasnippet)                     | C-x i i                                         |
-| Create snippet (yasnippet)                     | C-x i n                                         |
-| Edit registerd snippet (yasnippet)             | C-x i v                                         |
-| Show agend command menu (org)                  | C-c a                                           |
-| Capture task (org)                             | C-c c                                           |
-| Go to region select mode (cua)                 | C RET  (Ctrl + RET)                             |
-| Cancel                                         | C-g                                             |
+| action                         | command               | package       | key map                                 |
+|--------------------------------+-----------------------+---------------+-----------------------------------------|
+| Show recent                    | C-x C-x               | helm          | global-map                              |
+| Show command menu              | M-x                   | helm          | global-map                              |
+| Show menu that find files      | C-x C-f               | helm          | global-map                              |
+| Show recent files              | C-x C-r               | helm          | global-map                              |
+| Show kill ring                 | M-y                   | helm          | global-map                              |
+| Show helm imenu                | C-c i                 | helm          | global-map                              |
+| Show buffers                   | C-x C-b               | helm          | global-map                              |
+| Show helm mini                 | C-x C-m               | helm          | global-map                              |
+| Show resumed helm              | M-r                   | helm          | global-map                              |
+| Delete backword character      | C-h                   | helm          | helm-map, helm-find-files-map           |
+| Execute parsistent             | TAB                   | helm          | helm-find-files-map, helm-read-file-map |
+| Do completion                  | TAB                   | auto-complete | auto-complete-mode                      |
+| Show completion menu           | TAB                   | auto-complete | auto-complete-mode                      |
+| Hide completion menu           | ESC                   | auto-complete | ac-completing-map                       |
+| Select up on completion menu   | C-p or up arrow key   | auto-complete | ac-menu-map                             |
+| Select down on completion menu | C-n or down arrow key | auto-complete | ac-menu-map                             |
+| Insert snippet                 | C-x i i               | yasnippet     | yas-minor-mode-map                      |
+| Create snippet                 | C-x i n               | yasnippet     | yas-minor-mode-map                      |
+| Edit registerd snippet         | C-x i v               | yasnippet     | yas-minor-mode-map                      |
+| Show agend command menu        | C-c a                 | org           | global                                  |
+| Capture task                   | C-c c                 | org           | global                                  |
+| Go to region select mode       | C RET  (Ctrl + RET)   | cua           | cua-mode                                |
+| Cancel                         | C-g                   | -             | global                                  |
 
 ** Resources path
 
@@ -113,23 +125,23 @@ The downloading packages are as follows.
 ** Config files
 
 #+CAPTION: Config files
-| config for                                  | path                                         |
-|---------------------------------------------+----------------------------------------------|
-| for init-loader and expand load-path        | $HOME/.emacs.d/init.el                       |
-| Font and more                               | $HOME/.emacs.d/inits/00-common.el            |
-| Global key assign                           | $HOME/.emacs.d/inits/02-global-keybinding.el |
-| for auto-install.el                         | $HOME/.emacs.d/inits/03-auto-install.el      |
-| for cmake-mode                              | $HOME/.emacs.d/inits/04-cmake.el             |
-| for package.el                              | $HOME/.emacs.d/inits/20-package.el           |
-| for anything.el                             | $HOME/.emacs.d/inits/21-anything.el          |
-| for auto-complete-mode                      | $HOME/.emacs.d/inits/25-auto-complete.el     |
-| for org-mode                                | $HOME/.emacs.d/inits/30-org.el               |
-| for yasnippet                               | $HOME/.emacs.d/inits/35-yasnippet.el         |
-| for ruby-mode                               | $HOME/.emacs.d/inits/40-ruby.el              |
-| for javascript-mode and j2-mode             | $HOME/.emacs.d/inits/41-javascript.el        |
-| for scala2-mode                             | $HOME/.emacs.d/inits/71-scala.el             |
-| for web-mode (including asp)                | $HOME/.emacs.d/inits/72-web-mode.el          |
-| for csharp-mode                             | $HOME/.emacs.d/inits/73-csharp.el                               |
+| config for                           | path (finished setup.sh)                     |
+|--------------------------------------+----------------------------------------------|
+| for init-loader and expand load-path | $HOME/.emacs.d/init.el                       |
+| Font and more                        | $HOME/.emacs.d/inits/00-common.el            |
+| for auto-install.el                  | $HOME/.emacs.d/inits/03-auto-install.el      |
+| for cmake-mode                       | $HOME/.emacs.d/inits/04-cmake.el             |
+| for package.el                       | $HOME/.emacs.d/inits/20-package.el           |
+| for helm-mode                        | $HOME/.emacs.d/inits/21-helm.el              |
+| for auto-complete-mode               | $HOME/.emacs.d/inits/25-auto-complete.el     |
+| for org-mode                         | $HOME/.emacs.d/inits/30-org.el               |
+| for yasnippet                        | $HOME/.emacs.d/inits/35-yasnippet.el         |
+| for ruby-mode                        | $HOME/.emacs.d/inits/40-ruby.el              |
+| for javascript-mode and j2-mode      | $HOME/.emacs.d/inits/41-javascript.el        |
+| for scala2-mode                      | $HOME/.emacs.d/inits/71-scala.el             |
+| for web-mode (including asp)         | $HOME/.emacs.d/inits/72-web-mode.el          |
+| for csharp-mode                      | $HOME/.emacs.d/inits/73-csharp.el            |
+| Global key assign                    | $HOME/.emacs.d/inits/99-global-keybinding.el |
 
 * Zsh
 
