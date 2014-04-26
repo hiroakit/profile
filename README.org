@@ -8,7 +8,40 @@
 
 My Configurations for Emacs, Zsh, rbenv, and more.
 
-* How to install
+* Requirements
+
+- System
+  - Mac OS X 10.8.5 and later
+  - Intel 64bit CPU
+  - Installed apple command line tools
+
+** Software dependencies
+
+| software | version                               | source             |
+|----------+---------------------------------------+--------------------|
+| Emacs    | 24.3                                  | [[http://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-24&id=3a1ce0685f66f5fb162b07f6bf4a1d8e1ec75c06][git commit 3a1ce06]] |
+| Zsh      | zsh 5.0.2 (x86_64-apple-darwin12.4.0) | [[http://sourceforge.net/p/zsh/code/ci/zsh-5.0.2/tree/][git commit daa828b]] |
+| rbenv    | 0.4.0-89-g14bc162                     | [[https://github.com/sstephenson/rbenv/commit/14bc162ca606e0c61da8d82e1b99b0946d7be13f][git commit 14bc162]] |
+| iTerm2   | 1.0.0.20140421                        | [[https://github.com/gnachman/iTerm2/commit/4cf1808a903ca5f185f35c4d775f1bd7b4ac4e79][git commit 4cf1808]] |
+
+*** How to build Emacs ?
+I will make build script for Emacs.
+This code was including inline-patch.
+#+BEGIN_SRC sh
+$ cd ~/your/working/dir
+$ git clone git://git.savannah.gnu.org/emacs.git
+$ svn co http://svn.sourceforge.jp/svnroot/macemacsjp/inline_patch/trunk inline_patch
+$ cd ~/~/your/working/dir/emacs
+$ ./autogen.sh 
+$ patch -p0 < ../inline_patch/emacs-inline.patch
+$ ./configure --with-ns --without-x --enable-locallisppath=/usr/local/share/emacs/site-lisp <-- may need --without-selinux option
+$ make bootstrap
+$ make install
+$ mv nextstep/Emacs.app /Applications/Emacs.app
+#+END_SRC
+
+
+* How to install?
 #+BEGIN_SRC sh
 $ git clone https://github.com/hiroakit/profile
 $ sh /path/to/profile/setup.sh # Seek confirmation as to create symbolic link on $HOME
@@ -25,6 +58,8 @@ $ sh ./rubyInstallUsingRbenv.sh
 I use Emacs 24.3. I'll write later about Emacs's config.
 Your emacs will download packages from ELPA in the first, if you set up this profile. 
 The downloading packages are as follows.
+
+** Using packages
 
 #+CAPTION: Using packages
 | package         | source                                         |
@@ -46,7 +81,7 @@ The downloading packages are as follows.
 | web-mode        | ELPA                                           |
 | yasnippet       | ELPA                                           |
  
-** How to use?
+** Key bindings
 
 #+CAPTION: Key bindings
 | action                                         | command                                         |
@@ -66,12 +101,16 @@ The downloading packages are as follows.
 | Go to region select mode (cua)                 | C RET  (Ctrl + RET)                             |
 | Cancel                                         | C-g                                             |
 
+** Resources path
+
 #+CAPTION: Resources path
 | resource                                    | path (finished setup.sh)         |
 |---------------------------------------------+----------------------------------|
 | Dictionary files for auto-complete          | $HOME/.emacs.d/dict/ac-dict      |
 | User defined dictionaries for auto-complete | $HOME/.emacs.d/dict/ac-user-dict |
 | Snippet for yasnippet                       | $HOME/.emacs.d/snippets          |
+
+** Config files
 
 #+CAPTION: Config files
 | config for                                  | path                                         |
@@ -92,21 +131,6 @@ The downloading packages are as follows.
 | for web-mode (including asp)                | $HOME/.emacs.d/inits/72-web-mode.el          |
 | for csharp-mode                             | $HOME/.emacs.d/inits/73-csharp.el                               |
 
-** How to build Emacs ?
-I will make build script for Emacs.
-This code was including inline-patch.
-#+BEGIN_SRC sh
-$ cd ~/your/working/dir
-$ git clone git://git.savannah.gnu.org/emacs.git
-$ svn co http://svn.sourceforge.jp/svnroot/macemacsjp/inline_patch/trunk inline_patch
-$ cd ~/~/your/working/dir/emacs
-$ ./autogen.sh 
-$ patch -p0 < ../inline_patch/emacs-inline.patch
-$ ./configure --with-ns --without-x --enable-locallisppath=/usr/local/share/emacs/site-lisp <-- may need --without-selinux option
-$ make bootstrap
-$ make install
-$ mv nextstep/Emacs.app /Applications/Emacs.app
-#+END_SRC
 * Zsh
 
 |-----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------|
