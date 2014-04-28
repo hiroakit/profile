@@ -1,7 +1,7 @@
 ;; LICENSE
 ;;
-;; scala mode configration
-;; Copyright (C) 2013-2014 Hiroaki ENDOH
+;; helm mode configration
+;; Copyright (C) 2014 Hiroaki ENDOH
 ;;
 ;; This program is free software; you can redistribute it and/or modify 
 ;; it under the terms of the GNU General Public License as published 
@@ -17,4 +17,11 @@
 ;; along with this program. 
 ;; If not, see <http://www.gnu.org/licenses/>.
 
-(when (require 'scala-mode2 nil t))
+(when (require 'helm-config nil t)
+  (helm-mode 1)
+
+  ;; キーバインディング (02-global-keybindigns.elにもキーバインディングを記述している)
+  (define-key helm-map (kbd "C-h") 'delete-backward-char)
+  (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+  (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+  (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action))
