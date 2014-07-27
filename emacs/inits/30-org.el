@@ -7,13 +7,13 @@
 ;; return でリンクを追う
 ;; (setq org-return-follows-link t) 
 
-;; ファイルの拡張子が org だった場合，org-modeにする
+;; ファイルの拡張子が org だった場合，org-modeを起動する
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
 ;; org-modeで強調表示を可能にする
 (add-hook 'org-mode-hook 'turn-on-font-lock)
 
-;; 全てのヘッドラインの「*」を見えなくする
+;; 必要最低限の「*」のみ表示する
 ;; orgファイルに #+STARTUP: hidestars と記述しなくて済むようになる
 (setq org-hide-leading-stars t)
 
@@ -26,11 +26,8 @@
 ;;; Libre Office 
 ;; Org-mode with Libre Office Writer
 (setq org-export-odt-convert-processes 
-      '(
-        ("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
-        ("unoconv" "unoconv -f %f -o %d %i")
-       )
-)
+      '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
+        ("unoconv" "unoconv -f %f -o %d %i")))
 
 ;;; Org-mode :: TODO
 ;; C-c C-tを押すと、どれを選択するかとミニバッファが開く
@@ -39,71 +36,100 @@
 ;; 見栄えの関係で，VERIにする．本来ならVERIFYとすべき
 ;; 見栄えの関係で，CANCにする．本来ならCANCELEDとすべき
 (setq org-todo-keywords 
-      '(
-        (sequence "TODO(t)" 
+      '((sequence "TODO(t)" 
                   "VERI(y)" 
                   "WAIT(w)" 
-                  "CANC(c)" "|" "DONE(d)"
-                  )
-        )
-)
+                  "CANC(c)" "|" "DONE(d)")))
 
 ;; Taskの属性名につける装飾
 (setq org-todo-keyword-faces
-      '(
-        ("TODO"     . org-warning)
-        ("CANCELED" . shadow)
-       )
-)
+      '(("TODO"     . org-warning)
+        ("CANCELED" . shadow)))
 
-;; TAGの種類
+;; TAGの設定
 (setq org-tag-alist 
-      '(
-        ("OFFICE" . ?o)
+      '(("OFFICE" . ?o)
         ("HOME" . ?h)
         ("PROJECT" . ?p)
         ("READING" . ?r)
-        ("MAC" . ?m)
-        ("DVD" . ?d)
+        ("MAC" . ?a)
+        ("DVD" . ?b)
         ("LUNCHTIME" . ?l)
-       )
-)
+        ("CONFERENCE" . ?m)
+        ("DESIGN" . ?d)
+        ("CODING" . ?c)))
 
 ;;; Org-mode :: Agenda
 
-;; アジェンダ表示の対象ファイル
+;; アジェンダ表示対象のファイル
 (setq org-agenda-files (list org-directory))
 
 ;; アジェンダ表示で下線を用いる
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 (setq hl-line-face 'underline)
 
-;; (試験中)カスタムコマンド C-c a の後に P, H などを押す
-;; see also http://members.optusnet.com.au/%7Echarles57/GTD/mydotemacs.txt
+;; カスタムアジェンダコマンド
+;; 
+;; 関連資料
+;; - http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.htm
+;; - http://members.optusnet.com.au/%7Echarles57/GTD/mydotemacs.txt
+;; 
+;; 使い方
+;; C-c a の後に d, c, E などを押す
 (setq org-agenda-custom-commands
-'(
+      '(("d" "Upcoming deadlines" agenda "" 
+         ((org-agenda-time-grid nil)
+          (org-deadline-warning-days 365) 
+          (org-agenda-entry-types '(:deadline))))
+        ;; ("c" "Calendar" 
+        ;;  ((agenda "" ((org-agenda-ndays 30)
+        ;;               (org-agenda-start-on-weekday 1)
+        ;;               (org-agenda-repeating-timestamp-show-all t)
+        ;;               (org-agenda-entry-types '(:timestamp :sexp))))))
+        ("c" "Calendar"
+         ((agenda "" ((org-agenda-ndays 14)             
+                      (org-agenda-start-on-weekday nil) 
+                      (org-agenda-repeating-timestamp-show-all t)
+                      ))))
 
-;; タグ'PROJECT'が付いているもので，TODOあるいはWAIT状態にあるタスクを表示する
-("P" "Projects (TODO & WAIT only)" 
- ((tags "PROJECT/!+TODO|+WAIT"))
-)
+        ("E" . "Enginnering tasks")
+        ("EO" "Engineering tasks on Office"
+         ((agenda "" ((org-agenda-ndays 1)              ;; 今日のみ表示対象
+                      (org-agenda-start-on-weekday nil) ;; 今日からカレンダーを映す
+                      ))
+          (tags-todo "OFFICE&DESIGN")
+          (tags-todo "OFFICE&CODING")))
+        ("EH" "Engineering tasks on Home"
+         ((agenda "" ((org-agenda-ndays 14)
+                      (org-agenda-start-on-weekday nil)
+                      ))
+          (tags-todo "HOME&CONFERENCE")
+          (tags-todo "HOME&DESIGN")
+          (tags-todo "HOME&CODING")))
+        ("D" "Daily Action List"
+         ((agenda "" ((org-agenda-ndays 1)
+                      (org-agenda-sorting-strategy
+                       (quote ((agenda time-up priority-down tag-up))))
+                      (org-deadline-warning-days 0)
+                      ))))
+        ;; ("c" "Weekly schedule" agenda ""
+        ;;  ((org-agenda-ndays 7)
+        ;;   (org-agenda-repeating-timestamp-show-all t)
+        ;;   (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))) 
+        ;; ("H" "Homework" 
+        ;;  ((tags-todo "HOME")))
+        
+        ;; タグ'PROJECT'が付いているもので，TODOあるいはWAIT状態にあるタスクを表示する
+        ("P" "Projects (TODO & WAIT only)" 
+         ((tags "PROJECT/!+TODO|+WAIT")))
 
-("H" "Office and Home Lists"
-     ((agenda)
+        ("H" "Office and Home Lists"
+         ((agenda)
           (tags-todo "OFFICE")
           (tags-todo "HOME")
           (tags-todo "COMPUTER")
           (tags-todo "DVD")
-          (tags-todo "READING")))
-
-("D" "Daily Action List"
-     (
-          (agenda "" ((org-agenda-ndays 1)
-                      (org-agenda-sorting-strategy
-                       (quote ((agenda time-up priority-down tag-up) )))
-                      (org-deadline-warning-days 0)
-                      ))))
-)
+          (tags-todo "READING"))))
 )
 
 ;;; org-capture
