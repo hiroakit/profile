@@ -81,23 +81,19 @@
          ((org-agenda-time-grid nil)
           (org-deadline-warning-days 365) 
           (org-agenda-entry-types '(:deadline))))
-        ;; ("c" "Calendar" 
-        ;;  ((agenda "" ((org-agenda-ndays 30)
-        ;;               (org-agenda-start-on-weekday 1)
-        ;;               (org-agenda-repeating-timestamp-show-all t)
-        ;;               (org-agenda-entry-types '(:timestamp :sexp))))))
         ("c" "Calendar"
-         ((agenda "" ((org-agenda-ndays 14)             
-                      (org-agenda-start-on-weekday nil) 
-                      (org-agenda-repeating-timestamp-show-all t)
+         ((agenda "" (
+                      (org-agenda-ndays 'week)
+                      (org-agenda-start-on-weekday 1)
+                      (org-agenda-repeating-timestamp-show-all nil)
+;;                      (org-agenda-skip-function 
+;;                       '(org-agenda-skip-entry-if 'deadline 'scheduled)) 
+                      (org-agenda-entry-types '(:timestamp :sexp))
                       ))))
 
         ("E" . "Enginnering tasks")
         ("EO" "Engineering tasks on Office"
-         ((agenda "" ((org-agenda-ndays 1)              ;; 今日のみ表示対象
-                      (org-agenda-start-on-weekday nil) ;; 今日からカレンダーを映す
-                      ))
-          (tags-todo "OFFICE&DESIGN")
+         ((tags-todo "OFFICE&DESIGN")
           (tags-todo "OFFICE&CODING")))
         ("EH" "Engineering tasks on Home"
          ((agenda "" ((org-agenda-ndays 14)
