@@ -4,6 +4,7 @@
 (defvar hp-elpa-dir (concat user-emacs-directory "elpa"))
 (defvar hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
 (defvar hp-inits-dir (concat user-emacs-directory "inits"))
+(defvar hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-8.2.10/lisp"))
 
 ;;; 各パッケージのパスをload-pathに展開する関数
 (defun hp-expand-load-path (&rest paths)
@@ -20,6 +21,9 @@
   (hp-expand-load-path hp-elpa-dir))
 (when (file-directory-p (symbol-value 'hp-site-lisp-dir))
   (hp-expand-load-path hp-site-lisp-dir))
+(when (file-directory-p (symbol-value 'hp-org-mode-dir))
+  (hp-expand-load-path hp-org-mode-dir))
+
 
 ;;; 各パッケージの設定ファイルはinits以下に置く．init-loaderがそれを読み込む
 ;;; ファイル命名規則が存在する (例 : 10-hoge.el)
