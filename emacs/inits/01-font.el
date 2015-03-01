@@ -1,6 +1,6 @@
 ;;; フォント設定
 
-(defvar HEDefaultFontSize 12 "フォントサイズの初期値を返します")
+(defvar HPDefaultFontSize 14 "フォントサイズの初期値を返します")
 
 (defun my-ja-font-setter (spec)
   (set-fontset-font nil 'japanese-jisx0208 spec)
@@ -21,11 +21,10 @@
           ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
           ;; 2) Inconsolata, Migu 2M     : font-size=14, 
           ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
-          ((font-size HEDefaultFontSize)
+          ((font-size HPDefaultFontSize)
 ;           (ascii-font "Inconsolata")
-           (ascii-font "Monaco")
-	   (ja-font "MigMix 2M"))
-;           (ja-font "Migu 2M"))
+           (ascii-font "MigMix 2M")
+           (ja-font "MigMix 2M"))
         ;; (ja-font "Hiragino Maru Gothic Pro")) 
         (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
         (my-ja-font-setter (font-spec :family ja-font :size font-size)))
@@ -41,7 +40,6 @@
               ;; (".*monaco cy-bold-.*-mac-cyrillic" . 1.0)
               ;; (".*monaco-bold-.*-mac-roman" . 1.0) ; 0.9
               ("-cdac$" . 1.0)))           ; 1.3
- 
       ;; Space between lines
       (set-default 'line-spacing 1)
       ;; Anti aliasing with Quartz 2D

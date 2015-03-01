@@ -52,3 +52,6 @@ case "${OSTYPE}" in
 
 	;;    
 esac
+
+# PMD
+alias pmd='$PMD_HOME/bin/run.sh'
