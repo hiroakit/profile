@@ -140,3 +140,7 @@
        (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t")
 ))
 
+;; コードハイライト
+(setq org-src-fontify-natively t)
+(add-to-list 'org-src-lang-modes '("csharp" . csharp))
+

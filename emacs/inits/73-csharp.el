@@ -22,3 +22,10 @@
 )
 
 (add-to-list 'auto-mode-alist '("\\.cs$" . csharp-mode))
+
+;; カスタマイズ
+(defun hp-csharp-mode-hook ()
+  (electric-pair-mode 1))
+
+;; カスタマイズ割当
+(add-hook 'csharp-mode-hook 'hp-csharp-mode-hook)
