@@ -1,7 +1,7 @@
 ;; LICENSE
 ;;
 ;; C# mode configration
-;; Copyright (C) 2013-2014 Hiroaki ENDOH
+;; Copyright (C) 2013-2015 Hiroaki ENDOH
 ;;
 ;; This program is free software; you can redistribute it and/or modify 
 ;; it under the terms of the GNU General Public License as published 
@@ -25,7 +25,9 @@
 
 ;; カスタマイズ
 (defun hp-csharp-mode-hook ()
-  (electric-pair-mode 1))
+  (electric-pair-mode 1)
+  (auto-complete-mode t)
+)
 
 ;; カスタマイズ割当
 (add-hook 'csharp-mode-hook 'hp-csharp-mode-hook)
