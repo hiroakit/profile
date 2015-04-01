@@ -24,6 +24,7 @@
     ruby-additional
     ;; ruby-electric ELPAのバージョンは調子が良くない模様
     ruby-block
+    org-tree-slide
     )
 )
 

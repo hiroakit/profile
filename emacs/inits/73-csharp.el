@@ -31,3 +31,13 @@
 
 ;; カスタマイズ割当
 (add-hook 'csharp-mode-hook 'hp-csharp-mode-hook)
+
+
+;; カスタマイズ
+(defun hp-rib-mode-hook ()
+  (auto-complete-mode t)
+)
+
+;; カスタマイズ割当
+(add-hook 'rib-mode-hook 'hp-rib-mode-hook)
+

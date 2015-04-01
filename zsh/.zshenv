@@ -82,6 +82,10 @@ export PATH=/usr/local/bin/play:$PATH
 export GTAGSCONF=/usr/local/share/gtags/gtags.conf
 export GTAGSLABEL=exuberant-ctags
 
+## Pixar RenderMan
+export RMANTREE=/Applications/Pixar/RenderManProServer-19.0
+export PATH=$PATH:$RMANTREE/bin
+
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
 

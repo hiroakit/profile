@@ -128,6 +128,10 @@
           (tags-todo "READING"))))
 )
 
+;;; org-refile
+(setq org-refile-targets
+      (quote (("personal.org" :level . 1))))
+
 ;;; org-capture
 ;; 設定に使っている値は，The Org Manual 9.1.3 Capture templatesを参照せよ
 (setq org-capture-templates
