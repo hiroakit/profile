@@ -10,18 +10,18 @@
 ;; ファイルの拡張子が org だった場合，org-modeを起動する
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-;; org-modeで強調表示を可能にする
-(add-hook 'org-mode-hook 'turn-on-font-lock)
-
 ;; 必要最低限の「*」のみ表示する
 ;; orgファイルに #+STARTUP: hidestars と記述しなくて済むようになる
 (setq org-hide-leading-stars t)
 
-;; org-default-notes-fileのディレクトリ
+;; orgファイルが入っているディレクトリ
 (setq org-directory "~/org/")
 
 ;; org-default-notes-fileのファイル名
 (setq org-default-notes-file (concat org-directory "notes.org"))
+
+;; アジェンダ表示対象のファイル
+(setq org-agenda-files (list org-directory))
 
 ;;; Libre Office 
 ;; Org-mode with Libre Office Writer
@@ -61,76 +61,102 @@
 
 ;;; Org-mode :: Agenda
 
-;; アジェンダ表示対象のファイル
-(setq org-agenda-files (list org-directory))
-
 ;; アジェンダ表示で下線を用いる
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 (setq hl-line-face 'underline)
 
-;; カスタムアジェンダコマンド
-;; 
-;; 関連資料
-;; - http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.htm
-;; - http://members.optusnet.com.au/%7Echarles57/GTD/mydotemacs.txt
-;; 
-;; 使い方
-;; C-c a の後に d, c, E などを押す
-(setq org-agenda-custom-commands
-      '(("d" "Upcoming deadlines" agenda "" 
-         ((org-agenda-time-grid nil)
-          (org-deadline-warning-days 365) 
-          (org-agenda-entry-types '(:deadline))))
-        ("c" "Calendar"
-         ((agenda "" (
-                      (org-agenda-ndays 'week)
-                      (org-agenda-start-on-weekday 1)
-                      (org-agenda-repeating-timestamp-show-all nil)
-;;                      (org-agenda-skip-function 
-;;                       '(org-agenda-skip-entry-if 'deadline 'scheduled)) 
-                      (org-agenda-entry-types '(:timestamp :sexp))
-                      ))))
+;;; org-agenda-custom-command
 
-        ("E" . "Enginnering tasks")
-        ("EO" "Engineering tasks on Office"
-         ((tags-todo "OFFICE&DESIGN")
-          (tags-todo "OFFICE&CODING")))
-        ("EH" "Engineering tasks on Home"
-         ((agenda "" ((org-agenda-ndays 14)
-                      (org-agenda-start-on-weekday nil)
-                      ))
-          (tags-todo "HOME&CONFERENCE")
-          (tags-todo "HOME&DESIGN")
-          (tags-todo "HOME&CODING")))
-        ("D" "Daily Action List"
-         ((agenda "" ((org-agenda-ndays 1)
-                      (org-agenda-sorting-strategy
-                       (quote ((agenda time-up priority-down tag-up))))
-                      (org-deadline-warning-days 0)
-                      ))))
-        ;; ("c" "Weekly schedule" agenda ""
-        ;;  ((org-agenda-ndays 7)
-        ;;   (org-agenda-repeating-timestamp-show-all t)
-        ;;   (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))) 
-        ;; ("H" "Homework" 
-        ;;  ((tags-todo "HOME")))
-        
-        ;; タグ'PROJECT'が付いているもので，TODOあるいはWAIT状態にあるタスクを表示する
-        ("P" "Projects (TODO & WAIT only)" 
-         ((tags "PROJECT/!+TODO|+WAIT")))
+(org-add-agenda-custom-command
+ '("A" "Review this week"
+   ((agenda ""
+     ((org-agenda-time-grid nil)
+      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+      (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))
+      (org-scheduled-past-days 14)
+      (org-deadline-warning-days 14)))
+    (todo "WAIT")
+    (tags-todo "OFFICE")
+    (tags-todo "HOME")
+    (tags-todo "COMPUTER")
+    (tags-todo "DVD")
+    (tags-todo "READING"))))
 
-        ("H" "Office and Home Lists"
-         ((agenda)
-          (tags-todo "OFFICE")
-          (tags-todo "HOME")
-          (tags-todo "COMPUTER")
-          (tags-todo "DVD")
-          (tags-todo "READING"))))
-)
+(org-add-agenda-custom-command
+ '("B" "Review today"
+   ((agenda "" 
+    ((tags "OFFICE")
+     (org-agenda-span 'day)
+     (org-deadline-warning-days 0)
+     (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))))
+    (todo "WAIT"))))
+
+(org-add-agenda-custom-command
+ '("D" "デッドライン付きタスクを表示" 
+   ((agenda "" ((org-agenda-time-grid nil)
+                (org-deadline-warning-days 365) 
+                (org-agenda-entry-types '(:deadline)))))))
+
+(org-add-agenda-custom-command
+ '("N" . "不明確なタスク"))
+
+(org-add-agenda-custom-command
+ '("NS" "スケジュール未定のタスク" 
+   ((todo "TODO"
+              ((org-agenda-overriding-header "No due date")
+               (org-agenda-skip-function
+                '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
+
+   ;;   ((agenda "" ((org-agenda-overriding-header "未定のタスク")
+;;                (todo "TODO")
+                ;;(org-deadline-warning-days 365)
+                ;; うまく効かない
+                ;;(org-agenda-skip-function 
+                ;; '(org-agenda-skip-entry-if 'todo '("WAIT")))
+                ;; (org-agenda-skip-function 
+                ;;  '(org-agenda-skip-entry-if 'todo 'done))
+                ;; (org-agenda-skip-function 
+                ;;  '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                ))
+
+(org-add-agenda-custom-command
+ '("c" "2週間分の予定を表示"
+   ((agenda "" ((org-agenda-span 14)
+                (org-agenda-time-grid nil)
+                (org-scheduled-past-days 10)
+                (org-deadline-warning-days 10)
+                (org-agenda-repeating-timestamp-show-all nil)
+                (org-agenda-skip-function 
+                 '(org-agenda-skip-entry-if 'todo 'done)))))))
+
+;; TODOステータスが"WAIT"であるタスクを列挙する
+(org-add-agenda-custom-command
+ '("W" "Waiting for a response task list" 
+   ((todo "WAIT"))))
+
+;; タグ"PROJECT"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+(org-add-agenda-custom-command
+ '("P" "Projects (TODO & WAIT only)" 
+   ((tags "+PROJECT/!+TODO|+WAIT"))))
+
+;; タグ"HOME"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+(org-add-agenda-custom-command
+ '("H" "HOME (TODO & WAIT only)" 
+   ((tags "+HOME/!+TODO|+WAIT"))))
+
+;; タグ"READING"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+(org-add-agenda-custom-command
+ '("R" "Reading task (TODO & WAIT only)" 
+   ((tags "+READING/!+TODO|+WAIT"))))
 
 ;;; org-refile
 (setq org-refile-targets
-      (quote (("personal.org" :level . 1))))
+      (quote (("~/org/notes.org" :level . 1)
+              ("~/org/private.org" :level . 1)
+              ("~/org/jugemu.org" :level . 1)
+              ("~/org/book.org" :level . 1)
+              ("~/org/tools/windows.org" :level . 1)
+              ("~/org/tools/emacs.org" :level . 1))))
 
 ;;; org-capture
 ;; 設定に使っている値は，The Org Manual 9.1.3 Capture templatesを参照せよ
@@ -147,4 +173,21 @@
 ;; コードハイライト
 (setq org-src-fontify-natively t)
 (add-to-list 'org-src-lang-modes '("csharp" . csharp))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (perl . t)
+   (python . t)
+   (js . t)))
+
+;; org-mode-hook
+(add-hook 'org-mode-hook 
+          (lambda () 
+            (local-set-key (kbd "C-c c") 'hp-show-org-conf)))
+
+;; org-agenda-mode-hook
+(add-hook 'org-agenda-mode-hook
+          (lambda () 
+            (local-set-key (kbd "C-c c") 'hp-show-org-conf)))
 
