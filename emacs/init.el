@@ -1,10 +1,12 @@
 ;;; ロードパスの設定とinit-loaderを読み込むためのファイル
 
 ;;; 定数宣言
-(defvar hp-elpa-dir (concat user-emacs-directory "elpa"))
-(defvar hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
-(defvar hp-inits-dir (concat user-emacs-directory "inits"))
-(defvar hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-8.2.10/lisp"))
+(defconst hp-elpa-dir (concat user-emacs-directory "elpa"))
+(defconst hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
+(defconst hp-inits-dir (concat user-emacs-directory "inits"))
+(defconst hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-8.2.10/lisp"))
+(defconst hp-core-conf "~/.emacs.d/init.el")
+(defconst hp-org-conf (concat (concat user-emacs-directory "inits") "/30-org.el"))
 
 ;;; 各パッケージのパスをload-pathに展開する関数
 (defun hp-expand-load-path (&rest paths)
@@ -24,10 +26,18 @@
 (when (file-directory-p (symbol-value 'hp-org-mode-dir))
   (hp-expand-load-path hp-org-mode-dir))
 
-
 ;;; 各パッケージの設定ファイルはinits以下に置く．init-loaderがそれを読み込む
 ;;; ファイル命名規則が存在する (例 : 10-hoge.el)
 (when (require 'init-loader nil t)
   (when (file-directory-p (symbol-value 'hp-inits-dir))
     (init-loader-load hp-inits-dir)))
 
+(defun hp-show-core-conf ()
+  "init.elを開きます"
+  (interactive)
+  (switch-to-buffer (find-file-noselect hp-core-conf)))
+
+(defun hp-show-org-conf ()
+  "org-modeの設定ファイルを開きます"
+  (interactive)
+  (switch-to-buffer (find-file-noselect hp-org-conf)))
