@@ -41,3 +41,4 @@
   "org-modeの設定ファイルを開きます"
   (interactive)
   (switch-to-buffer (find-file-noselect hp-org-conf)))
+
