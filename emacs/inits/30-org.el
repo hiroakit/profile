@@ -1,11 +1,30 @@
 (when (require 'org-install nil t))
 (when (require 'org-habit nil t))
 
+(defvar hp-org-private-dir 
+  "~/org" 
+  "私的のorgファイル格納先ディレクトリ")
+(defvar hp-org-work-dir 
+  "~/work" 
+  "仕事のorgファイルの格納先ディレクトリ")
+(defvar hp-org-refile-targets 
+  '(("~/org/notes.org" :level . 1)
+    ("~/org/private.org" :level . 1)
+    ("~/org/book.org" :level . 1)
+    ("~/org/tools/windows.org" :level . 1)
+    ("~/org/tools/emacs.org" :level . 1)) 
+  "org-refileの対象")
+(defvar hp-org-capture-templates
+   '(("t" "TODOをInboxに追加する" entry
+      (file+headline org-default-notes-file "Inbox") "** TODO %?\n\t作成日: %U\n\t")
+     ("r" "興味のある本を追加する" entry
+      (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
+     ("w" "英単語をEnglish > 英単語に追加する" checkitem
+      (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
+   "org-captureテンプレート")
+
 ;; ファイルは折り畳んだ状態で開く
 (setq org-startup-truncated nil) 
-
-;; return でリンクを追う
-;; (setq org-return-follows-link t) 
 
 ;; ファイルの拡張子が org だった場合，org-modeを起動する
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -15,13 +34,15 @@
 (setq org-hide-leading-stars t)
 
 ;; orgファイルが入っているディレクトリ
-(setq org-directory "~/org/")
+(setq org-directory hp-org-private-dir)
 
 ;; org-default-notes-fileのファイル名
 (setq org-default-notes-file (concat org-directory "notes.org"))
 
-;; アジェンダ表示対象のファイル
-(setq org-agenda-files (list org-directory))
+;; アジェンダ表示対象のファイル 
+;; (ディレクトリを指定すると、そこに入っている全てのファイルが対象となる)
+(setq org-agenda-files 
+      (list org-directory hp-org-work-dir))
 
 ;;; Libre Office 
 ;; Org-mode with Libre Office Writer
@@ -29,12 +50,7 @@
       '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
         ("unoconv" "unoconv -f %f -o %d %i")))
 
-;;; Org-mode :: TODO
-;; C-c C-tを押すと、どれを選択するかとミニバッファが開く
-;;
-;; 見栄えの関係で，WAITにする．本来ならWAITINGとすべき
-;; 見栄えの関係で，VERIにする．本来ならVERIFYとすべき
-;; 見栄えの関係で，CANCにする．本来ならCANCELEDとすべき
+;;; Org-modeのTODOステータス(C-c C-tでミニバッファが開く)
 (setq org-todo-keywords 
       '((sequence "TODO(t)" 
                   "VERI(y)" 
@@ -66,59 +82,6 @@
 (setq hl-line-face 'underline)
 
 ;;; org-agenda-custom-command
-
-(org-add-agenda-custom-command
- '("A" "Review this week"
-   ((agenda ""
-     ((org-agenda-time-grid nil)
-      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-      (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))
-      (org-scheduled-past-days 14)
-      (org-deadline-warning-days 14)))
-    (todo "WAIT")
-    (tags-todo "OFFICE")
-    (tags-todo "HOME")
-    (tags-todo "COMPUTER")
-    (tags-todo "DVD")
-    (tags-todo "READING"))))
-
-(org-add-agenda-custom-command
- '("B" "Review today"
-   ((agenda "" 
-    ((tags "OFFICE")
-     (org-agenda-span 'day)
-     (org-deadline-warning-days 0)
-     (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))))
-    (todo "WAIT"))))
-
-(org-add-agenda-custom-command
- '("D" "デッドライン付きタスクを表示" 
-   ((agenda "" ((org-agenda-time-grid nil)
-                (org-deadline-warning-days 365) 
-                (org-agenda-entry-types '(:deadline)))))))
-
-(org-add-agenda-custom-command
- '("N" . "不明確なタスク"))
-
-(org-add-agenda-custom-command
- '("NS" "スケジュール未定のタスク" 
-   ((todo "TODO"
-              ((org-agenda-overriding-header "No due date")
-               (org-agenda-skip-function
-                '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
-
-   ;;   ((agenda "" ((org-agenda-overriding-header "未定のタスク")
-;;                (todo "TODO")
-                ;;(org-deadline-warning-days 365)
-                ;; うまく効かない
-                ;;(org-agenda-skip-function 
-                ;; '(org-agenda-skip-entry-if 'todo '("WAIT")))
-                ;; (org-agenda-skip-function 
-                ;;  '(org-agenda-skip-entry-if 'todo 'done))
-                ;; (org-agenda-skip-function 
-                ;;  '(org-agenda-skip-entry-if 'scheduled 'deadline))
-                ))
-
 (org-add-agenda-custom-command
  '("c" "2週間分の予定を表示"
    ((agenda "" ((org-agenda-span 14)
@@ -136,8 +99,8 @@
 
 ;; タグ"PROJECT"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
 (org-add-agenda-custom-command
- '("P" "Projects (TODO & WAIT only)" 
-   ((tags "+PROJECT/!+TODO|+WAIT"))))
+ '("O" "Office (TODO & WAIT only)" 
+   ((tags "+OFFICE/!+TODO|+WAIT"))))
 
 ;; タグ"HOME"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
 (org-add-agenda-custom-command
@@ -149,26 +112,48 @@
  '("R" "Reading task (TODO & WAIT only)" 
    ((tags "+READING/!+TODO|+WAIT"))))
 
+(org-add-agenda-custom-command
+ '("N" "スケジュール未定のタスク" 
+   ((todo "TODO"
+              ((org-agenda-overriding-header "No due date")
+               (org-agenda-skip-function
+                '(org-agenda-skip-entry-if 'scheduled 'deadline)))))))
+
+(org-add-agenda-custom-command
+ '("D" "デッドライン付きタスクを表示" 
+   ((agenda "" ((org-agenda-time-grid nil)
+                (org-deadline-warning-days 365) 
+                (org-agenda-entry-types '(:deadline)))))))
+
+(org-add-agenda-custom-command
+ '("B" "Review today"
+   ((agenda "" 
+    ((tags "OFFICE")
+     (org-agenda-span 'day)
+     (org-deadline-warning-days 0)
+     (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))))
+    (todo "WAIT"))))
+
+(org-add-agenda-custom-command
+ '("A" "Review this week"
+   ((agenda ""
+     ((org-agenda-time-grid nil)
+      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+      (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))
+      (org-scheduled-past-days 14)
+      (org-deadline-warning-days 14)))
+    (todo "WAIT")
+    (tags-todo "OFFICE")
+    (tags-todo "HOME")
+    (tags-todo "COMPUTER")
+    (tags-todo "DVD")
+    (tags-todo "READING"))))
+
 ;;; org-refile
-(setq org-refile-targets
-      (quote (("~/org/notes.org" :level . 1)
-              ("~/org/private.org" :level . 1)
-              ("~/org/jugemu.org" :level . 1)
-              ("~/org/book.org" :level . 1)
-              ("~/org/tools/windows.org" :level . 1)
-              ("~/org/tools/emacs.org" :level . 1))))
+(setq org-refile-targets hp-org-refile-targets)
 
 ;;; org-capture
-;; 設定に使っている値は，The Org Manual 9.1.3 Capture templatesを参照せよ
-(setq org-capture-templates
-   `(
-     ("t" "TODO項目をInboxに追加する" entry
-       (file+headline nil "INBOX") "** TODO %?\n\t作成日: %T")
-     ("r" "読みたい本をReadingに追加する" entry
-       (file+headline nil "Reading") "** TODO %?\n\t")
-     ("w" "英単語をEnglish > 英単語に追加する" checkitem
-       (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t")
-))
+(setq org-capture-templates hp-org-capture-templates)
 
 ;; コードハイライト
 (setq org-src-fontify-natively t)
