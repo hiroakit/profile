@@ -2,10 +2,10 @@
 (when (require 'org-habit nil t))
 
 (defvar hp-org-private-dir 
-  "~/org" 
+  "~/org/" 
   "私的のorgファイル格納先ディレクトリ")
 (defvar hp-org-work-dir 
-  "~/work" 
+  "~/work/" 
   "仕事のorgファイルの格納先ディレクトリ")
 (defvar hp-org-refile-targets 
   '(("~/org/notes.org" :level . 1)
