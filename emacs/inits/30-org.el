@@ -8,7 +8,7 @@
   "~/work/" 
   "仕事のorgファイルの格納先ディレクトリ")
 (defvar hp-org-refile-targets 
-  '(("~/org/notes.org" :level . 1)
+  '(("~/org/inbox.org" :level . 1)
     ("~/org/private.org" :level . 1)
     ("~/org/book.org" :level . 1)
     ("~/org/tools/windows.org" :level . 1)
@@ -37,7 +37,7 @@
 (setq org-directory hp-org-private-dir)
 
 ;; org-default-notes-fileのファイル名
-(setq org-default-notes-file (concat org-directory "notes.org"))
+(setq org-default-notes-file (concat org-directory "inbox.org"))
 
 ;; アジェンダ表示対象のファイル 
 ;; (ディレクトリを指定すると、そこに入っている全てのファイルが対象となる)
@@ -130,7 +130,7 @@
    ((agenda "" 
     ((tags "OFFICE")
      (org-agenda-span 'day)
-     (org-deadline-warning-days 0)
+     (org-deadline-warning-days 3)
      (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))))
     (todo "WAIT"))))
 
