@@ -63,16 +63,22 @@
 
 ;; TAGの設定
 (setq org-tag-alist 
-      '(("OFFICE" . ?o)
-        ("HOME" . ?h)
-        ("PROJECT" . ?p)
+      '(
+        ("@HOME" . ?h)
+        ("@OFFICE" . ?o)
+        ("@TSUTAYA" . ?t)
+        ("@ITOYOKADO" . ?i)
+        ("@CLEANERS" . ?x)
+        ("@POSTOFFICE" .?y)
+        ("@BANK" . ?z)
+        ("@LUNCHTIME")
+        ("PHONE" . ?p)
+        ("MAIL" . ?m)
+        ("CONFERENCE" . ?c)
+        ("TALKING")
         ("READING" . ?r)
-        ("MAC" . ?a)
-        ("DVD" . ?b)
-        ("LUNCHTIME" . ?l)
-        ("CONFERENCE" . ?m)
-        ("DESIGN" . ?d)
-        ("CODING" . ?c)))
+        ("WATCHING" . ?w)
+       ))
 
 ;;; Org-mode :: Agenda
 
