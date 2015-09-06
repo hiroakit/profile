@@ -41,8 +41,7 @@
 
 ;; アジェンダ表示対象のファイル 
 ;; (ディレクトリを指定すると、そこに入っている全てのファイルが対象となる)
-(setq org-agenda-files 
-      (list org-directory hp-org-work-dir))
+(setq org-agenda-files (list org-directory hp-org-work-dir))
 
 ;;; Libre Office 
 ;; Org-mode with Libre Office Writer
