@@ -17,7 +17,7 @@
 ;; along with this program. 
 ;; If not, see <http://www.gnu.org/licenses/>.
 
-(defvar HEDefaultFrameWidthSize 80 "フレームの横幅の初期値を返します")
+(defvar HEDefaultFrameWidthSize 120 "フレームの横幅の初期値を返します")
 (defvar HEDefaultTabSpaceSize 4 "タブを半角スペースで置き換える際の文字数を返します")
 
 ;; 起動時のスプラッシュイメージを表示しない
