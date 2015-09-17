@@ -4,7 +4,7 @@
 (defconst hp-elpa-dir (concat user-emacs-directory "elpa"))
 (defconst hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
 (defconst hp-inits-dir (concat user-emacs-directory "inits"))
-(defconst hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-8.2.10/lisp"))
+(defconst hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-8.3.1/lisp"))
 (defconst hp-core-conf "~/.emacs.d/init.el")
 (defconst hp-org-conf (concat (concat user-emacs-directory "inits") "/30-org.el"))
 
