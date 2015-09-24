@@ -12,7 +12,9 @@
     ("~/org/private.org" :level . 1)
     ("~/org/book.org" :level . 1)
     ("~/org/tools/windows.org" :level . 1)
-    ("~/org/tools/emacs.org" :level . 1)) 
+    ("~/org/tools/emacs.org" :level . 1)
+    ("~/work/work.org" :level . 2)
+    ) 
   "org-refileの対象")
 (defvar hp-org-capture-templates
    '(("t" "TODOをInboxに追加する" entry
