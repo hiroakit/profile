@@ -51,10 +51,10 @@
 
 ;;; Org-modeのTODOステータス(C-c C-tでミニバッファが開く)
 (setq org-todo-keywords 
-      '((sequence "TODO(t)" 
-                  "VERI(y)" 
-                  "WAIT(w)" 
-                  "CANC(c)" "|" "DONE(d)")))
+      '((sequence "TODO(t)" "|" "DONE(d!)")
+        (sequence "WAITING(w@/!)" "|")
+        (sequence "|" "CANCELED(c@/!)")
+        ))
 
 ;; Taskの属性名につける装飾
 (setq org-todo-keyword-faces
@@ -97,25 +97,25 @@
                 (org-agenda-skip-function 
                  '(org-agenda-skip-entry-if 'todo 'done)))))))
 
-;; TODOステータスが"WAIT"であるタスクを列挙する
+;; TODOステータスが"WAITING"であるタスクを列挙する
 (org-add-agenda-custom-command
  '("W" "Waiting for a response task list" 
-   ((todo "WAIT"))))
+   ((todo "WAITING"))))
 
-;; タグ"PROJECT"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+;; タグ"OFFICE"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
- '("O" "Office (TODO & WAIT only)" 
-   ((tags "+OFFICE/!+TODO|+WAIT"))))
+ '("O" "Office (TODO & WAITING only)" 
+   ((tags "+OFFICE/!+TODO|+WAITING"))))
 
-;; タグ"HOME"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+;; タグ"HOME"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
- '("H" "HOME (TODO & WAIT only)" 
-   ((tags "+HOME/!+TODO|+WAIT"))))
+ '("H" "HOME (TODO & WAITING only)" h
+   ((tags "+HOME/!+TODO|+WAITING"))))
 
-;; タグ"READING"で，かつTODOステータスがTODOもしくはWAITのタスクを列挙する
+;; タグ"READING"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
- '("R" "Reading task (TODO & WAIT only)" 
-   ((tags "+READING/!+TODO|+WAIT"))))
+ '("R" "Reading task (TODO & WAITING only)" 
+   ((tags "+READING/!+TODO|+WAITING"))))
 
 (org-add-agenda-custom-command
  '("N" "スケジュール未定のタスク" 
@@ -137,17 +137,17 @@
      (org-agenda-span 'day)
      (org-deadline-warning-days 3)
      (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))))
-    (todo "WAIT"))))
+    (todo "WAITING"))))
 
 (org-add-agenda-custom-command
  '("A" "Review this week"
-   ((agenda ""
+   ((agenda "" 
      ((org-agenda-time-grid nil)
       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
       (org-agenda-sorting-strategy '(time-up todo-state-up priority-down))
       (org-scheduled-past-days 14)
       (org-deadline-warning-days 14)))
-    (todo "WAIT")
+    (todo "WAITING")
     (tags-todo "OFFICE")
     (tags-todo "HOME")
     (tags-todo "COMPUTER")
