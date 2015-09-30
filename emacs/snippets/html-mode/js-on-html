@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: js-on-html
+# key: js-on-html
+# binding: direct-keybinding
+# --
+<script type="text/javascript"> 
+</script> 
