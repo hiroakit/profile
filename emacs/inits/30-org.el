@@ -16,7 +16,7 @@
   "org-refileの対象")
 (defvar hp-org-capture-templates
    '(("t" "TODOをInboxに追加する" entry
-      (file+headline org-default-notes-file "Inbox") "** TODO %?\n\t作成日: %U\n\t")
+      (file+headline org-default-notes-file "Inbox") "** TODO %?\n\t:PROPERTY:\n\t:CREATE: %U\n\t:END:")
      ("r" "興味のある本を追加する" entry
       (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
      ("w" "英単語をEnglish > 英単語に追加する" checkitem
