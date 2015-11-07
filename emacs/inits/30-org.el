@@ -184,7 +184,7 @@
 
 ;; org-effort
 (setq org-global-properties (quote ((
-      "Effort_ALL" . "00:05 00:10 00:15 00:30 01:00 01:30 02:00 03:00 04:00 08:00"))))
+      "Effort_ALL" . "00:10 00:15 00:30 01:00 01:30 02:00 03:00 04:00 08:00 16:00"))))
 (setq org-columns-default-format "%3PRIORITY(P) %80ITEM(Task) %10TAGS(Context) %5Effort(Effort){:} %5CLOCKSUM(Clock)")
 
 ;; org-drawers
