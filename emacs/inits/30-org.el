@@ -193,3 +193,13 @@
 (setq org-log-into-drawer t)
 ;; Save clock data in the CLOCK drawer and state changes and notes in the LOGBOOK drawer
 (setq org-clock-into-drawer "CLOCK")
+
+(defun hp-org-revert-subtasks ()
+  "現タスクの子タスクをDONEからTODOに変えます"
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (org-map-entries
+     '(progn (if (equal (org-entry-get (point) "TODO") "DONE") (org-todo "TODO"))
+             (hp-org-revert-subtasks))
+     (format "LEVEL=%d" (1+ (org-reduced-level (org-outline-level))))
+     'tree 'archive 'comment))) 
