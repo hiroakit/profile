@@ -109,8 +109,9 @@
 
 ;; タグ"HOME"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
- '("H" "HOME (TODO & WAITING only)" h
-   ((tags "+HOME/!+TODO|+WAITING"))))
+ '("H" "@HOME (TODO & WAITING only)" 
+   ((tags "+@HOME/!+TODO|+WAITING"))))
+
 
 ;; タグ"READING"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
