@@ -155,6 +155,10 @@
     (tags-todo "DVD")
     (tags-todo "READING"))))
 
+;;; アジェンダでのclock reportの設定
+(setq org-agenda-clockreport-parameter-plist
+      (quote (:link t :maxlevel 7 :fileskip0 t :compact t :narrow 80)))
+
 ;;; org-refile
 (setq org-refile-targets hp-org-refile-targets)
 
