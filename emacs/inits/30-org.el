@@ -66,19 +66,21 @@
       '(
         ("@HOME" . ?h)
         ("@OFFICE" . ?o)
-        ("@TSUTAYA" . ?t)
+        ("@TSUTAYA")
         ("@ITOYOKADO" . ?i)
         ("@CLEANERS" . ?x)
         ("@POSTOFFICE" .?y)
-        ("@BANK" . ?z)
+        ("@BANK" . ?b)
         ("@LUNCHTIME")
         ("PHONE" . ?p)
         ("MAIL" . ?m)
         ("CONFERENCE" . ?c)
-        ("TALKING")
+        ("TALKING" . ?t)
+        ("TIMEMANAGEMENT")
         ("READING" . ?r)
-        ("WATCHING" . ?w)
-       ))
+        ("WATCHING")
+        ("WRITTING" . ?w)
+        ))
 
 ;;; Org-mode :: Agenda
 
