@@ -103,3 +103,5 @@ if [ -L ${PYENV_ROOT} -o -d ${PYENV_ROOT} ]; then
     eval "$(pyenv init -)"
 fi
 
+# ASP.NET 5
+source /usr/local/lib/dnx/bin/dnvm.sh
