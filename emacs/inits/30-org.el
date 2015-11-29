@@ -114,6 +114,10 @@
  '("H" "@HOME (TODO & WAITING only)" 
    ((tags "+@HOME/!+TODO|+WAITING"))))
 
+;; Z
+(org-add-agenda-custom-command
+ '("Z" "Weekly review" 
+   ((tags "+WEEKLY_REVIEW=\"t\""))))
 
 ;; タグ"READING"で，かつTODOステータスがTODOもしくはWAITINGのタスクを列挙する
 (org-add-agenda-custom-command
