@@ -74,12 +74,13 @@
         ("@LUNCHTIME")
         ("PHONE" . ?p)
         ("MAIL" . ?m)
-        ("CONFERENCE" . ?c)
-        ("TALKING" . ?t)
-        ("TIMEMANAGEMENT")
         ("READING" . ?r)
         ("WATCHING")
-        ("WRITTING" . ?w)
+        ("CONFERENCE" . ?c)
+        ("TALKING" . ?t)
+        ("Scheduling" . ?s)
+        ("Writting" . ?w)
+        ("Payment")
         ))
 
 ;;; Org-mode :: Agenda
@@ -155,11 +156,30 @@
       (org-scheduled-past-days 14)
       (org-deadline-warning-days 14)))
     (todo "WAITING")
-    (tags-todo "OFFICE")
-    (tags-todo "HOME")
-    (tags-todo "COMPUTER")
-    (tags-todo "DVD")
+    (tags-todo "Payment"
+               ((org-agenda-overriding-header "Payment tasks")
+                (org-agenda-sorting-strategy
+                 '(todo-state-down effort-up category-keep))))
+    (tags-todo "Scheduling"
+               ((org-agenda-overriding-header "Scheduling")
+                (org-agenda-sorting-strategy
+                 '(todo-state-down effort-up category-keep))))
+    (tags-todo "Writting"
+               ((org-agenda-overriding-header "Writting")
+                (org-agenda-sorting-strategy
+                 '(todo-state-down effort-up category-keep))))    
+    (tags-todo "@OFFICE")
+    (tags-todo "@HOME")
     (tags-todo "READING"))))
+
+(org-add-agenda-custom-command
+ '("h" "Habits" 
+   ((tags-todo "STYLE=\"habit\""
+               ((org-agenda-overriding-header "Habits")
+                (org-agenda-sorting-strategy
+                 '(todo-state-down effort-up category-keep))
+               )))))
+
 
 ;;; アジェンダでのclock reportの設定
 (setq org-agenda-clockreport-parameter-plist
