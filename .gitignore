@@ -1,6 +1,20 @@
+.python-environments
+
+# Emacs
+emacs/url/cookies
+emacs/bookmarks
 ac-comphist.dat
 auto-save-list
 .org-id-locations
-.DS_Store
 .chpwd-recent-dirs
 elpa/
+~$*
+*~
+\#*\#
+
+# zsh
+zsh/.zcompdump
+
+# Mac
+*.DS_Store
+

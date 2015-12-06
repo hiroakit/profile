@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.hiroakit.autoupgrade-macports</string>
+	<key>ProgramArguments</key>
+	<array>
+	  <string>/usr/local/bin/autoupgrade-macports.sh</string>
+	</array>
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>04</integer>
+      <key>Minute</key>
+      <integer>30</integer>
+    </dict>
+	<key>StandardErrorPath</key>
+	<string>/var/log/com.hiroakit.autoupgrade-macports-error.log</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/com.hiroakit.autoupgrade-macports.log</string>
+</dict>
+</plist>

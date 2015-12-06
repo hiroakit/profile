@@ -63,8 +63,14 @@ export PATH=$PATH:/opt/X11/bin
 export PATH=/usr/local/mysql/bin:$PATH
 
 ## Java
-export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 export CATALINA_HOME=/Library/Tomcat
+export MAVEN3_HOME=/usr/local/apache-maven-3.2.5
+export PATH=$PATH:$MAVEN3_HOME/bin
+
+## PMD
+export PMD_HOME=/usr/local/pmd-bin-5.1.3
+export PATH=$PATH:$PMD_HOME/bin
 
 ## Scala
 export PATH=/usr/local/bin/scala-2.10.3/bin:$PATH
@@ -76,10 +82,26 @@ export PATH=/usr/local/bin/play:$PATH
 export GTAGSCONF=/usr/local/share/gtags/gtags.conf
 export GTAGSLABEL=exuberant-ctags
 
+## Pixar RenderMan
+export RMANTREE=/Applications/Pixar/RenderManProServer-19.0
+export PATH=$PATH:$RMANTREE/bin
+
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
 
 ## rbenv (on Mac OS X Mountain Lion)
 export RBENV_ROOT=$HOME/.rbenv
-export PATH="$RBENV_ROOT/bin:$PATH"
-eval "$(rbenv init -)"
+if [ -d ${RBENV_ROOT} ]; then
+    export PATH="$RBENV_ROOT/bin:$PATH"
+    eval "$(rbenv init -)" 
+fi
+
+# pyenv
+export PYENV_ROOT=${HOME}/.pyenv
+if [ -L ${PYENV_ROOT} -o -d ${PYENV_ROOT} ]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
+
+# ASP.NET 5
+source /usr/local/lib/dnx/bin/dnvm.sh
