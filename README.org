@@ -76,7 +76,7 @@ The downloading packages are as follows.
 | helm            | ELPA                                           |
 | init-loader     | ELPA                                           |
 | js2-mode        | ELPA                                           |
-| org-mode        | Built in                                       |
+| org-mode        | [[http://orgmode.org/ja/][org 8.3.2]]                                      |
 | ruby-additional | ELPA                                           |
 | ruby-block      | ELPA                                           |
 | ruby-mode       | ELPA                                           |
