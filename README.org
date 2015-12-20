@@ -74,7 +74,7 @@ The downloading packages are as follows.
 | csharp-mode     | ELPA                                           |
 | foreign-regexp  | ELPA                                           |
 | helm            | ELPA                                           |
-| init-loader     | auto-install.el                                |
+| init-loader     | ELPA                                           |
 | js2-mode        | ELPA                                           |
 | org-mode        | Built in                                       |
 | ruby-additional | ELPA                                           |

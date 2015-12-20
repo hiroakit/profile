@@ -92,3 +92,32 @@
 (global-set-key (kbd "C-c C-d y") 'hp-year)
 (global-set-key (kbd "C-c C-d m") 'hp-month)
 (global-set-key (kbd "C-c C-d d") 'hp-day)
+
+;;; 各パッケージのパスをload-pathに展開する
+(defun hp-expand-load-path (&rest paths)
+  (let (path)
+    (dolist (path paths paths)
+      (let ((default-directory
+              (expand-file-name path)))
+      (add-to-list 'load-path default-directory)
+      (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+            (normal-top-level-add-subdirs-to-load-path))))))
+
+;;; load-pathを設定
+(when (file-directory-p (symbol-value 'hp-elpa-dir))
+  (hp-expand-load-path hp-elpa-dir))
+(when (file-directory-p (symbol-value 'hp-site-lisp-dir))
+  (hp-expand-load-path hp-site-lisp-dir))
+(when (file-directory-p (symbol-value 'hp-org-mode-dir))
+  (hp-expand-load-path hp-org-mode-dir))
+
+(defun hp-show-core-conf ()
+  "init.elを開きます"
+  (interactive)
+  (switch-to-buffer (find-file-noselect hp-core-conf)))
+
+(defun hp-show-org-conf ()
+  "org-modeの設定ファイルを開きます"
+  (interactive)
+  (switch-to-buffer (find-file-noselect hp-org-conf)))
+
