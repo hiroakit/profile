@@ -11,7 +11,6 @@
   '(("~/org/inbox.org" :level . 1)
     ("~/org/private.org" :level . 1)
     ("~/org/book.org" :level . 1)
-    ("~/work/work.org" :level . 2)
     ) 
   "org-refileの対象")
 (defvar hp-org-capture-templates
@@ -41,7 +40,7 @@
 
 ;; アジェンダ表示対象のファイル 
 ;; (ディレクトリを指定すると、そこに入っている全てのファイルが対象となる)
-(setq org-agenda-files (list org-directory hp-org-work-dir))
+(setq org-agenda-files (list org-directory)) 
 
 ;;; Libre Office 
 ;; Org-mode with Libre Office Writer
