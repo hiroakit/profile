@@ -26,7 +26,6 @@ case "${OSTYPE}" in
         # TODO : MacPortsが入っていない環境も考慮した記述に変更する
         path=(
             /usr/local/{bin,sbin}(N-/)
-            /opt/local/{bin,sbin}(N-/)
             /usr{/bin,/sbin}(N-/)
             /{bin,sbin}(N-/)
         )
@@ -46,7 +45,6 @@ case "${OSTYPE}" in
     darwin*)
         manpath=(
             /usr/local/share/man(N-/)
-            /opt/local/share/man(N-/)
             /usr/share/man(N-/)
         )
         ;;
@@ -90,18 +88,18 @@ export PATH=$PATH:$RMANTREE/bin
 export MAYA_UI_LANGUAGE="en_US"
 
 ## rbenv (on Mac OS X Mountain Lion)
-export RBENV_ROOT=$HOME/.rbenv
-if [ -d ${RBENV_ROOT} ]; then
-    export PATH="$RBENV_ROOT/bin:$PATH"
-    eval "$(rbenv init -)" 
-fi
+#export RBENV_ROOT=$HOME/.rbenv
+#if [ -d ${RBENV_ROOT} ]; then
+#    export PATH="$RBENV_ROOT/bin:$PATH"
+#    eval "$(rbenv init -)" 
+#fi
 
 # pyenv
-export PYENV_ROOT=${HOME}/.pyenv
-if [ -L ${PYENV_ROOT} -o -d ${PYENV_ROOT} ]; then
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
+#export PYENV_ROOT=${HOME}/.pyenv
+#if [ -L ${PYENV_ROOT} -o -d ${PYENV_ROOT} ]; then
+#    export PATH="$PYENV_ROOT/bin:$PATH"
+#    eval "$(pyenv init -)"
+#fi
 
 # ASP.NET 5
 source /usr/local/lib/dnx/bin/dnvm.sh
