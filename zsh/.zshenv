@@ -87,12 +87,12 @@ export PATH=$PATH:$RMANTREE/bin
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
 
-## rbenv (on Mac OS X Mountain Lion)
-#export RBENV_ROOT=$HOME/.rbenv
-#if [ -d ${RBENV_ROOT} ]; then
-#    export PATH="$RBENV_ROOT/bin:$PATH"
-#    eval "$(rbenv init -)" 
-#fi
+## rbenv
+export RBENV_ROOT=$HOME/.rbenv
+if [ -d ${RBENV_ROOT} ]; then
+   export PATH="$RBENV_ROOT/bin:$PATH"
+   eval "$(rbenv init -)" 
+fi
 
 # pyenv
 #export PYENV_ROOT=${HOME}/.pyenv
