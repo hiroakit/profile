@@ -57,6 +57,8 @@
 ;; frame resizer
 (global-set-key "\C-c\C-r" 'my-window-resizer)
 
+;; C-zを無効化
+(global-unset-key "\C-z")
 
 (when (require 'flycheck nil t)
   (define-key global-map (kbd "C-x C-n") 'flycheck-next-error)
