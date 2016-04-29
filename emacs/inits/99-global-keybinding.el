@@ -17,7 +17,9 @@
 ;; along with this program. 
 ;; If not, see <http://www.gnu.org/licenses/>.
 
-;; helm-mode
+;;; Code:
+
+;;helm-mode
 (when (require 'helm-config nil t)
   ;; Emacsのコマンドを絞り込むためのキーバインディグ
   (define-key global-map (kbd "M-x")     'helm-M-x)
@@ -61,3 +63,4 @@
   (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
   (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
 
+;;; 99-global-keybinding.el ends here
