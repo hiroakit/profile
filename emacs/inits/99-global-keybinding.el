@@ -55,3 +55,9 @@
 ;; frame resizer
 (global-set-key "\C-c\C-r" 'my-window-resizer)
 
+
+(when (require 'flycheck nil t)
+  (define-key global-map (kbd "C-x C-n") 'flycheck-next-error)
+  (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
+  (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
+
