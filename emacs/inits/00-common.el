@@ -23,6 +23,12 @@
 ;; 起動時のスプラッシュイメージを表示しない
 (setq inhibit-startup-screen t)
 
+;; モードラインに行番号表示
+(line-number-mode t)
+
+;; モードラインに列番号表示
+(column-number-mode t)
+
 ;; ドラッグ&ドロップ, あるいは右クリック経由のコンテキストメニューなどで
 ;; ファイルを開くときには新しいウィンドウで開かずに新規バッファで開く
 (define-key global-map [ns-drag-file] 'ns-find-file)
