@@ -51,3 +51,7 @@
 (global-set-key "\C-co" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+;; frame resizer
+(global-set-key "\C-c\C-r" 'my-window-resizer)
+
