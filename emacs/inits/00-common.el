@@ -23,6 +23,8 @@
 ;; 起動時のスプラッシュイメージを表示しない
 (setq inhibit-startup-screen t)
 
+;; スクロールバー非表示
+(set-scroll-bar-mode nil)
 ;; モードラインに行番号表示
 (line-number-mode t)
 
