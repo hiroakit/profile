@@ -1,6 +1,7 @@
 .python-environments
 
 # Emacs
+emacs/undohist
 emacs/url/cookies
 emacs/bookmarks
 ac-comphist.dat
