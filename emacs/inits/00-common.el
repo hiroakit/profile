@@ -25,6 +25,11 @@
 
 ;; スクロールバー非表示
 (set-scroll-bar-mode nil)
+
+;; タイトルバーにファイルのフルパス表示
+(setq frame-title-format
+      (format "%%f - Emacs@%s" (system-name)))
+
 ;; モードラインに行番号表示
 (line-number-mode t)
 
