@@ -30,6 +30,17 @@
 (setq frame-title-format
       (format "%%f - Emacs@%s" (system-name)))
 
+;; 括弧の範囲内を強調表示
+(show-paren-mode t)
+(setq show-paren-delay 0)
+(setq show-paren-style 'expression)
+
+;; 括弧の範囲色
+(set-face-background 'show-paren-match-face "#500")
+
+;; リージョンの色
+(set-face-background 'region "#4a4a4a")
+
 ;; モードラインに行番号表示
 (line-number-mode t)
 
