@@ -13,19 +13,28 @@
   '(
     ;; 以下に使用するパッケージを記述する
     init-loader
-    scala-mode2
-    yasnippet
     auto-complete
-    foreign-regexp
-    web-mode
-    js2-mode
-    csharp-mode
     cmake-mode
+    company
+    company-irony
+    company-sourcekit
+    csharp-mode
+    flycheck
+    foreign-regexp
+    js2-mode
     helm
+    helm-swoop
+    irony
     ruby-mode
     ruby-additional
     ruby-block
+    neotree
     org-tree-slide
+    swift-mode
+    undo-tree
+    undohist
+    web-mode
+    yasnippet
     )
 )
 
