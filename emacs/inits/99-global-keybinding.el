@@ -55,7 +55,7 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; frame resizer
-(global-set-key "\C-c\C-r" 'my-window-resizer)
+(define-key global-map (kbd "C-c C-r") 'my-window-resizer)
 
 ;; C-zを無効化
 (global-unset-key "\C-z")
