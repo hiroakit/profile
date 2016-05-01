@@ -72,15 +72,20 @@ The downloading packages are as follows.
 | cmake-mode      | ELPA                                           |
 | cua-mode        | Built in                                       |
 | csharp-mode     | ELPA                                           |
+| flycheck        | ELPA                                           |
 | foreign-regexp  | ELPA                                           |
-| helm            | ELPA                                           |
+| helm            | ELPA                                           | 
+| helm-swoop      | ELPA                                           |  
 | init-loader     | ELPA                                           |
 | js2-mode        | ELPA                                           |
+| neotree         | ELPA                                           |
 | org-mode        | [[http://orgmode.org/ja/][org 8.3.2]]                                      |
 | ruby-additional | ELPA                                           |
 | ruby-block      | ELPA                                           |
 | ruby-mode       | ELPA                                           |
-| scala-mode2     | ELPA                                           |
+| swift-mode      | ELPA                                           |
+| undo-tree       | ELPA                                           |
+| undohist        | ELPA                                           |
 | web-mode        | ELPA                                           |
 | yasnippet       | ELPA                                           |
  
@@ -108,10 +113,19 @@ The downloading packages are as follows.
 | Insert snippet                 | C-x i i               | yasnippet     | yas-minor-mode-map                      |
 | Create snippet                 | C-x i n               | yasnippet     | yas-minor-mode-map                      |
 | Edit registerd snippet         | C-x i v               | yasnippet     | yas-minor-mode-map                      |
-| Show agend command menu        | C-c a                 | org           | global                                  |
-| Capture task                   | C-c c                 | org           | global                                  |
+| Show error list                | C-c C-l               | flycheck      | global-map                              |
+| Jump to next error             | C-c C-n               | flycheck      | global-map                              |
+| Jump to  previous error        | C-c C-p               | flycheck      | global-map                              |
+| Show agend command menu        | C-c a                 | org           | global-map                              |
+| Capture task                   | C-c c                 | org           | global-map                              |
 | Go to region select mode       | C RET  (Ctrl + RET)   | cua           | cua-mode                                |
-| Cancel                         | C-g                   | -             | global                                  |
+| Turn on frame rizeing mode     | C-c C-r               | -             | global-map                              |
+| To reduce the left frame       | h                     | -             | -                                       |
+| To reduce the rigth frame      | l                     | -             | -                                       |
+| To reduce the top frame        | k                     | -             | -                                       |
+| To reduce the bottom frame     | j                     | -             | -                                       |
+| Show undo tree                 | C-x u                 | -             | global-map                              |
+| Cancel                         | C-g                   | -             | global-map                              |
 
 ** Resources path
 
