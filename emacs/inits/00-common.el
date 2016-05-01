@@ -23,6 +23,9 @@
 ;; 起動時のスプラッシュイメージを表示しない
 (setq inhibit-startup-screen t)
 
+;; ツールバー非表示
+(tool-bar-mode -1)
+
 ;; スクロールバー非表示
 (set-scroll-bar-mode nil)
 
