@@ -55,14 +55,29 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; frame resizer
+;;(global-set-key "\C-c\C-r" 'my-window-resizer)
 (define-key global-map (kbd "C-c C-r") 'my-window-resizer)
 
 ;; C-zを無効化
 (global-unset-key "\C-z")
+
+;; コメントアウトのキーバインディングををCtrl押しながらに変更する
+(define-key global-map (kbd "M-;") nil) 
+(define-key global-map (kbd "C-;") 'comment-dwim) 
+
+(define-key global-map (kbd "M-;") 'show-paren-mode)
+
+;; 文字コードと改行コードの変更する関数
+(define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
 
 (when (require 'flycheck nil t)
   (define-key global-map (kbd "C-x C-n") 'flycheck-next-error)
   (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
   (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
 
+(global-set-key (kbd "C-c C-d y") 'hp-year)
+(global-set-key (kbd "C-c C-d m") 'hp-month)
+(global-set-key (kbd "C-c C-d d") 'hp-day)
+
 ;;; 99-global-keybinding.el ends here
+ 

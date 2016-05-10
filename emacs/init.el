@@ -13,7 +13,6 @@
   '(
     ;; 以下に使用するパッケージを記述する
     init-loader
-    auto-complete
     cmake-mode
     company
     company-irony
@@ -21,27 +20,29 @@
     csharp-mode
     flycheck
     foreign-regexp
-    js2-mode
     helm
+    helm-gtags
     helm-swoop
     irony
+    js2-mode
+    neotree
+    org-tree-slide
+    osx-dictionary
     ruby-mode
     ruby-additional
     ruby-block
-    neotree
-    org-tree-slide
     swift-mode
     undo-tree
     undohist
     web-mode
     yasnippet
+    zoom-window
     )
 )
 
 ;;; パッケージ
 (require 'package)
 (add-to-list 'package-archives (cons "melpa" hp-melpa-url))
-(add-to-list 'package-archives (cons "marmalade" hp-marmalade-url))
 (package-initialize)
 
 ;;; 未インストールのパッケージを探す
