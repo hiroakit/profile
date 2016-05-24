@@ -62,3 +62,7 @@
   (setq init-loader-show-log-after-init 'error-only)
   (when (file-directory-p (symbol-value 'hp-inits-dir))
     (init-loader-load hp-inits-dir)))
+
+(defun open-current-dir-with-finder ()
+  (interactive)
+  (shell-command (concat "open .")))
