@@ -63,6 +63,5 @@
   (when (file-directory-p (symbol-value 'hp-inits-dir))
     (init-loader-load hp-inits-dir)))
 
-(defun open-current-dir-with-finder ()
-  (interactive)
-  (shell-command (concat "open .")))
+;;; ユーティリティを読み込む
+(require 'hp-utility)
