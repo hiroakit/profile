@@ -1,6 +1,14 @@
 
 ;;; Code:
 
+(defun hp-create-temporary-org-buffer ()
+  "Get new temporary org-mode buffer."
+  (interactive)
+  ;; バッファ *temp org* を作成
+  (switch-to-buffer (generate-new-buffer "*temp org*"))
+  ;; org-modeに切り替える
+  (org-mode))
+
 (defun hp-insert-current-date-text ()
   "Insert current date."  
   (interactive) 
