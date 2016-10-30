@@ -75,9 +75,11 @@
   (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
   (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
 
-(global-set-key (kbd "C-c C-d y") 'hp-year)
-(global-set-key (kbd "C-c C-d m") 'hp-month)
-(global-set-key (kbd "C-c C-d d") 'hp-day)
+;; 日時の取得
+(global-set-key (kbd "C-c C-d c") 'hp-insert-current-date-text)
+(global-set-key (kbd "C-c C-d y") 'hp-insert-current-year-text)
+(global-set-key (kbd "C-c C-d m") 'hp-insert-current-month-text)
+(global-set-key (kbd "C-c C-d d") 'hp-insert-current-day-text)
 
 ;;; 99-global-keybinding.el ends here
  

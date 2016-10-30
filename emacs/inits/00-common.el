@@ -105,17 +105,6 @@
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
 
-;; 日付取得
-(defun hp-year () 
-  (interactive) 
-  (insert (format-time-string "%Y"))) 
-(defun hp-month () 
-  (interactive) 
-  (insert (format-time-string "%m"))) 
-(defun hp-day () 
-  (interactive) 
-  (insert (format-time-string "%d"))) 
-
 ;;; 各パッケージのパスをload-pathに展開する
 (defun hp-expand-load-path (&rest paths)
   (let (path)
