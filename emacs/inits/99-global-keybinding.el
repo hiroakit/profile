@@ -65,15 +65,24 @@
 (define-key global-map (kbd "M-;") nil) 
 (define-key global-map (kbd "C-;") 'comment-dwim) 
 
+;; カッコのスタートからエンドまでをハイライト
 (define-key global-map (kbd "M-;") 'show-paren-mode)
 
 ;; 文字コードと改行コードの変更する関数
 (define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
 
+;; flycheck
 (when (require 'flycheck nil t)
   (define-key global-map (kbd "C-x C-n") 'flycheck-next-error)
   (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
   (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
+
+;; 矩形範囲の拡大・縮小
+(global-set-key (kbd "C-c r u") 'er/expand-region)
+(global-set-key (kbd "C-c r d") 'er/contract-region)
+
+;; 補完の起動
+(global-set-key (kbd "C-c .") 'company-complete)
 
 ;; 日時の取得
 (global-set-key (kbd "C-c C-d c") 'hp-insert-current-date-text)

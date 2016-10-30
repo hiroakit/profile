@@ -63,5 +63,9 @@
   (when (file-directory-p (symbol-value 'hp-inits-dir))
     (init-loader-load hp-inits-dir)))
 
+;;; 矩形の拡大・縮小
+(require 'expand-region)
+
 ;;; ユーティリティを読み込む
 (require 'hp-utility)
+
