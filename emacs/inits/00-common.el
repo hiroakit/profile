@@ -116,10 +116,6 @@
   (interactive) 
   (insert (format-time-string "%d"))) 
 
-(global-set-key (kbd "C-c C-d y") 'hp-year)
-(global-set-key (kbd "C-c C-d m") 'hp-month)
-(global-set-key (kbd "C-c C-d d") 'hp-day)
-
 ;;; 各パッケージのパスをload-pathに展開する
 (defun hp-expand-load-path (&rest paths)
   (let (path)
