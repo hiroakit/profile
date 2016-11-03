@@ -54,9 +54,8 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;; frame resizer
-;;(global-set-key "\C-c\C-r" 'my-window-resizer)
-(define-key global-map (kbd "C-c C-r") 'my-window-resizer)
+;; frameの境界線を動かす
+(define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
 
 ;; C-zを無効化
 (global-unset-key "\C-z")
