@@ -48,11 +48,10 @@
   ;; 前回のhelmコマンドの続きから絞り込むためのキーバインディグ
   (define-key global-map (kbd "M-r")     'helm-resume))
 
-;; org-mode (org-modeは一番優先する)
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-co" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+;; org-mode (org-modeはhelm-modeの次に優先する)
+(global-set-key (kbd "C-c o") 'org-capture)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
 
 ;; frameの境界線を動かす
 (define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
