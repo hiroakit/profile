@@ -1,7 +1,7 @@
 
 ;;; Code:
 
-(defun hp-create-temporary-org-buffer ()
+(defun hp-create-temp-org-buffer ()
   "Get new temporary org-mode buffer."
   (interactive)
   ;; バッファ *temp org* を作成

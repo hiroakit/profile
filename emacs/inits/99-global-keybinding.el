@@ -90,7 +90,7 @@
 (global-set-key (kbd "C-c C-d d") 'hp-insert-current-day-text)
 
 ;; 一時的なorgのバッファを作成
-(global-set-key (kbd "C-c t") 'hp-create-temporary-org-buffer)
+(global-set-key (kbd "C-c t") 'hp-create-temp-org-buffer)
 
 ;; 現在のディレクトリをFinderで開く
 (global-set-key (kbd "C-c f") 'hp-open-current-directory)
