@@ -1,0 +1,200 @@
+#+TITLE: Operations Guide for My Emacs
+#+AUTHOR: Hiroaki Endoh
+#+LANGUAGE: ja
+#+OPTIONS: \n:nil
+#+STARTUP: overview
+#+STARTUP: hidestars
+
+* About this
+My customization note for Emacs.
+I use Emacs 24.3 now..., I'll change Emacs 25 !
+* Operations Guide
+** General
+
+ #+CAPTION: Key bindings for general
+ | action                 | function                     | command   | key map    |
+ |------------------------+------------------------------+-----------+------------|
+ | Show key bindings      | describe-bindings            | C-h b     | global-map |
+ | Open current directory | hp-open-current-directory    | C-c f     | global-map |
+ | Inset current date     | hp-insert-current-date-text  | C-c C-d c | global-map |
+ | Inset current year     | hp-insert-current-year-text  | C-c C-d y | global-map |
+ | Inset current month    | hp-insert-current-month-text | C-c C-d m | global-map |
+ | Inset current day      | hp-insert-current-day-text   | C-c C-d d | global-map |
+ | Cancel                 | ? (TBD)                      | C-g       | global-map |
+
+*** Frame
+
+ If you get frame size adjusted, these command help you. 
+
+  #+CAPTION: Key bindings for frame control
+  | action                     | function | command | key map    |
+  |----------------------------+----------+---------+------------|
+  | Turn on frame rizeing mode | -        | C-c C-r | global-map |
+  | Move line left             | -        | h       | -          |
+  | Move line right            | -        | l       | -          |
+  | Move line up               | -        | k       | -          |
+  | Move line down             | -        | j       | -          |
+  |                            |          |         |            |
+
+*** Region
+
+ If you get region, these command help you. 
+
+ | action                   | function           | command             | key map    |
+ |--------------------------+--------------------+---------------------+------------|
+ | Go to region select mode | ? (TBD)            | C RET  (Ctrl + RET) | cua-mode   |
+ | Expand region            | er/expand-region   | C-c r u             | global-map |
+ | Contract region          | er/contract-region | C-c r d             | global-map |
+
+*** Undo
+
+ You can get Undo history by these command.
+
+ #+CAPTION: Key bindings
+ | action         | function                  | command | key map    |
+ |----------------+---------------------------+---------+------------|
+ | Show undo tree | undo-tree-visualize       | C-x u   | global-map |
+ | Exit undo tree | undo-tree-visualizer-quit | q       | ? (TBD)    |
+
+*** Flycheck
+
+Flycheck catch error.
+
+ #+CAPTION: Key bindings for flycheck
+ | action                  | function          | command | key map    |
+ |-------------------------+-------------------+---------+------------|
+ | Show error list         |                   | C-c C-l | global-map |
+ | Jump to next error      |                   | C-c C-n | global-map |
+ | Jump to  previous error |                   | C-c C-p | global-map |
+
+*** Snippets
+
+Snippet manage by yas.
+
+ #+CAPTION: Key bindings for snippets
+ | action                 | function               | command | key map            |
+ |------------------------+------------------------+---------+--------------------|
+ | Insert snippet         | yas-insert-snippet     | C-x i i | yas-minor-mode-map |
+ | Create snippet         | yas-new-snippet        | C-x i n | yas-minor-mode-map |
+ | Edit registerd snippet | yas-visit-snippet-file | C-x i v | yas-minor-mode-map |
+
+*** Completion
+
+Auto-complete take you some completion.
+
+  #+CAPTION: Key bindings
+  | action                         | command               | package       | key map                                 |
+  |--------------------------------+-----------------------+---------------+-----------------------------------------|
+  | Do completion                  | TAB                   | auto-complete | auto-complete-mode                      |
+  | Show completion menu           | TAB                   | auto-complete | auto-complete-mode                      |
+  | Hide completion menu           | ESC                   | auto-complete | ac-completing-map                       |
+  | Select up on completion menu   | C-p or up arrow key   | auto-complete | ac-menu-map                             |
+  | Select down on completion menu | C-n or down arrow key | auto-complete | ac-menu-map                             |
+
+** Helm
+
+Helm put you powerful searching feature.
+
+ #+CAPTION: Key bindings for helm
+ | action                    | command | package | key map                                 |
+ |---------------------------+---------+---------+-----------------------------------------|
+ | Show recent               | C-x C-x | helm    | global-map                              |
+ | Show command menu         | M-x     | helm    | global-map                              |
+ | Show menu that find files | C-x C-f | helm    | global-map                              |
+ | Show recent files         | C-x C-r | helm    | global-map                              |
+ | Show kill ring            | M-y     | helm    | global-map                              |
+ | Show helm imenu           | C-c i   | helm    | global-map                              |
+ | Show buffers              | C-x C-b | helm    | global-map                              |
+ | Show helm mini            | C-x C-m | helm    | global-map                              |
+ | Show resumed helm         | M-r     | helm    | global-map                              |
+ | Delete backword character | C-h     | helm    | helm-map, helm-find-files-map           |
+ | Execute parsistent        | TAB     | helm    | helm-find-files-map, helm-read-file-map |
+
+*** Helm Swoop
+
+ Helm-Swoop launch when you put M-i in I-Search (C-s).
+
+** Org mode
+
+Org-mode will help you as R2-D2.
+
+ #+CAPTION: Key bindings for org-mode
+ | action                 | function                  | command | key map    |
+ |------------------------+---------------------------+---------+------------|
+ | Add task               | org-capture               | C-c o   | global-map |
+ | Switch org buffer      | org-iswitchb              | C-c b   | global-map |
+ | Show agenda menu       | org-agenda                | C-c a   | global-map |
+ | Create temp org buffer | hp-create-temp-org-buffer | C-c t   | global-map |
+
+*** Links
+
+ If you need to get a org-headling linked, these command help you. 
+
+  #+CAPTION: Key bindings for links
+  | action            | function          | command   | key map    |
+  |-------------------+-------------------+-----------+------------|
+  | Add link          | org-insert-link   | C-c C-l   | global-map |
+  | Store link        | org-store-link    | C-c l     | global-map |
+  | Open link         | org-open-at-point | C-c C-o   | global-map |
+
+ If you will get some more information, read this help.
+ - [[http://orgmode.org/manual/Hyperlinks.html#Hyperlinks][Hyperlinks - The Org Manual]]
+   - [[http://orgmode.org/manual/External-links.html][External links - The Org Manual]]
+   - [[http://orgmode.org/manual/Handling-links.html][Handling links - The Org Manual]]
+* Using packages
+
+#+CAPTION: Using packages
+| package         | source                                         |
+|-----------------+------------------------------------------------|
+| auto-install    | http://www.emacswiki.org/emacs/auto-install.el |
+| auto-complete   | ELPA                                           |
+| cmake-mode      | ELPA                                           |
+| cua-mode        | Built in                                       |
+| csharp-mode     | ELPA                                           |
+| flycheck        | ELPA                                           |
+| foreign-regexp  | ELPA                                           |
+| helm            | ELPA                                           | 
+| helm-swoop      | ELPA                                           |  
+| init-loader     | ELPA                                           |
+| js2-mode        | ELPA                                           |
+| neotree         | ELPA                                           |
+| org-mode        | [[http://orgmode.org/ja/][org 8.3.2]]                                      |
+| ruby-additional | ELPA                                           |
+| ruby-block      | ELPA                                           |
+| ruby-mode       | ELPA                                           |
+| swift-mode      | ELPA                                           |
+| undo-tree       | ELPA                                           |
+| undohist        | ELPA                                           |
+| web-mode        | ELPA                                           |
+| yasnippet       | ELPA                                           |
+
+* Resources path
+
+#+CAPTION: Resources path
+| resource                                    | path (finished setup.sh)         |
+|---------------------------------------------+----------------------------------|
+| Dictionary files for auto-complete          | $HOME/.emacs.d/dict/ac-dict      |
+| User defined dictionaries for auto-complete | $HOME/.emacs.d/dict/ac-user-dict |
+| Snippet for yasnippet                       | $HOME/.emacs.d/snippets          |
+
+* Config files
+
+#+CAPTION: Config files
+| config for                           | path (finished setup.sh)                     |
+|--------------------------------------+----------------------------------------------|
+| for init-loader and expand load-path | $HOME/.emacs.d/init.el                       |
+| Font and more                        | $HOME/.emacs.d/inits/00-common.el            |
+| for auto-install.el                  | $HOME/.emacs.d/inits/03-auto-install.el      |
+| for cmake-mode                       | $HOME/.emacs.d/inits/04-cmake.el             |
+| for package.el                       | $HOME/.emacs.d/inits/20-package.el           |
+| for helm-mode                        | $HOME/.emacs.d/inits/21-helm.el              |
+| for auto-complete-mode               | $HOME/.emacs.d/inits/25-auto-complete.el     |
+| for org-mode                         | $HOME/.emacs.d/inits/30-org.el               |
+| for yasnippet                        | $HOME/.emacs.d/inits/35-yasnippet.el         |
+| for ruby-mode                        | $HOME/.emacs.d/inits/40-ruby.el              |
+| for javascript-mode and j2-mode      | $HOME/.emacs.d/inits/41-javascript.el        |
+| for scala2-mode                      | $HOME/.emacs.d/inits/71-scala.el             |
+| for web-mode (including asp)         | $HOME/.emacs.d/inits/72-web-mode.el          |
+| for csharp-mode                      | $HOME/.emacs.d/inits/73-csharp.el            |
+| Global key assign                    | $HOME/.emacs.d/inits/99-global-keybinding.el |
+
