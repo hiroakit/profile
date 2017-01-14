@@ -68,17 +68,12 @@ Dependency.
 |---------+-------------------------------|
 | zaw     | Emacs Anything like interface |
 
-* iTerm
+* Profile for Terminal.app 
 
-It just fits me on "MacBook Air 13-inch". 
-Maybe, you feel small characters if you use a mac larger than this model.
+If you use profile, you need to get MigMix 2M.
 
-** Text
+MigMixフォント : M+とIPAの合成フォント
+http://mix-mplus-ipa.osdn.jp/migmix/
 
-| Font           | 14pt MigMix 2M Regular |
-| Cursor         | Box                    |
 
-** Color
-
-I'm looking for color style.
 
