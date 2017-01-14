@@ -4,15 +4,6 @@
 # Common
 #-------------------------------------------
 
-case "${OSTYPE}" in
-freebsd*|darwin*)
-    alias ls="ls -G -w"
-    ;;
-linux*)
-    export PATH=$PATH:/usr/local/tripwire/sbin
-    ;;
-esac
-
 setopt no_beep           # ビープ音を鳴らさない
 setopt ignore_eof        # ctr-d でログアウトしない
 setopt auto_cd           # ディレクトリ名の入力だけ移動可能にする
@@ -41,67 +32,29 @@ case ${UID} in
     RPROMPT="%{${fg[green]}%}[%~:%T]%{${reset_color}%}"
     ;;
 *)
-    PROMPT="%{${fg_bold[red]}%}%n@%m%%%{${reset_color}%} "
+    # %n : ユーザ名
+    # %m : 短いホスト名
+
+    PROMPT="%{${fg_bold[red]}%}%n%%%{${reset_color}%} "
     PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
     SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-    RPROMPT="%{${fg[green]}%}[%~:%T]%{${reset_color}%}"
+    RPROMPT="%{${fg_bold[green]}%}[%~:%T]%{${reset_color}%}"
     [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
         PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
     ;;
 esac
 
-# %n : ユーザ名
-# %m : 短いホスト名
-
 # ls
-# export LSCOLORS=exfxcxdxbxegedabagacad # (デフォルト)
-export LSCOLORS=gxfxcxdxbxegedabagacad
+# LSCOLORS: BSD ls
+# LS_COLORS: GNU ls
+export LSCOLORS=exfxcxdxbxegedabagaxex
+export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
-## terminal configuration
-#
-case "${TERM}" in
-screen)
-    TERM=xterm
-    ;;
-esac
- 
-case "${TERM}" in
-xterm|xterm-color)
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm-color)
-    stty erase '^H'
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm)
-    stty erase '^H'
-    ;;
-cons25)
-    unset LANG
-    export LSCOLORS=ExFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-jfbterm-color)
-    export LSCOLORS=gxFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;36:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;36;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-esac
- 
-# set terminal title including current directory
-#
-case "${TERM}" in
-xterm|xterm-color|kterm|kterm-color)
-    precmd() {
-        echo -ne "\033]0;${USER}@${HOST%%.*}:${PWD}\007"
-    }
-    ;;
-esac
+# プロンプトを表示する直前に呼ばれるHook関数
+precmd() {
+    # タイトル欄を user@hostname にする
+    echo -ne "\033]0;${USER}@${HOST%%.*}\007"
+}
  
 #-------------------------------------------
 # Complement
@@ -123,11 +76,11 @@ setopt always_to_end     # 補完時に文字列末尾へカーソル移動
  
 zstyle ':completion:*:default' menu select=1        # 保管候補のカーソル選択を有効にする
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
+zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 
 # 補完候補の増やすためのディレクトリをfpathに追加
 fpath=(${ZDOTDIR}/functions/completion ${fpath})
 autoload -U compinit; compinit
-
 
 #-------------------------------------------
 # History
