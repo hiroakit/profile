@@ -1,3 +1,4 @@
+export TERM='xterm-256color'
 export ZDOTDIR=$HOME/.zsh
 export LANG=ja_JP.UTF-8
 
@@ -102,4 +103,4 @@ fi
 #fi
 
 # ASP.NET 5
-source /usr/local/lib/dnx/bin/dnvm.sh
+#source /usr/local/lib/dnx/bin/dnvm.sh
