@@ -1,0 +1,4 @@
+---
+ruby_global_version: 2.3.0
+ruby_install_gems:
+  - bundler

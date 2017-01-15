@@ -1,0 +1,37 @@
+#+TITLE: Provisioning playbook for Mac OS X
+#+AUTHOR: Hiroaki ENDOH
+
+* Summary
+This repository has the source code that to build my development environment automatically for Mac OS X. This code has dependency on Ansible, MacPorts and few packages.
+
+I was inspired by these other repository.
+- https://github.com/mawatari/mac-provisioning
+- https://github.com/shin1x1/osx-provisioning-with-ansible
+- https://github.com/SimplyAdmire/Ansible-MacPorts-Devbox
+
+* Requirements
+This code has dependency on below:
+- Mac OS X 10.10
+- Xcode 7.2
+- Apple Command Line Tools
+- MacPorts 2.3.4
+- Ansible 1.9.3
+
+* Usage
+#+BEGIN_SRC sh
+$ git clone https://github.com/hiroakit/provisioning
+$ cd provisioning
+$ ansible-playbook -i hosts osx.yml -K
+#+END_SRC 
+ 
+* Construction
+|-------------------+-------------------|
+| summry            | file or directory |
+|-------------------+-------------------|
+| osx playbook      | osx.yml           |
+| inventory file    | hosts             |
+| task              | roles             |
+| variable for task | host_vars         |
+|-------------------+-------------------|
+* Licence
+MIT

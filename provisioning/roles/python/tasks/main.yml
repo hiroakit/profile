@@ -1,0 +1,44 @@
+---
+- name: check installed pyenv
+  shell: pyenv --version
+  ignore_errors: true
+  register: has_pyenv
+  tags:
+    - python
+
+- name: git clone pyenv.git
+  git: repo=https://github.com/yyuu/pyenv.git dest=~/src/pyenv
+  when: has_pyenv.rc != 0  
+  tags:
+    - python
+
+- name: create .pyenv symlink
+  file: src=~/src/pyenv dest=~/.pyenv state=link
+  tags:
+    - python
+
+- name: check installed global python
+  shell: pyenv versions | grep {{ python_global_version }}
+  ignore_errors: true
+  register: has_global_python
+  tags:
+    - python
+
+- name: install global python
+  shell: pyenv install {{ python_global_version }}
+  when: has_global_python.rc != 0  
+  tags:
+    - python
+
+- name: check set global python
+  shell: pyenv global | grep {{ python_global_version }}
+  ignore_errors: true
+  register: set_global_python
+  tags:
+    - python
+
+- name: set global python version
+  shell: pyenv global {{ python_global_version }}
+  when: set_global_python.rc != 0  
+  tags:
+    - python
