@@ -1,0 +1,20 @@
+---
+- name: create .emacs.d symlink
+  file: src=~/src/profile/resources/emacs dest=~/.emacs.d state=link
+  tags:
+    - dotfiles
+
+- name: git clone zaw.git
+  git: repo=https://github.com/zsh-users/zaw.git dest=~/src/profile/resources/zsh/zaw
+  tags:
+    - dotfiles
+
+- name: create .zsh symlink
+  file: src=~/src/profile/resources/zsh dest=~/.zsh state=link
+  tags:
+    - dotfiles
+
+- name: create .zshenv symlink
+  file: src=~/src/profile/resources/zsh/.zshenv dest=~/.zshenv state=link
+  tags:
+    - dotfiles

@@ -1,0 +1,1 @@
+/usr/local/Cellar/global/6.5.4/share/gtags/gtags.el

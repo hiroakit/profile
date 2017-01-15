@@ -1,0 +1,14 @@
+# Download dir
+downloads/
+
+# Documents
+*.html
+
+# Emacs
+~$*
+*~
+\#*\#
+
+# Mac
+*.DS_Store
+

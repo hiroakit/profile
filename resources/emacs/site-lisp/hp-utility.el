@@ -1,11 +1,46 @@
 
 ;;; Code:
 
+(defun hp-show-core-conf ()
+  "init.elを開く."
+  (interactive)
+  (switch-to-buffer (find-file-noselect hp-core-conf)))
+
+(defun hp-measure-emacs-initialization-time ()
+  "Emacsの初期化にかかる秒数を計測する."
+  (message "Emacs initialization time: %.3f sec"
+             (float-time (time-subtract after-init-time before-init-time))))
+
+(defun add-org-task-to-reminder ()
+  "orgのタスクをリマインダー.appに登録する."
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (setq reminder-list-name "リマインダー")
+    (setq element (org-element-at-point))
+    (setq title (org-element-property :title element))
+    (setq command (format "reminders add %s %s" reminder-list-name title))
+    (shell-command-to-string command)))
+
+;; (defun hp-org-task4 ()
+;;   "hoge"
+;;   (interactive)
+;;   (when (eq major-mode 'org-mode)
+;;      (let ((ele (org-element-at-point)))
+;;        (message (org-element-property :raw-value ele)))))
+
+;; (defun hp-org-task2 ()
+;;   "hoge"
+;;   (interactive)
+;;   (when (eq major-mode 'org-mode)
+;;     (org-map-entries
+;;      '(progn (if (equal (org-entry-get (point) "TODO") "TODO")
+;;                  (message (org-entry-get (point) ":raw-value"))))))) 
+
 (defun hp-create-temp-org-buffer ()
   "Get new temporary org-mode buffer."
   (interactive)
   ;; バッファ *temp org* を作成
-  (switch-to-buffer (generate-new-buffer "*temp org*"))
+  (switch-to-buffer (generate-new-buffer "*temp org*"))  
   ;; org-modeに切り替える
   (org-mode))
 
