@@ -86,9 +86,6 @@
             ;; 矩形選択にcua-modeを使う.
             (cua-mode t)
             (setq cua-enable-cua-keys nil)
-          
-            ;; リージョンの色.
-            (set-face-background 'region "#4a4a4a")
 
             ;; buffer-nameを識別しやすくする設定
             (require 'uniquify)
@@ -212,7 +209,8 @@
   (setq show-paren-style 'expression)
 
   ;; 括弧の範囲色
-  (set-face-background 'show-paren-match-face "#500"))
+  ;; (set-face-background 'show-paren-match-face "#500")
+)
 
 (defun hp-load-text-editing-config ()
   "文字の取り扱いに関する設定を読み込む. プライベートな関数として扱うこと."
@@ -737,16 +735,30 @@
 
 ;;;  Emacsの配色
 (custom-set-faces
- '(default ((t
-             (:background "black" :foreground "#CCCCCC")
-             )))
- '(cursor ((((class color)
-             (background dark))
-            (:background "#00AA00"))
-           (((class color)
-             (background light))
-            (:background "#999999"))
-           (t ()))))
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "#CBB16F" :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
+ '(border ((t (:background "light green"))))
+ '(cursor ((((class color) (background dark)) (:background "#00AA00")) (((class color) (background light)) (:background "#999999")) (t nil)))
+ '(fringe ((t nil)))
+ '(helm-M-x-key ((t (:foreground "Black"))))
+ '(helm-buffer-directory ((t nil)))
+ '(helm-buffer-file ((t (:inherit nil))))
+ '(helm-buffer-size ((t nil)))
+ '(helm-ff-directory ((t (:foreground "Blue"))))
+ '(helm-ff-dotted-directory ((t (:foreground "Blue"))))
+ '(helm-ff-dotted-symlink-directory ((t (:foreground "Black"))))
+ '(helm-ff-file ((t (:foreground "black"))))
+ '(helm-ff-symlink ((t (:foreground "Black"))))
+ '(helm-selection ((t (:background "khaki" :foreground "black"))))
+ '(helm-selection-line ((t (:foreground "khaki"))))
+ '(helm-source-header ((t (:background "Yellow" :foreground "black" :weight bold :height 1.3 :family "Sans Serif"))))
+ '(helm-visible-mark ((t (:background "khaki"))))
+ '(isearch ((t (:background "khaki"))))
+ '(region ((t (:background "khaki"))))
+ '(show-paren-match ((t (:background "Yellow")))))
 
 ;;; フォント設定
 (defun hp-load-font-config ()
