@@ -1,6 +1,7 @@
 export TERM='xterm-256color'
 export ZDOTDIR=$HOME/.zsh
 export LANG=ja_JP.UTF-8
+export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -q -nw"
 
 #------------------
 # Path config
