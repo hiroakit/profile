@@ -7,4 +7,4 @@
     - homebrew
     - font
     - dotfiles
-    - python
+#    - python  # buggy
