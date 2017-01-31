@@ -7,5 +7,4 @@
     - homebrew
     - font
     - dotfiles
-#    - ruby
-#    - python
+    - python

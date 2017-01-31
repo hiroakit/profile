@@ -1,4 +1,35 @@
 ---
+
 homebrew_repositories: []
-homebrew_packages: []
+homebrew_packages:
+  - { name: antibody }
+  - { name: autoconf }
+  - { name: automake }
+  - { name: cmake }
+  - { name: coreutils }
+  - { name: ctags }
+  - { name: curl }
+  - { name: fpp }
+  - { name: glib }
+  - { name: gnu-sed }
+  - { name: go }
+  - { name: gpg }
+  - { name: jo }
+  - { name: jq }
+  - { name: mas }
+  - { name: npm }
+  - { name: openssl }
+  - { name: pcre }
+  - { name: peco }
+  - { name: pkg-config }
+  - { name: pyenv }
+  - { name: pyenv-virtualenv }
+  - { name: python3 }
+  - { name: readline }
+  - { name: redpen }
+  - { name: tree }
+  - { name: vault }
+  - { name: watch }
+  - { name: wget }
+  - { name: xz }
 
