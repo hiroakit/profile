@@ -403,7 +403,7 @@
     (defun hp-load-org-data-location-config ()
       "Private function."
       ;; orgファイルを格納するディレクトリ.
-      (setq org-directory "~/org/")
+      (setq org-directory "~/src/org/")
       
       ;; org-default-notes-fileのファイル名.
       (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org"))
