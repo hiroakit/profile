@@ -831,6 +831,9 @@
 ;; フォントに関する設定を読み込む. 
 (hp-load-font-config)
 
+;; Emacs全般
+(global-set-key (kbd "C-x j") 'goto-line)
+
 ;; org-mode
 (global-set-key (kbd "C-c o") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -846,7 +849,7 @@
 (define-key global-map (kbd "C-;") 'comment-dwim) 
 
 ;; カッコのスタートからエンドまでをハイライト
-(define-key global-map (kbd "M-;") 'show-paren-mode)
+(define-key global-mapdefine-key global-map (kbd "M-;") 'show-paren-mode)
 
 ;; 文字コードと改行コードの変更する関数
 (define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
