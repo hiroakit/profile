@@ -849,7 +849,7 @@
 (define-key global-map (kbd "C-;") 'comment-dwim) 
 
 ;; カッコのスタートからエンドまでをハイライト
-(define-key global-mapdefine-key global-map (kbd "M-;") 'show-paren-mode)
+(define-key global-map (kbd "M-;") 'show-paren-mode)
 
 ;; 文字コードと改行コードの変更する関数
 (define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
