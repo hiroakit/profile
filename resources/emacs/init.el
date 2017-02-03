@@ -105,6 +105,10 @@
           (lambda ()
             ;; (message "run emacs-startup-hook")
 
+	    ;; isearchのスタイル
+	    (set-face-attribute 'isearch nil :foreground "Black" :background "Yellow" :weight 'bold)	    
+	    (set-face-attribute 'lazy-highlight nil :foreground "Black" :background "light yellow")
+	    
             ;; フレームサイズを調整する.
             (modify-frame-parameters nil (list (cons 'width hp-default-emacs-frame-width-size)))
 
@@ -768,7 +772,6 @@
  '(helm-buffer-directory ((t nil)))
  '(helm-buffer-file ((t (:inherit nil))))
  '(helm-buffer-size ((t nil)))
- '(isearch ((t (:background "khaki"))))
  '(region ((t (:background "khaki"))))
  '(show-paren-match ((t (:background "Yellow")))))
 
