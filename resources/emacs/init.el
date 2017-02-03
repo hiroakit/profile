@@ -330,6 +330,11 @@
     ;; org-load-hook (org.elが読み込まれた)
     (add-hook 'org-load-hook
               (lambda ()
+		;; #+BEGIN_SRC - #+END_SRCのテキストスタイル
+		(set-face-attribute 'org-block nil :foreground "black")     		
+		(setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
+					    ("python" (:background "#E5FFB8"))))
+		
                 ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
                 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
                 
