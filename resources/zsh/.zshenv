@@ -63,10 +63,10 @@ export PATH=$PATH:/opt/X11/bin
 export PATH=/usr/local/mysql/bin:$PATH
 
 ## Java
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-export CATALINA_HOME=/Library/Tomcat
-export MAVEN3_HOME=/usr/local/apache-maven-3.2.5
-export PATH=$PATH:$MAVEN3_HOME/bin
+# export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+# export CATALINA_HOME=/Library/Tomcat
+# export MAVEN3_HOME=/usr/local/apache-maven-3.2.5
+# export PATH=$PATH:$MAVEN3_HOME/bin
 
 ## PMD
 export PMD_HOME=/usr/local/pmd-bin-5.1.3
