@@ -232,6 +232,22 @@
   (when (require 'helm-config nil t)
     (let ((ad-redefinition-action 'accept))
       (helm-mode 1))
+
+    ;; helmのソースのヘッダのスタイル
+    (set-face-attribute 'helm-source-header nil :foreground "Black" :background "Yellow" :height 1.3)
+
+    ;; helm-find-filesのスタイル
+    (set-face-attribute 'helm-ff-directory nil :foreground "Blue" :background nil)     		
+    (set-face-attribute 'helm-ff-dotted-directory nil :foreground "Blue" :background nil)
+    (set-face-attribute 'helm-ff-symlink nil :foreground "Black" :background nil)		
+    (set-face-attribute 'helm-ff-dotted-symlink-directory nil :foreground "Black" :background nil)		
+    (set-face-attribute 'helm-ff-file nil :foreground "Black" :background nil)		
+    (set-face-attribute 'helm-ff-executable nil :foreground "Black" :background nil)		
+
+    ;; helmで選択するときのスタイル
+    (set-face-attribute 'helm-selection nil :foreground "Black" :background "khaki")		    
+    (set-face-attribute 'helm-selection-line nil :foreground "khaki" :background nil)		
+    (set-face-attribute 'helm-visible-mark nil :foreground "khaki")
     
     ;; キーバインディングの設定を読み込む.
     (hp-load-helm-mode-keybinding-config))
@@ -752,15 +768,6 @@
  '(helm-buffer-directory ((t nil)))
  '(helm-buffer-file ((t (:inherit nil))))
  '(helm-buffer-size ((t nil)))
- '(helm-ff-directory ((t (:foreground "Blue"))))
- '(helm-ff-dotted-directory ((t (:foreground "Blue"))))
- '(helm-ff-dotted-symlink-directory ((t (:foreground "Black"))))
- '(helm-ff-file ((t (:foreground "black"))))
- '(helm-ff-symlink ((t (:foreground "Black"))))
- '(helm-selection ((t (:background "khaki" :foreground "black"))))
- '(helm-selection-line ((t (:foreground "khaki"))))
- '(helm-source-header ((t (:background "Yellow" :foreground "black" :weight bold :height 1.3 :family "Sans Serif"))))
- '(helm-visible-mark ((t (:background "khaki"))))
  '(isearch ((t (:background "khaki"))))
  '(region ((t (:background "khaki"))))
  '(show-paren-match ((t (:background "Yellow")))))
