@@ -361,8 +361,12 @@
 
                 ;; org-mode時のテキスト編集に関する設定を読み込む.
                 (hp-load-org-text-editing-config)
-                
-                (local-set-key (kbd "C-c c") 'hp-show-org-conf)))
+
+		;; org-mode時のキーバインディング
+                (local-set-key (kbd "C-c C-x i") 'org-clock-in)
+		(local-set-key (kbd "C-c C-x o") 'org-clock-out)
+                ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
+		))
     
     ;; org-mode-hook (org-modeが起動した)
     (add-hook 'org-mode-hook
@@ -843,8 +847,6 @@
 (global-set-key (kbd "C-c o") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
-(global-set-key (kbd "C-c C-x i") 'org-clock-in)
-(global-set-key (kbd "C-c C-x o") 'org-clock-out)
 
 ;; frameの境界線を動かす
 (define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
