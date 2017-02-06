@@ -468,6 +468,8 @@
            (file+headline org-default-notes-file "Inbox") "** TODO %?\n   :PROPERTIES:\n   :CREATE: %U\n   :END:")
           ("r" "興味のある本を追加する" entry
            (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
+          ("i" "Add interrupted task" entry
+           (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)	  
           ("w" "英単語をEnglish > 英単語に追加する" checkitem
            (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
         "org-captureテンプレート")
