@@ -844,7 +844,7 @@
 (global-set-key (kbd "C-x j") 'goto-line)
 
 ;; org-mode
-(global-set-key (kbd "C-c o") 'org-capture)
+(global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 
