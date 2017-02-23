@@ -381,8 +381,12 @@
 
                 ;; org-mode時のテキスト編集に関する設定を読み込む.
                 (hp-load-org-text-editing-config)
-                
-                (local-set-key (kbd "C-c c") 'hp-show-org-conf)))
+
+		;; org-mode時のキーバインディング
+                (local-set-key (kbd "C-c C-x i") 'org-clock-in)
+		(local-set-key (kbd "C-c C-x o") 'org-clock-out)
+                ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
+		))
     
     ;; org-mode-hook (org-modeが起動した)
     (add-hook 'org-mode-hook
@@ -484,6 +488,8 @@
            (file+headline org-default-notes-file "Inbox") "** TODO %?\n   :PROPERTIES:\n   :CREATE: %U\n   :END:")
           ("r" "興味のある本を追加する" entry
            (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
+          ("i" "Add interrupted task" entry
+           (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)	  
           ("w" "英単語をEnglish > 英単語に追加する" checkitem
            (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
         "org-captureテンプレート")
@@ -850,11 +856,9 @@
 (global-set-key (kbd "C-x j") 'goto-line)
 
 ;; org-mode
-(global-set-key (kbd "C-c o") 'org-capture)
+(global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
-(global-set-key (kbd "C-c C-x i") 'org-clock-in)
-(global-set-key (kbd "C-c C-x o") 'org-clock-out)
 
 ;; frameの境界線を動かす
 (define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
