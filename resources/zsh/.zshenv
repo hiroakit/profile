@@ -102,6 +102,3 @@ fi
 #    export PATH="$PYENV_ROOT/bin:$PATH"
 #    eval "$(pyenv init -)"
 #fi
-
-# ASP.NET 5
-#source /usr/local/lib/dnx/bin/dnvm.sh
