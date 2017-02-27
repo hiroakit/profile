@@ -1,6 +1,14 @@
 ---
 
 homebrew_repositories: []
+
+homebrew_taps:
+  - { tap: caskroom/cask }
+
+homebrew_cask_packages:
+  - { name: dotnet }
+  - { name: visual-studio-code }
+
 homebrew_packages:
   - { name: autoconf }
   - { name: automake }
