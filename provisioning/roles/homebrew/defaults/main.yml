@@ -8,6 +8,8 @@ homebrew_taps:
 homebrew_cask_packages:
   - { name: dotnet }
   - { name: visual-studio-code }
+  - { name: alfred }
+  - { name: slack }
 
 homebrew_packages:
   - { name: autoconf }
