@@ -896,3 +896,5 @@
 ;; 現在のディレクトリをFinderで開く
 (global-set-key (kbd "C-c f") 'hp-open-current-directory)
 
+;; org-time-stamp, org-time-stamp-inactiveの曜日表記を英語にする
+(setq system-time-locale "C")
