@@ -75,7 +75,8 @@
             (hp-load-filer-config)
 
             ;; C-zを無効にする.
-            (global-unset-key "\C-z")
+	    (when (equal window-system 'ns)
+	      (global-unset-key "\C-z"))
 
             ;; 括弧の取り扱いに関する設定を読み込む.
             (hp-load-paren-config)
