@@ -439,9 +439,7 @@
       
       ;; アジェンダ表示対象のファイル. 
       ;; (ディレクトリを指定すると, そこに入っている全てのファイルが対象となる)
-      (setq org-agenda-files '((concat (file-name-as-directory org-directory) "work/inbox.org")
-			       (concat (file-name-as-directory org-directory) "private/inbox.org")
-			       (concat (file-name-as-directory org-directory) "private/private.org")))
+      (setq org-agenda-files (list org-directory)))
     
     (defun hp-load-org-todo-keywords-config ()
       ;; org-modeのTODOステータス(C-c C-tでミニバッファが開く)
