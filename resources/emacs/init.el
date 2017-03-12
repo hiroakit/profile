@@ -435,7 +435,7 @@
       (setq org-directory "~/src/org/")
       
       ;; org-default-notes-fileのファイル名.
-      (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org"))
+      (setq org-default-notes-file (concat (file-name-as-directory org-directory) "work/inbox.org"))
       
       ;; アジェンダ表示対象のファイル. 
       ;; (ディレクトリを指定すると, そこに入っている全てのファイルが対象となる)
