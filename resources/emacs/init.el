@@ -706,7 +706,8 @@
                  (setq js2-bounce-indent-flag nil)
                  (define-key js2-mode-map "\C-m" 'newline-and-indent)
                  (define-key js2-mode-map "\C-i" 'move-cursor-if-needed-when-indentation)
-                 (add-to-list 'ac-dictionary-files "~/.emacs.d/dict/ac-user-dict/apple-uiautomation"))))
+		 (company-mode t)
+		 (tern-mode t))))
   
   (defun move-cursor-if-needed-when-indentation ()
     (interactive)
