@@ -901,3 +901,16 @@
 
 ;; org-time-stamp, org-time-stamp-inactiveの曜日表記を英語にする
 (setq system-time-locale "C")
+
+;; 端末でEmacsを開いた時にmacOSのクリップボードと同期する
+(defun hp-copy-from-macOS ()
+    "macOSのクリップボードからペースト"
+    (shell-command-to-string "pbpaste"))
+(defun hp-paste-to-macOS (text &optional push)
+    "macOSのクリップボードにコピー"
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	(process-send-string proc text)
+	(process-send-eof proc))))
+(setq interprogram-cut-function 'hp-paste-to-macOS)
+(setq interprogram-paste-function 'hp-copy-from-macOS)
