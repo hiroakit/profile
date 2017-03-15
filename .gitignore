@@ -16,7 +16,7 @@ elpa/
 
 # zsh
 zsh/zaw/
-zsh/.zcompdump
+.zcompdump
 
 # Mac
 *.DS_Store
