@@ -34,8 +34,9 @@
     zoom-window))
 
 ;;; ライブラリの読み込み
-;; common lisp
-(require 'cl)
+
+(require 'cl)      ;; common lisp
+(require 'server)  ;; emacsのserver-startを呼ぶために使う
 
 ;;; Emacsとhook
 
@@ -903,8 +904,13 @@
 ;; org-time-stamp, org-time-stamp-inactiveの曜日表記を英語にする
 (setq system-time-locale "C")
 
-;; 端末でEmacsを開いた時にmacOSのクリップボードと同期する
+;; 端末でEmacsを開いた時の処理
 (when (equal window-system nil)
+  ;; emacsclientを使えるようにserver-startを実行する
+  (when (not (server-running-p))
+    (server-start))
+
+  ;; macOSのクリップボードとEmacsのクリップボードを同期する    
   (defun hp-copy-from-macOS ()
     "macOSのクリップボードからペースト"
     (shell-command-to-string "pbpaste"))
