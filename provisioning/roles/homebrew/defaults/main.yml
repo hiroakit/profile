@@ -6,7 +6,7 @@ homebrew_taps:
   - { tap: caskroom/cask }
 
 homebrew_cask_packages:
-  - { name: dotnet }
+  - { name: dotnet-sdk }
   - { name: visual-studio-code }
   - { name: alfred }
   - { name: slack }
