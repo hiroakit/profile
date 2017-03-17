@@ -14,9 +14,18 @@ setopt magic_equal_subst # = 以降でも補完できるようにする
 
 autoload zed             # zsh editorを読み込む
 
-# Emacsが起動しており、M-x server-startを実行済みであると想定している
-export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+case "${OSTYPE}" in
+    # macOS
+    darwin*)
+	# Emacsが起動しており、M-x server-startを実行済みであると想定している
+	export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 
+	# XcodeのDerivedDataディレクトリ
+	export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
+
+	# iOSシミュレーターのデータがあるディレクトリ
+	export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
+esac
 
 #---------------------------------
 # シェルの標準設定
