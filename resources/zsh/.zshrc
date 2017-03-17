@@ -25,6 +25,9 @@ case "${OSTYPE}" in
 
 	# iOSシミュレーターのデータがあるディレクトリ
 	export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
+
+	# 様々なバージョンのFBXのSDKが格納されるディレクトリ
+	export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
 esac
 
 #---------------------------------
