@@ -35,6 +35,8 @@ esac
 # prompt設定(着色)
 #---------------------------------
 
+export TERM=xterm-256color
+
 autoload colors
 colors
 setopt prompt_subst
