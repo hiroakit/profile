@@ -8,8 +8,8 @@ setopt no_beep           # ビープ音を鳴らさない
 setopt ignore_eof        # ctr-d でログアウトしない
 setopt auto_cd           # ディレクトリ名の入力だけ移動可能にする
 setopt auto_pushd        # ディレクトリ移動時、自動でディレクトリスタックに追加する
-setopt correct           # 入力したコマンドのミスを指摘する
-setopt correct_all       # 入力内容全て(ファイル名含む)を判断対象とする
+# setopt correct           # 入力したコマンドのミスを指摘する
+# setopt correct_all       # 入力内容全て(ファイル名含む)を判断対象とする
 setopt magic_equal_subst # = 以降でも補完できるようにする
 
 autoload zed             # zsh editorを読み込む
