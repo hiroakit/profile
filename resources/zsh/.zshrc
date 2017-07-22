@@ -8,20 +8,34 @@ setopt no_beep           # ビープ音を鳴らさない
 setopt ignore_eof        # ctr-d でログアウトしない
 setopt auto_cd           # ディレクトリ名の入力だけ移動可能にする
 setopt auto_pushd        # ディレクトリ移動時、自動でディレクトリスタックに追加する
-setopt correct           # 入力したコマンドのミスを指摘する
-setopt correct_all       # 入力内容全て(ファイル名含む)を判断対象とする
+# setopt correct           # 入力したコマンドのミスを指摘する
+# setopt correct_all       # 入力内容全て(ファイル名含む)を判断対象とする
 setopt magic_equal_subst # = 以降でも補完できるようにする
 
 autoload zed             # zsh editorを読み込む
 
-# Emacsが起動しており、M-x server-startを実行済みであると想定している
-export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+case "${OSTYPE}" in
+    # macOS
+    darwin*)
+	# Emacsが起動しており、M-x server-startを実行済みであると想定している
+	export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 
+	# XcodeのDerivedDataディレクトリ
+	export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
+
+	# iOSシミュレーターのデータがあるディレクトリ
+	export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
+
+	# 様々なバージョンのFBXのSDKが格納されるディレクトリ
+	export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
+esac
 
 #---------------------------------
 # シェルの標準設定
 # prompt設定(着色)
 #---------------------------------
+
+export TERM=xterm-256color
 
 autoload colors
 colors
@@ -41,7 +55,7 @@ case ${UID} in
     PROMPT="%{${fg_bold[red]}%}%n%%%{${reset_color}%} "
     PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
     SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-    RPROMPT="%{${fg_bold[green]}%}[%~:%T]%{${reset_color}%}"
+    RPROMPT="%{${fg_bold[black]}%}[%~ %T]%{${reset_color}%}"
     [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
         PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
     ;;
