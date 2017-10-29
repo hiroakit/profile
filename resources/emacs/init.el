@@ -48,18 +48,18 @@
             ;; load-pathを設定する.
             (hp-load-load-path-config)
 
-	    ;; 矩形の拡大・縮小
-	    (when (require 'expand-region nil t))
-	    
-	    ;; 自作のユーティリティツールを読み込む.
-	    (when (require 'hp-utility nil t))
-	    
+            ;; 矩形の拡大・縮小
+            (when (require 'expand-region nil t))
+            
+            ;; 自作のユーティリティツールを読み込む.
+            (when (require 'hp-utility nil t))
+            
             ;; 起動時のスプラッシュイメージを表示しない.
             (setq inhibit-startup-screen t)
 
-	    ;; scratchの初期メッセージを表示しない.
-	    (setq initial-scratch-message "")
-	    
+            ;; scratchの初期メッセージを表示しない.
+            (setq initial-scratch-message "")
+            
             ;; ツールバーを表示しない.
             (tool-bar-mode -1)
 
@@ -76,8 +76,8 @@
             (hp-load-filer-config)
 
             ;; C-zを無効にする.
-	    (when (equal window-system 'ns)
-	      (global-unset-key "\C-z"))
+            (when (equal window-system 'ns)
+              (global-unset-key "\C-z"))
 
             ;; 括弧の取り扱いに関する設定を読み込む.
             (hp-load-paren-config)
@@ -107,23 +107,23 @@
           (lambda ()
             ;; (message "run emacs-startup-hook")
 
-	    ;; isearchのスタイル
-	    (set-face-attribute 'isearch nil :foreground "Black" :background "Yellow" :weight 'bold)	    
-	    (set-face-attribute 'lazy-highlight nil :foreground "Black" :background "light yellow")
-	    
+            ;; isearchのスタイル
+            (set-face-attribute 'isearch nil :foreground "Black" :background "Yellow" :weight 'bold)        
+            (set-face-attribute 'lazy-highlight nil :foreground "Black" :background "light yellow")
+            
             ;; フレームサイズを調整する.
             (modify-frame-parameters nil (list (cons 'width hp-default-emacs-frame-width-size)))
 
-	    ;; helmに関する設定を読み込む.
-	    (hp-load-helm-config)
+            ;; helmに関する設定を読み込む.
+            (hp-load-helm-config)
 
-	    ;; org-modeに関する設定を読み込む. 
+            ;; org-modeに関する設定を読み込む. 
             (hp-load-org-mode-config)
 
             ;; org-agenda-modeに関する設定を読み込む.
             (hp-load-org-agenda-moe-config)
 
-	    ;; auto-installに関する設定を読み込む. 
+            ;; auto-installに関する設定を読み込む. 
             (hp-load-auto-install-config)
 
             ;; cmake-modeに関する設定を読み込む.            
@@ -243,16 +243,16 @@
     (set-face-attribute 'helm-source-header nil :foreground "Black" :background "Yellow" :height 1.3)
 
     ;; helm-find-filesのスタイル
-    (set-face-attribute 'helm-ff-directory nil :foreground "Blue" :background nil)     		
+    (set-face-attribute 'helm-ff-directory nil :foreground "Blue" :background nil)              
     (set-face-attribute 'helm-ff-dotted-directory nil :foreground "Blue" :background nil)
-    (set-face-attribute 'helm-ff-symlink nil :foreground "Black" :background nil)		
-    (set-face-attribute 'helm-ff-dotted-symlink-directory nil :foreground "Black" :background nil)		
-    (set-face-attribute 'helm-ff-file nil :foreground "Black" :background nil)		
-    (set-face-attribute 'helm-ff-executable nil :foreground "Black" :background nil)		
+    (set-face-attribute 'helm-ff-symlink nil :foreground "Black" :background nil)               
+    (set-face-attribute 'helm-ff-dotted-symlink-directory nil :foreground "Black" :background nil)              
+    (set-face-attribute 'helm-ff-file nil :foreground "Black" :background nil)          
+    (set-face-attribute 'helm-ff-executable nil :foreground "Black" :background nil)            
 
     ;; helmで選択するときのスタイル
-    (set-face-attribute 'helm-selection nil :foreground "Black" :background "khaki")		    
-    (set-face-attribute 'helm-selection-line nil :foreground "khaki" :background nil)		
+    (set-face-attribute 'helm-selection nil :foreground "Black" :background "khaki")                
+    (set-face-attribute 'helm-selection-line nil :foreground "khaki" :background nil)           
     (set-face-attribute 'helm-visible-mark nil :foreground "khaki")
     
     ;; キーバインディングの設定を読み込む.
@@ -263,7 +263,7 @@
   (when (require 'helm-swoop nil t))
   
   ;; helm-gtags-mode
-  (autoload 'helm-gtags-mode "helm-gtags" "" t)	    
+  (autoload 'helm-gtags-mode "helm-gtags" "" t)     
   (with-eval-after-load 'helm-gtags
     ;; キーバインディングの設定を読み込む.
     (hp-load-helm-gtags-mode-keybinding-config))
@@ -312,7 +312,7 @@
   ;; (setq helm-gtags-suggested-key-mapping t)
   ;; (setq helm-gtags-prefix-key "\C-c")
   
-  ;; helm-gtags-find-tag	       関数の定義場所の検索
+  ;; helm-gtags-find-tag               関数の定義場所の検索
   ;; helm-gtags-find-rtag              関数や使用箇所の検索
   ;; helm-gtags-find-symbol            変数の使用箇所の検索
   ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
@@ -352,20 +352,20 @@
     ;; org-load-hook (org.elが読み込まれた)
     (add-hook 'org-load-hook
               (lambda ()
-		;; #+BEGIN_SRC - #+END_SRCのテキストスタイル
-		(set-face-attribute 'org-block nil :foreground "black")     		
-		(setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
-					    ("python" (:background "#E5FFB8"))))
-		
+                ;; #+BEGIN_SRC - #+END_SRCのテキストスタイル
+                (set-face-attribute 'org-block nil :foreground "black")                 
+                (setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
+                                            ("python" (:background "#E5FFB8"))))
+
                 ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
                 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
                 
                 ;; orgファイルの取り扱いに関する設定を読み込む. 
                 (hp-load-org-data-location-config)
 
-		;; org-modeの設定値を読み込む.
-		(load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el")
-		
+                ;; org-modeの設定値を読み込む.
+                (load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el")
+                
                 ;; org-modeのTODOステータスに関する設定を読み込む.
                 (hp-load-org-todo-keywords-config)
                 
@@ -377,17 +377,18 @@
                 
                 ;; org-captureに関する設定を読み込む.
                 (hp-load-org-capture-config)
+                                
                 ;; org-drawersに関する設定を読み込む.
                 (hp-load-org-drawers-config)
 
                 ;; org-mode時のテキスト編集に関する設定を読み込む.
                 (hp-load-org-text-editing-config)
 
-		;; org-mode時のキーバインディング
+                ;; org-mode時のキーバインディング
                 (local-set-key (kbd "C-c C-x i") 'org-clock-in)
-		(local-set-key (kbd "C-c C-x o") 'org-clock-out)
+                (local-set-key (kbd "C-c C-x o") 'org-clock-out)
                 ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
-		))
+                ))
     
     ;; org-mode-hook (org-modeが起動した)
     (add-hook 'org-mode-hook
@@ -441,8 +442,8 @@
       ;; アジェンダ表示対象のファイル. 
       ;; (ディレクトリを指定すると, そこに入っている全てのファイルが対象となる)
       (setq org-agenda-files (list (concat (file-name-as-directory org-directory) "work/inbox.org")
-				   (concat (file-name-as-directory org-directory) "private/inbox.org")
-				   (concat (file-name-as-directory org-directory) "private/private.org"))))
+                                   (concat (file-name-as-directory org-directory) "private/inbox.org")
+                                   (concat (file-name-as-directory org-directory) "private/private.org"))))
 
     (defun hp-load-org-todo-keywords-config ()
       ;; org-modeのTODOステータス(C-c C-tでミニバッファが開く)
@@ -483,7 +484,7 @@
           ("r" "興味のある本を追加する" entry
            (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
           ("i" "Add interrupted task" entry
-           (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)	  
+           (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)         
           ("w" "英単語をEnglish > 英単語に追加する" checkitem
            (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
         "org-captureテンプレート")
@@ -697,8 +698,8 @@
                  (setq js2-bounce-indent-flag nil)
                  (define-key js2-mode-map "\C-m" 'newline-and-indent)
                  (define-key js2-mode-map "\C-i" 'move-cursor-if-needed-when-indentation)
-		 (company-mode t)
-		 (tern-mode t))))
+                 (company-mode t)
+                 (tern-mode t))))
   
   (defun move-cursor-if-needed-when-indentation ()
     (interactive)
@@ -908,8 +909,8 @@
     "macOSのクリップボードにコピー"
     (let ((process-connection-type nil))
       (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-	(process-send-string proc text)
-	(process-send-eof proc))))
+        (process-send-string proc text)
+        (process-send-eof proc))))
   (setq interprogram-cut-function 'hp-paste-to-macOS)
   (setq interprogram-paste-function 'hp-copy-from-macOS))
 
