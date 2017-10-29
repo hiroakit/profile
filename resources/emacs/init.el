@@ -437,13 +437,7 @@
       (setq org-directory "~/src/org/")
       
       ;; org-default-notes-fileのファイル名.
-      (setq org-default-notes-file (concat (file-name-as-directory org-directory) "work/inbox.org"))
-      
-      ;; アジェンダ表示対象のファイル. 
-      ;; (ディレクトリを指定すると, そこに入っている全てのファイルが対象となる)
-      (setq org-agenda-files (list (concat (file-name-as-directory org-directory) "work/inbox.org")
-                                   (concat (file-name-as-directory org-directory) "private/inbox.org")
-                                   (concat (file-name-as-directory org-directory) "private/private.org"))))
+      (setq org-default-notes-file (concat (file-name-as-directory org-directory) "work/inbox.org")))
 
     (defun hp-load-org-todo-keywords-config ()
       ;; org-modeのTODOステータス(C-c C-tでミニバッファが開く)
