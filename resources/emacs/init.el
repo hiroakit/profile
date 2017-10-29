@@ -362,7 +362,10 @@
                 
                 ;; orgファイルの取り扱いに関する設定を読み込む. 
                 (hp-load-org-data-location-config)
-                
+
+		;; org-modeの設定値を読み込む.
+		(load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el")
+		
                 ;; org-modeのTODOステータスに関する設定を読み込む.
                 (hp-load-org-todo-keywords-config)
                 
@@ -374,10 +377,6 @@
                 
                 ;; org-captureに関する設定を読み込む.
                 (hp-load-org-capture-config)
-                
-                ;; org-refileに関する設定を読み込む.
-                (hp-load-org-refile-config)
-                
                 ;; org-drawersに関する設定を読み込む.
                 (hp-load-org-drawers-config)
 
@@ -475,15 +474,6 @@
                             ("Scheduling" . ?s)
                             ("Writting" . ?w)
                             ("Payment"))))
-    
-    (defun hp-load-org-refile-config ()
-      "Private function."
-      (defvar hp-org-refile-targets 
-        '(("~/org/inbox.org" :level . 1)
-          ("~/org/private.org" :level . 1)
-        ("~/org/book.org" :level . 1)) 
-        "org-refileの対象")
-      (setq org-refile-targets hp-org-refile-targets))
     
     (defun hp-load-org-capture-config ()
       "Private function."
