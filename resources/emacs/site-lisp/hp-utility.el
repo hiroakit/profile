@@ -101,6 +101,29 @@
                (message "Quit")
                               (throw 'end-flag t)))))))
 
+;;;; org-mode
+
+(defun hp-org-directory-path (&optional organaization)
+  "Return dirctory path that is `org-directory' appended organaization name. Depend on `org-directory'.
+
+ORGANAIZATION:
+As a suffix for `org-directory'. Optional parameter."
+
+  (cond (organaization (format "%s%s" (file-name-as-directory org-directory) (file-name-as-directory organaization)))
+	(t (format "%s" (file-name-as-directory org-directory)))))
+
+(defun hp-org-file-full-path (file-name organaization)
+  "Return org file path. Depend on `hp-org-directory-path' function.
+
+FILE-NAME:
+org file name that is included .org .
+
+ORGANAIZATION:
+As a suffix for `org-directory'. Optional parameter."
+  
+  (format "%s%s" (hp-org-directory-path organaization) file-name))
+
+
 (provide 'hp-utility)
 
 ;;; hp-utility.el ends here
