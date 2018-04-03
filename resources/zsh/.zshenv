@@ -75,6 +75,10 @@ export PATH=$HOME/src/flutter/bin:$PATH
 # export MAVEN3_HOME=/usr/local/apache-maven-3.2.5
 # export PATH=$PATH:$MAVEN3_HOME/bin
 
+## Android
+export ANDROID_SDK="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_SDK/platform-tools:$PATH"
+
 ## PMD
 export PMD_HOME=/usr/local/pmd-bin-5.1.3
 export PATH=$PATH:$PMD_HOME/bin

@@ -7,6 +7,8 @@ resources/emacs/bookmarks
 resources/emacs/recentf
 ac-comphist.dat
 auto-save-list
+hp-org-mode-local-config.el
+hp-org-mode-local-config.elc
 .org-id-locations
 .chpwd-recent-dirs
 elpa/
