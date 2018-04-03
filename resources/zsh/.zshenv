@@ -62,6 +62,10 @@ export PATH=$PATH:/opt/X11/bin
 ## MySQL
 export PATH=/usr/local/mysql/bin:$PATH
 
+## Go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
+
 ## Flutter
 export PATH=$HOME/src/flutter/bin:$PATH
 
