@@ -62,6 +62,9 @@ export PATH=$PATH:/opt/X11/bin
 ## MySQL
 export PATH=/usr/local/mysql/bin:$PATH
 
+## Flutter
+export PATH=$HOME/src/flutter/bin:$PATH
+
 ## Java
 # export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 # export CATALINA_HOME=/Library/Tomcat
