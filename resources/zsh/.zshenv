@@ -84,12 +84,6 @@ export PATH="$ANDROID_HOME/tools:$PATH"
 export PMD_HOME=/usr/local/pmd-bin-5.1.3
 export PATH=$PATH:$PMD_HOME/bin
 
-## Scala
-export PATH=/usr/local/bin/scala-2.10.3/bin:$PATH
-
-## Play
-export PATH=/usr/local/bin/play:$PATH
-
 ## Gtags - Global
 export GTAGSCONF=/usr/local/share/gtags/gtags.conf
 export GTAGSLABEL=exuberant-ctags
