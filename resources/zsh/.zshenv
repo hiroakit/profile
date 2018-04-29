@@ -80,10 +80,6 @@ export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/tools:$PATH"
 
-## PMD
-export PMD_HOME=/usr/local/pmd-bin-5.1.3
-export PATH=$PATH:$PMD_HOME/bin
-
 ## Gtags - Global
 export GTAGSCONF=/usr/local/share/gtags/gtags.conf
 export GTAGSLABEL=exuberant-ctags
