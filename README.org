@@ -4,9 +4,9 @@
 #+STARTUP: showall
 #+OPTIONS: \n:t
 
-* What's this?
+* Overview
 
-My Configurations for Emacs, Zsh, rbenv, and more.
+The script to automatically build my development environment.
 
 * Requirements
 
