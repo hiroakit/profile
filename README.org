@@ -1,10 +1,8 @@
-#+TITLE: README
+#+TITLE: Overview
 #+TEXT:                                           Create:      2013-09-16
 #+TEXT:                                           Last Update: 2014-02-15
 #+STARTUP: showall
 #+OPTIONS: \n:t
-
-* Overview
 
 The script to automatically build my development environment.
 
