@@ -6,6 +6,8 @@
 
 The script to automatically build my development environment.
 
+Keyword: macOS, Xcode, Homebrew, Emacs, Zsh, Ansible
+
 * Requirements
 
 Computer below system requirements
