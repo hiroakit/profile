@@ -19,6 +19,12 @@
   tags:
     - dotfiles
     
+- name: get zsh path
+  command: >
+    which zsh
+  register: which_zsh
+  ignore_errors: False    
+        
 - name: change login shell
   shell: >
     chsh -s {{which_zsh.stdout}}
