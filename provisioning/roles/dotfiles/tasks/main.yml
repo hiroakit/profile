@@ -9,7 +9,21 @@
   tags:
     - dotfiles
 
+- name: create .zshrc symlink
+  file: src=~/documents/sources/profile/resources/zsh/.zshrc dest=~/.zshrc state=link
+  tags:
+    - dotfiles
+
 - name: create .zshenv symlink
   file: src=~/documents/sources/profile/resources/zsh/.zshenv dest=~/.zshenv state=link
   tags:
     - dotfiles
+    
+- name: change login shell
+  shell: >
+    chsh -s {{which_zsh.stdout}}
+  register: result
+  until: result.rc == 0
+  retries: 3
+  tags:
+    - dotfiles    
