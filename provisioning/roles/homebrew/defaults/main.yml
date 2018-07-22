@@ -3,13 +3,19 @@
 homebrew_repositories: []
 
 homebrew_taps:
-  - { tap: caskroom/cask }
-
+  - { tap: hiroakit/homebrew-formula }
+  
 homebrew_cask_packages:
-  - { name: dotnet-sdk }
-  - { name: visual-studio-code }
   - { name: alfred }
+  - { name: 1password }
+  - { name: google-chrome }  
+  - { name: kindle }  
+  - { name: quicklook-json }    
+  - { name: visual-studio-code }
+  - { name: coteditor }  
   - { name: slack }
+  - { name: microsoft-teams } 
+  - { name: skype }   
 
 homebrew_packages:
   - { name: autoconf }
@@ -18,14 +24,10 @@ homebrew_packages:
   - { name: coreutils }
   - { name: ctags }
   - { name: curl }
-  - { name: fpp }
-  - { name: glib }
   - { name: gnu-sed }
   - { name: go }
-  - { name: gpg }
-  - { name: jo }
+  - { name: hugo }       
   - { name: jq }
-  - { name: mas }
   - { name: npm }
   - { name: openssl }
   - { name: pcre }
@@ -33,8 +35,10 @@ homebrew_packages:
   - { name: pkg-config }
   - { name: pyenv }
   - { name: pyenv-virtualenv }
-  - { name: python3 }
+  - { name: python } 
   - { name: readline }
+  - { name: ruby-build } 
+  - { name: rbenv }   
   - { name: tree }
   - { name: vault }
   - { name: watch }
