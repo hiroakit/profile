@@ -15,7 +15,7 @@ const puppeteer = require('puppeteer');
 
   await page.goto('https://developer.apple.com/download/more/');
   await page.type('#accountname', 'hiroakiendoh@outlook.jp');
-  await page.type('#accountpassword', 'wULCKd6KfkM#bY7ernmzhNe74F*E=qw#');
+  await page.type('#accountpassword', 'your password');
   await page.click('#submitButton2');
   await page.waitFor(5000); // millseconds
   
