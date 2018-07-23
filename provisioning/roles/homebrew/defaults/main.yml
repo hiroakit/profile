@@ -16,6 +16,7 @@ homebrew_cask_packages:
   - { name: slack }
   - { name: microsoft-teams } 
   - { name: skype }   
+  - { name: sourcetree }
 
 homebrew_packages:
   - { name: autoconf }
