@@ -4,6 +4,11 @@ osx_defaults:
     key: autohide
     type: bool
     value: true
+    
+  - domain: com.apple.dock    
+    key: tilesize
+    type: float
+    value: 60
 
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
