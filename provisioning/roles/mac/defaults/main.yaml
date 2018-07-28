@@ -19,7 +19,12 @@ osx_defaults:
     key: ShowPercent
     type: string
     value: "YES"  
-    
+
+  - domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: true
+
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
     type: int
