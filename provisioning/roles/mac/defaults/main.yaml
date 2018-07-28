@@ -14,11 +14,16 @@ osx_defaults:
     key: orientation
     type: string
     value: "bottom"  
-    
+
+  - domain: com.apple.finder
+    key: FXPreferredViewStyle
+    type: string
+    value: "clmv"
+
   - domain: com.apple.menuextra.battery    
     key: ShowPercent
     type: string
-    value: "YES"  
+    value: "YES"
 
   - domain: NSGlobalDomain
     key: AppleShowAllExtensions
