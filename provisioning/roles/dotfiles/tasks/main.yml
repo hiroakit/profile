@@ -1,20 +1,35 @@
 ---
 - name: create .emacs.d symlink
-  file: src=~/src/profile/resources/emacs dest=~/.emacs.d state=link
-  tags:
-    - dotfiles
-
-- name: git clone zaw.git
-  git: repo=https://github.com/zsh-users/zaw.git dest=~/src/profile/resources/zsh/zaw
+  file: src=~/documents/sources/profile/resources/emacs dest=~/.emacs.d state=link
   tags:
     - dotfiles
 
 - name: create .zsh symlink
-  file: src=~/src/profile/resources/zsh dest=~/.zsh state=link
+  file: src=~/documents/sources/profile/resources/zsh dest=~/.zsh state=link
+  tags:
+    - dotfiles
+
+- name: create .zshrc symlink
+  file: src=~/documents/sources/profile/resources/zsh/.zshrc dest=~/.zshrc state=link
   tags:
     - dotfiles
 
 - name: create .zshenv symlink
-  file: src=~/src/profile/resources/zsh/.zshenv dest=~/.zshenv state=link
+  file: src=~/documents/sources/profile/resources/zsh/.zshenv dest=~/.zshenv state=link
   tags:
     - dotfiles
+    
+- name: get zsh path
+  command: >
+    which zsh
+  register: which_zsh
+  ignore_errors: False    
+        
+- name: change login shell
+  shell: >
+    chsh -s {{which_zsh.stdout}}
+  register: result
+  until: result.rc == 0
+  retries: 3
+  tags:
+    - dotfiles    

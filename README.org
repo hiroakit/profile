@@ -21,6 +21,8 @@ Computer below system requirements
 
 #+BEGIN_SRC sh
 $ git clone https://github.com/hiroakit/profile --recursive
+$ cd profile
+$ ansible-playbook -i hosts osx.yml -K
 #+END_SRC
 
 ** Software dependencies
