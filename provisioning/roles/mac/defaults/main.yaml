@@ -25,6 +25,11 @@ osx_defaults:
     type: string
     value: "YES"
 
+  - domain: com.apple.menuextra.clock
+    key: DateFormat
+    type: string
+    value: "M\u6708d\u65e5(EEE)  H:mm:ss"
+
   - domain: NSGlobalDomain
     key: AppleShowAllExtensions
     type: bool
