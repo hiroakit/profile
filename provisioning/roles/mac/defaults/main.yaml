@@ -9,6 +9,11 @@ osx_defaults:
     key: tilesize
     type: float
     value: 60
+    
+  - domain: com.apple.dock    
+    key: orientation
+    type: string
+    value: "bottom"    
 
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
