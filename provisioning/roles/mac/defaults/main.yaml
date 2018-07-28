@@ -20,6 +20,16 @@ osx_defaults:
     type: string
     value: "clmv"
 
+  - domain: com.apple.finder
+    key: NewWindowTarget
+    type: string
+    value: "PfHm"
+
+  - domain: com.apple.finder
+    key: NewWindowTargetPath
+    type: string
+    value: "file://${HOME}/"
+
   - domain: com.apple.menuextra.battery    
     key: ShowPercent
     type: string
