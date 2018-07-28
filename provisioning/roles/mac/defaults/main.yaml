@@ -4,7 +4,22 @@ osx_defaults:
     key: autohide
     type: bool
     value: true
-
+    
+  - domain: com.apple.dock    
+    key: tilesize
+    type: float
+    value: 60
+    
+  - domain: com.apple.dock    
+    key: orientation
+    type: string
+    value: "bottom"  
+    
+  - domain: com.apple.menuextra.battery    
+    key: ShowPercent
+    type: string
+    value: "YES"  
+    
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
     type: int
