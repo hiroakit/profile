@@ -25,7 +25,6 @@
     osx-dictionary
     ruby-mode
     ruby-additional
-    ruby-block
     swift-mode
     undo-tree
     undohist
@@ -674,12 +673,7 @@
     (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
     (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
     (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode)))
-  
-  ;; ruby-block.el
-  (autoload 'ruby-block-mode "ruby-block" nil t)
-  (with-eval-after-load 'ruby-block-mode
-    (ruby-block-mode t)
-    (setq ruby-block-highlight-toggle t)))
+)
 
 (defun hp-load-js2-mode-config ()
   "js2-modeに関する設定をする. プライベートな関数として扱うこと."
