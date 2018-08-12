@@ -21,6 +21,7 @@
     helm-swoop
     irony
     js2-mode
+    markdown-mode
     neotree
     osx-dictionary
     ruby-mode
@@ -258,6 +259,17 @@
   (use-package dired-recent
     :config
     (dired-recent-mode 1)))
+
+(defun hp-load-markdown-mode ()
+  "markdown-modeに関する設定を読み込む. プライベートな関数として扱うこと."
+
+  (use-package markdown-mod
+    :ensure t
+    :commands (markdown-mode gfm-mode)    
+    :mode (("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown")
+    ))
 
 (defun hp-load-helm-config ()
   "helmに関する設定を読み込む. プライベートな関数として扱うこと."  
@@ -938,4 +950,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (use-package dired-recent dired-sidebar plantuml-mode zoom-window yasnippet web-mode undohist undo-tree swift-mode ruby-additional osx-dictionary neotree js2-mode helm-swoop helm-gtags foreign-regexp flycheck company-irony cmake-mode))))
+    (markdown-mode use-package dired-recent dired-sidebar plantuml-mode zoom-window yasnippet web-mode undohist undo-tree swift-mode ruby-additional osx-dictionary neotree js2-mode helm-swoop helm-gtags foreign-regexp flycheck company-irony cmake-mode))))
