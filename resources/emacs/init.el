@@ -143,6 +143,12 @@
             ;; web-modeに関する設定を読み込む.
             (hp-load-web-mode-config)
 
+	    ;; plantuml-modeに関する設定を読み込む.
+	    (hp-load-plantuml-mode-config)
+
+	    ;;; dired-recentパッケージと設定の読み込みをする
+	    (hp-load-dired-recent)
+
             ;; company-modeに関する設定を読み込む.
             (hp-load-company-mode-config)))                          
 
@@ -150,6 +156,8 @@
 (require 'package)
 (add-to-list 'package-archives (cons "melpa" hp-melpa-url))
 (package-initialize)
+
+(require 'use-package)
 
 ;;; 未インストールのパッケージを探す
 (let ((not-installed 
@@ -230,6 +238,27 @@
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width hp-default-tab-space-length))
 
+(defun hp-load-plantuml-mode-config ()
+  "plantuml-modeに関する設定を読み込む. プライベートな関数として扱うこと."  
+
+  (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.9/libexec/plantuml.jar")
+  (setq plantuml-java-options "")
+  (setq plantuml-options "-charset UTF-8")
+
+  ;; svg or png or utxt
+  (setq plantuml-output-type "png")
+  
+  (add-to-list 'auto-mode-alist '("\\.pu\\'" . plantuml-mode))  
+  (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
+  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode)))
+
+(defun hp-load-dired-recent ()
+  "dired-recentに関する設定を読み込む. プライベートな関数として扱うこと."  
+
+  (use-package dired-recent
+    :config
+    (dired-recent-mode 1)))
+
 (defun hp-load-helm-config ()
   "helmに関する設定を読み込む. プライベートな関数として扱うこと."  
 
@@ -282,7 +311,7 @@
   
   ;; ファイル探す際に絞り込むためのキーバインディグ
   (define-key global-map (kbd "C-x C-f") 'helm-find-files)
-  
+
   ;; 最近開いたファイルを絞り込むためのキーバインディグ
   (define-key global-map (kbd "C-x C-r") 'helm-recentf)
   
@@ -902,3 +931,11 @@
   (setq interprogram-cut-function 'hp-paste-to-macOS)
   (setq interprogram-paste-function 'hp-copy-from-macOS))
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (use-package dired-recent dired-sidebar plantuml-mode zoom-window yasnippet web-mode undohist undo-tree swift-mode ruby-additional osx-dictionary neotree js2-mode helm-swoop helm-gtags foreign-regexp flycheck company-irony cmake-mode))))
