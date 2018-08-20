@@ -22,40 +22,6 @@ export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -q -nw"
 #        .: 通常のファイルのみ残す
 typeset -xU path cdpath fpath manpath
 
-## init path
-case "${OSTYPE}" in
-    darwin*)
-        # TODO : MacPortsが入っていない環境も考慮した記述に変更する
-        path=(
-            /usr/local/{bin,sbin}(N-/)
-            /usr{/bin,/sbin}(N-/)
-            /{bin,sbin}(N-/)
-        )
-        ;;
-    # freebsd*)
-    #     ;;
-    # linux*)
-    # case ${UID} in
-    #     0)
-    #         ;;
-    # esac
-    #     ;;
-esac
-
-## init manpath
-case "${OSTYPE}" in
-    darwin*)
-        manpath=(
-            /usr/local/share/man(N-/)
-            /usr/share/man(N-/)
-        )
-        ;;
-    # freebsd*)
-    #     ;;
-    # linux*)
-    #     ;;
-esac
-
 ## XQuartz
 export PATH=$PATH:/opt/X11/bin
 
@@ -90,17 +56,3 @@ export PATH=$PATH:$RMANTREE/bin
 
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
-
-## rbenv
-export RBENV_ROOT=$HOME/.rbenv
-if [ -d ${RBENV_ROOT} ]; then
-   export PATH="$RBENV_ROOT/bin:$PATH"
-   eval "$(rbenv init -)" 
-fi
-
-# pyenv
-export PYENV_ROOT=${HOME}/.pyenv
-if [ -L ${PYENV_ROOT} -o -d ${PYENV_ROOT} ]; then
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
