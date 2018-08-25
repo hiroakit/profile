@@ -40,4 +40,5 @@ homebrew_packages:
   - { name: watch }
   - { name: wget }
   - { name: xz }
+  - { name: p7zip }
 
