@@ -116,6 +116,10 @@
             ;; helmに関する設定を読み込む.
             (hp-load-helm-config)
 
+	    ;; helm-ag or ripgrep
+	    (setq helm-ag-base-command "rg -S --vimgrep --no-heading")
+	    (global-set-key (kbd "C-x g g") 'helm-ag)
+	    
             ;; org-modeに関する設定を読み込む. 
             (hp-load-org-mode-config)
 
@@ -902,3 +906,25 @@
   (setq interprogram-cut-function 'hp-paste-to-macOS)
   (setq interprogram-paste-function 'hp-copy-from-macOS))
 
+(when (not window-system)
+  (message "custom-set-faces")
+  (custom-set-faces
+   '(helm-source-header                  ((t (:foreground "#17202A" :background "#F8F9F9" :bold t))))   
+;;   '(helm-visible-mark                   ((t (:inherit highlight ))))
+   '(helm-selection                      ((t (:inherit highlight ))))
+;;   '(helm-selection                      ((t (:foreground "#000000" :background "#D6EAF8" :bold t))))
+   '(helm-selection-line                 ((t (:inherit highlight ))))   
+   '(helm-ff-directory                   ((t (:inherit dired-directory ))))
+   '(helm-bookmark-directory             ((t (:inherit helm-ff-directory ))))
+   '(helm-buffer-directory               ((t (:inherit helm-ff-directory ))))
+   '(helm-ff-dotted-directory            ((t (:inherit helm-ff-directory ))))
+   '(helm-ff-file                        ((t (:inherit default ))))
+   '(helm-bookmark-file                  ((t (:inherit helm-ff-file ))))
+   '(helm-buffer-file                    ((t (:inherit helm-ff-file ))))
+   '(helm-grep-file                      ((t (:inherit helm-ff-file ))))
+   '(helm-etags-file                     ((t (:inherit helm-ff-file ))))
+   '(helm-ff-executable                  ((t (:inherit helm-ff-file :foreground "#7FFF7F" :bold t))))
+   '(helm-ff-symlink                     ((t (:inherit default :foreground "#7FFFFF" :bold t))))
+   '(helm-ff-dotted-symlink-directory    ((t (:inherit helm-ff-symlink ))))
+   '(helm-ff-invalid-symlink             ((t (:inherit default :foreground "#FF7F7F" ))))
+   ))
