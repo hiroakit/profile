@@ -907,7 +907,20 @@
   (setq interprogram-paste-function 'hp-copy-from-macOS))
 
 (when (not window-system)
-  (message "custom-set-faces")
+  ;; フレームサイズの調整
+  (global-set-key [C-S-up] 'enlarge-window)
+  (global-set-key [C-S-down] 'shrink-window)
+  (global-set-key [C-S-right] 'enlarge-window-horizontally)
+  (global-set-key [C-S-left] 'shrink-window-horizontally)
+
+  (add-hook 'org-mode-hook
+	    ;; global-mapをlocal-mapよりも優先させ、org-mode時もフレームサイズを調整できるようにする
+	    (lambda ()
+	      (local-unset-key [C-S-up])
+	      (local-unset-key [C-S-down])
+              (local-unset-key [C-S-right])
+              (local-unset-key [C-S-left])))
+    
   (custom-set-faces
    '(helm-source-header                  ((t (:foreground "#17202A" :background "#F8F9F9" :bold t))))   
 ;;   '(helm-visible-mark                   ((t (:inherit highlight ))))
