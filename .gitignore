@@ -3,6 +3,7 @@
 # Emacs
 resources/emacs/undohist
 resources/emacs/url/cookies
+resources/emacs/url/cache
 resources/emacs/bookmarks
 resources/emacs/recentf
 ac-comphist.dat
