@@ -908,19 +908,40 @@
 
 (when (not window-system)
   ;; フレームサイズの調整
-  (global-set-key [C-S-up] 'enlarge-window)
-  (global-set-key [C-S-down] 'shrink-window)
-  (global-set-key [C-S-right] 'enlarge-window-horizontally)
-  (global-set-key [C-S-left] 'shrink-window-horizontally)
+  (global-unset-key (kbd "C-x ^"))
+  (global-unset-key (kbd "<C-x {>"))
+  (global-unset-key (kbd "<C-x }>"))
+  
+  (global-set-key (kbd "<C-S-up>") 'enlarge-window)
+  (global-set-key (kbd "<C-S-down>") 'shrink-window)
+  (global-set-key (kbd "<C-S-right>") 'enlarge-window-horizontally)
+  (global-set-key (kbd "<C-S-left>") 'shrink-window-horizontally)
 
   (add-hook 'org-mode-hook
-	    ;; global-mapをlocal-mapよりも優先させ、org-mode時もフレームサイズを調整できるようにする
-	    (lambda ()
-	      (local-unset-key [C-S-up])
-	      (local-unset-key [C-S-down])
-              (local-unset-key [C-S-right])
-              (local-unset-key [C-S-left])))
-    
+            (lambda ()
+              "Custmize org-mode key binding."
+
+              (message "Run org-mode-hook at not window-system")
+
+              ;; org-modeのlocal-mapよりもglobal-mapを優先させる。
+              ;; フレームサイズの調整が楽な方が嬉しいから。
+              (local-unset-key (kbd "<C-S-up>"))
+              (local-unset-key (kbd "<C-S-down>"))
+              (local-unset-key (kbd "<C-S-right>"))
+              (local-unset-key (kbd "<C-S-left>"))
+
+              ;; TABとC-iは同じなので
+              ;; - org-clock-outのキーバインドはC-c C-x C-o
+              ;; - org-clock-inのキーバインドはC-c C-x TAB
+              ;;
+              ;; In ASCII, C-i and <TAB> are the same character.
+              ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
+              ;;
+              ;; だから以下の設定は無意味
+              ;; (local-unset-key (kbd "C-c C-x TAB"))
+              ;; (local-set-key (kbd "C-c C-x C-i") 'org-clock-in)            
+              ))
+  
   (custom-set-faces
    '(helm-source-header                  ((t (:foreground "#17202A" :background "#F8F9F9" :bold t))))   
 ;;   '(helm-visible-mark                   ((t (:inherit highlight ))))
