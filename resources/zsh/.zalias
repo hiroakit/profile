@@ -20,14 +20,14 @@ alias su="su -l"
 
 case "${OSTYPE}" in
     darwin*)
-	alias e="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+	alias emacs="/usr/local/bin/emacs -nw"
 	;;
     linux*)
-	alias e="/usr/bin/emacs"
+	alias emacs="/usr/bin/emacs"
 	;;
     freebsd*)
 	;;
     cygwin*)
-	alias e="/usr/bin/emacs"
+	alias emacs="/usr/bin/emacs"
 	;;    
 esac

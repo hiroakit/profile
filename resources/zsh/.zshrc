@@ -18,7 +18,7 @@ case "${OSTYPE}" in
     # macOS
     darwin*)
 	# Emacsが起動しており、M-x server-startを実行済みであると想定している
-	export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+	export EDITOR="/usr/local/bin/emacs -q -nw"
 
 	# XcodeのDerivedDataディレクトリ
 	export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
