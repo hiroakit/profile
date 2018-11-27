@@ -37,7 +37,25 @@
 (require 'cl)      ;; common lisp
 (require 'server)  ;; emacsのserver-startを呼ぶために使う
 
-;;; Emacsとhook
+;;; Emacs初期化
+
+(defun hp-run-emacs-initialization ()
+  "Emacsを画面に表示する前に適用したい設定を集めた. プライベートな関数として扱うこと."
+            ;; 起動時のスプラッシュイメージを表示しない
+            (setq inhibit-startup-screen t)
+
+            ;; scratchの初期メッセージを表示しない
+            (setq initial-scratch-message "")
+            
+            ;; ツールバーを表示しない
+            (tool-bar-mode -1)
+
+            ;; メニューバーを表示しない
+            (menu-bar-mode -1)
+
+            ;; スクロールバーを表示しない
+            (set-scroll-bar-mode nil))
+(hp-run-emacs-initialization)
 
 ;; Emacs初期化が完了した時のフック
 (add-hook 'after-init-hook
@@ -53,18 +71,6 @@
             ;; 自作のユーティリティツールを読み込む.
             (when (require 'hp-utility nil t))
             
-            ;; 起動時のスプラッシュイメージを表示しない.
-            (setq inhibit-startup-screen t)
-
-            ;; scratchの初期メッセージを表示しない.
-            (setq initial-scratch-message "")
-            
-            ;; ツールバーを表示しない.
-            (tool-bar-mode -1)
-
-            ;; スクロールバーを表示しない.
-            (set-scroll-bar-mode nil)
-
             ;; フレームのタイトルバーにファイルのフルパスとホスト名を表示する.
             (setq frame-title-format (format "%%f @%s" (system-name)))
 
