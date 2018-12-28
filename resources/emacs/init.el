@@ -85,6 +85,9 @@
             ;; ファイラに関する設定を読み込む.
             (hp-load-filer-config)
 
+            ;; タブで字下げする場合に半角スペースを利用する
+            (setq-default indent-tabs-mode nil)
+            (setq-default tab-width hp-default-tab-space-length)
             ;; C-zを無効にする.
             (when (equal window-system 'ns)
               (global-unset-key "\C-z"))
