@@ -374,8 +374,11 @@
                 ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
                 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
                 
-                ;; orgファイルの取り扱いに関する設定を読み込む. 
-                (hp-load-org-data-location-config)
+                ;; orgファイルを格納するディレクトリ.
+                (setq org-directory "~/Documents/sources/notebook")
+      
+                ;; org-default-notes-fileのファイル名.
+                (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org"))                
 
                 ;; org-modeの設定値を読み込む.
                 (load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el")
@@ -433,14 +436,6 @@
          (format "LEVEL=%d" (1+ (org-reduced-level (org-outline-level))))
          'tree 'archive 'comment)))
     
-    (defun hp-load-org-data-location-config ()
-      "Private function."
-      ;; orgファイルを格納するディレクトリ.
-      (setq org-directory "~/src/org/")
-      
-      ;; org-default-notes-fileのファイル名.
-      (setq org-default-notes-file (concat (file-name-as-directory org-directory) "work/inbox.org")))
-
     (defun hp-load-org-todo-keywords-config ()
       ;; org-modeのTODOステータス(C-c C-tでミニバッファが開く)
       (setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d!)")
