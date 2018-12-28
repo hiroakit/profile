@@ -367,7 +367,7 @@
     ;; http://orgmode.org/tmp/worg/org-configs/org-hooks.html
     
     ;; org-load-hook (org.elが読み込まれた)
-    (add-hook 'org-load-hook
+    (add-hook 'org-load-hook	      
               (lambda ()
                 ;; #+BEGIN_SRC - #+END_SRCのテキストスタイル
                 (set-face-attribute 'org-block nil :foreground "black")                 
@@ -410,9 +410,9 @@
                 ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
                 ))
     
-    ;; org-mode-hook (org-modeが起動した)
-    (add-hook 'org-mode-hook
-              (lambda ()
+    ;; org-mode-hook (org-modeが起動した)    
+    (add-hook 'org-mode-hook	      
+	      (lambda ()
                 ;; org-babel
                 (org-babel-do-load-languages 'org-babel-load-languages
                                              '((emacs-lisp . t)
@@ -420,9 +420,9 @@
                                                (python . t)
                                                (js . t)))
 
-              ;; org-habit
-              ;; (autoload 'org-habit-mode "org-habit" nil t)
-              ;; (when (require 'org-habit nil t))
+		;; org-habit
+		;; (autoload 'org-habit-mode "org-habit" nil t)
+		;; (when (require 'org-habit nil t))
                 
                 ;; Libre Office Writer
                 (setq org-export-odt-convert-processes 
