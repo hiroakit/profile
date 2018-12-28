@@ -58,6 +58,8 @@
 
             ;; スクロールバーを表示しない
             (set-scroll-bar-mode nil))
+
+;; Emacsの初期化時に指定したい設定
 (hp-run-emacs-initialization)
 
 ;; Emacs初期化が完了した時のフック
