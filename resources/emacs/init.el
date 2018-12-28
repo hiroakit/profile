@@ -417,19 +417,7 @@
                 (setq org-export-odt-convert-processes 
                       '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
                         ("unoconv" "unoconv -f %f -o %d %i")))))
-
-    ;; 要検討. ここにorg-agenda-mode-hookを書くのは妥当ではない気がする.
-    ;; org-agenda-mode-hook (org-agenda-modeが起動した)
-    (add-hook 'org-agenda-mode-hook            
-              (lambda ()
-                ;; アジェンダ表示で下線を用いる.
-                (hl-line-mode 1)
-                (setq hl-line-face 'underline)
-                
-                ;; アジェンダでのclock reportの設定
-                (setq org-agenda-clockreport-parameter-plist
-                    (quote (:link t :maxlevel 7 :fileskip0 t :compact t :narrow 80)))))
-
+ 
     (defun hp-org-revert-subtasks ()
       "現タスクの子タスクをDONEからTODOに変えます"
       (interactive)
@@ -527,6 +515,20 @@
 (defun hp-load-org-agenda-moe-config ()
   "org-agenda-modeに関する設定を読み込む. プライベートな関数として扱うこと."
   (when (require 'org-agenda nil t)
+
+    (add-hook 'org-agenda-mode-hook
+              (lambda ()
+                ;; アジェンダに表示する対象のファイル
+                (setq org-agenda-files (list org-directory))
+                
+                ;; アジェンダ表示時にカーソル行をハイライトする
+                (hl-line-mode 1)
+                (setq hl-line-face 'underline)
+                
+                ;; アジェンダでのclock reportの設定
+                (setq org-agenda-clockreport-parameter-plist
+                      (quote (:link t :maxlevel 7 :fileskip0 t :compact t :narrow 80)))))
+    
     (defun hp-load-org-agenda-custom-commands ()
       "Private function."
       (org-add-agenda-custom-command
