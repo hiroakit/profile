@@ -47,6 +47,9 @@
             ;; scratchの初期メッセージを表示しない
             (setq initial-scratch-message "")
             
+            ;; 警告音もフラッシュも全て無効
+            (setq ring-bell-function 'ignore)
+	    
             ;; ツールバーを表示しない
             (tool-bar-mode -1)
 
