@@ -170,9 +170,7 @@
 
   ;; helm-modeの設定を読み込む.
   (when (require 'helm-config nil t)
-    (let ((ad-redefinition-action 'accept)) (helm-mode 1))
-    ;; キーバインディングの設定を読み込む.
-    (hp-load-helm-mode-keybinding-config))
+    (let ((ad-redefinition-action 'accept)) (helm-mode 1)))
 
   ;; helm-ag or ripgrep
   (setq helm-ag-base-command "rg -S --vimgrep --no-heading") 
@@ -182,70 +180,11 @@
   (when (require 'helm-swoop nil t))
   
   ;; helm-gtags-mode
-  (autoload 'helm-gtags-mode "helm-gtags" "" t)     
-  (with-eval-after-load 'helm-gtags
-    ;; キーバインディングの設定を読み込む.
-    ;; (hp-load-helm-gtags-mode-keybinding-config)
-    )
-  
   (add-hook 'c-mode-hook 'helm-gtags-mode)
   (add-hook 'c++-mode-hook 'helm-gtags-mode))
 
-(defun hp-load-helm-mode-keybinding-config ()
-  "helm -modeのキーバインディングに関する設定を読み込む. プライベートな関数として扱うこと."
-  ;; キーバインディング
-  (define-key helm-map            (kbd "C-h") 'delete-backward-char)
-  (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
-  (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
-  (define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
-
-  ;; Emacsのコマンドを絞り込むためのキーバインディグ
-  (define-key global-map (kbd "M-x")     'helm-M-x)
+  (autoload 'helm-gtags-mode "helm-gtags" "" t))
   
-  ;; ファイル探す際に絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-x C-f") 'helm-find-files)
-  
-  ;; 最近開いたファイルを絞り込むためのキーバインディグ
-  ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)
-  
-  ;; キリングを絞り込むためのキーバインディング
-  (define-key global-map (kbd "M-y")     'helm-show-kill-ring)
-  
-  ;; バッファ内に存在する関数を絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-c i")   'helm-imenu)
-  
-  ;; バッファを絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-x C-b") 'helm-buffers-list)
-  
-  ;; 絞り込み対象をとても広く取ってから絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-x C-x") 'helm-for-files)
-  
-  ;; 絞り込み対象をやや広く取ってから絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-x C-m") 'helm-mini)
-  
-  ;; 前回のhelmコマンドの続きから絞り込むためのキーバインディグ
-  (define-key global-map (kbd "M-r")     'helm-resume))  
-
-
-;; (defun hp-load-helm-gtags-mode-keybinding-config ()
-;;   "helm-gtags-modeのキーバインディングを初期化する"
-  
-;;   ;; (setq helm-gtags-suggested-key-mapping t)
-;;   ;; (setq helm-gtags-prefix-key "\C-c")
-  
-;;   ;; helm-gtags-find-tag               関数の定義場所の検索
-;;   ;; helm-gtags-find-rtag              関数や使用箇所の検索
-;;   ;; helm-gtags-find-symbol            変数の使用箇所の検索
-;;   ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
-;;   ;; helm-gtags-parse-file             関数の定義一覧
-;;   ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
-;;   (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function))            
-
 (defun hp-load-org-mode-config ()
   "org-modeに関する設定を読み込む. プライベートな関数として扱うこと."
 
@@ -747,8 +686,41 @@
   (global-set-key (kbd "C-c /") 'hs-toggle-hiding)
   
   ;; helm-mode
-  (global-set-key (kbd "C-x g g") 'helm-ag)
-  
+  (with-eval-after-load 'helm-mode      
+    (define-key helm-map            (kbd "C-h") 'delete-backward-char)
+    (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+    (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+    (define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
+    (define-key global-map (kbd "M-x")     'helm-M-x)            ;; Emacsのコマンドを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-f") 'helm-find-files)     ;; ファイル探す際に絞り込むためのキーバインディグ
+    ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)     ;; 最近開いたファイルを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "M-y")     'helm-show-kill-ring) ;; キリングを絞り込むためのキーバインディング
+    (define-key global-map (kbd "C-c i")   'helm-imenu)          ;; バッファ内に存在する関数を絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-b") 'helm-buffers-list)   ;; バッファを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-x") 'helm-for-files)      ;; 絞り込み対象をとても広く取ってから絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-m") 'helm-mini)           ;; 絞り込み対象をやや広く取ってから絞り込むためのキーバインディグ
+    (define-key global-map (kbd "M-r")     'helm-resume)         ;; 前回のhelmコマンドの続きから絞り込むためのキーバインディグ
+    (global-set-key (kbd "C-x g g") 'helm-ag)                    ;; 
+    )
+
+  (with-eval-after-load 'helm-gtags
+    ;; (setq helm-gtags-suggested-key-mapping t)
+    ;; (setq helm-gtags-prefix-key "\C-c")
+    
+    ;; helm-gtags-find-tag               関数の定義場所の検索
+    ;; helm-gtags-find-rtag              関数や使用箇所の検索
+    ;; helm-gtags-find-symbol            変数の使用箇所の検索
+    ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
+    ;; helm-gtags-parse-file             関数の定義一覧
+    ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
+    (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
+    (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
+    (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
+    (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
+    (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
+    (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function)
+    )
+
   (add-hook 'org-mode-hook
             (lambda ()
               "Custmize org-mode key binding."
