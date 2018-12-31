@@ -406,10 +406,6 @@
   (message "Load hp-emacs-lisp-mode-hook")
   (hs-minor-mode 1))
 
-(defun hp-lisp-mode-hook ()
-  "lisp-modeに関する設定をする。プライベートな関数として扱うこと。"
-  (hs-minor-mode 1))
-
 (defun hp-load-cmake-mode-config ()
   "cmake-modeに関する設定をする. プライベートな関数として扱うこと."  
   (when (locate-library "cmake-mode")
