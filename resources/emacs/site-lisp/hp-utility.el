@@ -11,6 +11,16 @@
   (message "Emacs initialization time: %.3f sec"
              (float-time (time-subtract after-init-time before-init-time))))
 
+(defun hp-org-revert-subtasks ()
+  "現タスクの子タスクをDONEからTODOに変えます"
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (org-map-entries
+     '(progn (if (equal (org-entry-get (point) "TODO") "DONE") (org-todo "TODO"))
+             (hp-org-revert-subtasks))
+     (format "LEVEL=%d" (1+ (org-reduced-level (org-outline-level))))
+     'tree 'archive 'comment)))
+
 (defun add-org-task-to-reminder ()
   "orgのタスクをリマインダー.appに登録する."
   (interactive)

@@ -1,5 +1,7 @@
 ;;; Emacsの設定
 
+(message "Run init.el")
+
 ;; 定数宣言
 (defconst hp-elpa-dir (concat user-emacs-directory "elpa"))
 (defconst hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
@@ -38,131 +40,96 @@
 (require 'server)  ;; emacsのserver-startを呼ぶために使う
 
 ;;; Emacs初期化
+;;
+;; Emacs初期化のライフサイクル
+;; 1. Run before-init-hook
+;; 2. Run loading init files
+;; 3. Run after-init-hook
+;; 4. Run emacs-startup-hook
 
 (defun hp-run-emacs-initialization ()
-  "Emacsを画面に表示する前に適用したい設定を集めた. プライベートな関数として扱うこと."
-            ;; 起動時のスプラッシュイメージを表示しない
-            (setq inhibit-startup-screen t)
+  "Emacsを画面に表示する前に適用したい設定を集めた。プライベートな関数として扱うこと。"
 
-            ;; scratchの初期メッセージを表示しない
-            (setq initial-scratch-message "")
-            
-            ;; 警告音もフラッシュも全て無効
-            (setq ring-bell-function 'ignore)
-	    
-            ;; ツールバーを表示しない
-            (tool-bar-mode -1)
+  ;; (setq debug-on-error t)
+  (setq inhibit-startup-screen t)   ;; 起動時のスプラッシュイメージを表示しない
+  (setq initial-scratch-message "") ;; scratchの初期メッセージを表示しない
+  (setq ring-bell-function 'ignore) ;; 警告音もフラッシュも全て無効
+  (tool-bar-mode -1)                ;; ツールバーを表示しない
+  (menu-bar-mode -1)                ;; メニューバーを表示しない  
+  (set-scroll-bar-mode nil)         ;; スクロールバーを表示しない
+)
 
-            ;; メニューバーを表示しない
-            (menu-bar-mode -1)
+(defun hp-emacs-after-init ()
+  "Emacs初期化後に適用する設定。プライベートな関数として扱うこと。"
+  
+  (hp-load-load-path-config) ;; load-pathを設定
+  (when (require 'expand-region nil t)) ;; 矩形の拡大・縮小
+  (when (require 'hp-utility nil t)) ;; 自作のユーティリティツールを読み込む.  
+  (when (require 'uniquify nil t) (setq uniquify-buffer-name-style 'post-forward-angle-brackets)) ;; buffer-nameを識別しやすくする設定
+  (setq frame-title-format (format "%%f @%s" (system-name))) ;; フレームのタイトルバーにファイルのフルパスとホスト名を表示する.
+  (line-number-mode t)   ;; モードラインに行番号表示
+  (column-number-mode t) ;; モードラインに列番号表示
+  (setq ns-pop-up-frames nil) ;; ファイルを開くときには新しいウィンドウで開かずに新規バッファで開く
+  (setq vc-follow-symlinks t) ;; symlinkを追いかけるかの問いに, 常にYESと返す
+  (setq scroll-conservatively 35 scroll-margin 0 scroll-step 1) ;; スクロールを1行毎にする  
+  (setq completion-ignore-case t) ;; 大文字と小文字を区別しない
+  ;; (define-key global-map [ns-drag-file] 'ns-find-file) ;; ドラッグ&ドロップ, あるいは右クリック経由のコンテキストメニューなど
+  (setq-default indent-tabs-mode nil) ;; タブで字下げする場合に半角スペースを利用する
+  (setq-default tab-width hp-default-tab-space-length)
+  
+  (when (equal window-system 'ns) (global-unset-key "\C-z")) ;; C-zを無効にする.
 
-            ;; スクロールバーを表示しない
-            (set-scroll-bar-mode nil))
+  ;; 括弧の範囲内を強調表示
+  (show-paren-mode t)
+  (setq show-paren-delay 0)
+  (setq show-paren-style 'parenthesis)   
+
+  (when (require 'undohist nil t) (undohist-initialize)) ;; undohist undoの履歴をウィンドウを閉じても保持する
+  (when (require 'undo-tree nil t) (global-undo-tree-mode)) ;; undo-tree undoの樹形図を表示する C-x u
+  
+  ;; 矩形選択にcua-modeを使う.
+  (cua-mode t)
+  (setq cua-enable-cua-keys nil)
+    
+  (global-auto-revert-mode 1) ;; ファイルを読み込み直す revert-buffer の自動実行を、すべてのメジャーモードにおいて許可する.
+
+  (add-hook 'emacs-lisp-mode-hook 'hp-emacs-lisp-mode-hook) ;; emacs-lisp-modeの設定
+  )
+
+(defun hp-emacs-startup ()
+  (modify-frame-parameters nil (list (cons 'width hp-default-emacs-frame-width-size))) ;; フレームサイズを調整する.
+  (hp-load-helm-config)            ;; helmの設定            
+  (hp-load-org-mode-config)        ;; org-modeの設定
+  (hp-load-org-agenda-mode-config) ;; org-agenda-modeの設定
+  ;; (hp-load-auto-install-config) ;; auto-installの設定
+  ;; (hp-load-cmak-mode-config)    ;; cmake-modeの設定          
+  ;; (hp-load-flycheck-config)     ;; flycheckの設定
+  ;; (hp-load-yas-config)          ;; yasの設定
+  ;; (hp-load-ruby-mode-config)    ;; ruby-modeの設定
+  ;; (hp-load-js2-mode-config)     ;; js2-modeの設定 
+  ;; (hp-load-web-mode-config)     ;; web-modeの設定
+  ;; (hp-load-company-mode-config) ;; company-modeの設定
+)
 
 ;; Emacsの初期化時に指定したい設定
 (hp-run-emacs-initialization)
 
-;; Emacs初期化が完了した時のフック
+;; Emacsの初期化が始まる前のフック
+(add-hook 'before-init-hook
+          (lambda ()
+            (message "Run before-init-hook")))
+
+;; Emacsの初期化が終わった時のフック
 (add-hook 'after-init-hook
-          (lambda ()                    
-            ;; (message "run after-init-hook")
-
-            ;; load-pathを設定する.
-            (hp-load-load-path-config)
-
-            ;; 矩形の拡大・縮小
-            (when (require 'expand-region nil t))
-            
-            ;; 自作のユーティリティツールを読み込む.
-            (when (require 'hp-utility nil t))
-            
-            ;; フレームのタイトルバーにファイルのフルパスとホスト名を表示する.
-            (setq frame-title-format (format "%%f @%s" (system-name)))
-
-            ;; モードラインに関する設定を読み込む.
-            (hp-load-mode-line-config)
-
-            ;; ファイラに関する設定を読み込む.
-            (hp-load-filer-config)
-
-            ;; タブで字下げする場合に半角スペースを利用する
-            (setq-default indent-tabs-mode nil)
-            (setq-default tab-width hp-default-tab-space-length)
-            ;; C-zを無効にする.
-            (when (equal window-system 'ns)
-              (global-unset-key "\C-z"))
-
-            ;; 括弧の取り扱いに関する設定を読み込む.
-            (hp-load-paren-config)
-
-            ;; アンドゥに関する設定を読み込む.
-            ;;(hp-load-undo-config)
-
-            ;; 矩形選択にcua-modeを使う.
-            (cua-mode t)
-            (setq cua-enable-cua-keys nil)
-
-            ;; buffer-nameを識別しやすくする設定
-            (require 'uniquify)
-            (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-
-            ;; ;; org-modeに関する設定を読み込む. 
-            ;; (hp-load-org-mode-config)
-
-            ;; ;; org-agenda-modeに関する設定を読み込む.
-            ;; (hp-load-org-agenda-moe-config)
-
-            ;; ファイルを読み込み直す revert-buffer の自動実行を、すべてのメジャーモードにおいて許可する.
-            (global-auto-revert-mode 1)))
+          (lambda ()
+            (message "Run after-init-hook")
+            (hp-emacs-after-init)))
 
 ;; Emacsが立ち上がった時のフック (after-init-hookよりあとのフック)
 (add-hook 'emacs-startup-hook
           (lambda ()
-            ;; (message "run emacs-startup-hook")
-
-            ;; isearchのスタイル
-            (set-face-attribute 'isearch nil :foreground "Black" :background "Yellow" :weight 'bold)        
-            (set-face-attribute 'lazy-highlight nil :foreground "Black" :background "light yellow")
-            
-            ;; フレームサイズを調整する.
-            (modify-frame-parameters nil (list (cons 'width hp-default-emacs-frame-width-size)))
-
-            ;; helmに関する設定を読み込む.
-            (hp-load-helm-config)
-
-	    ;; helm-ag or ripgrep
-	    (setq helm-ag-base-command "rg -S --vimgrep --no-heading")
-	    (global-set-key (kbd "C-x g g") 'helm-ag)
-	    
-            ;; org-modeに関する設定を読み込む. 
-            (hp-load-org-mode-config)
-
-            ;; org-agenda-modeに関する設定を読み込む.
-            (hp-load-org-agenda-moe-config)
-
-            ;; auto-installに関する設定を読み込む. 
-            (hp-load-auto-install-config)
-
-            ;; cmake-modeに関する設定を読み込む.            
-            (hp-load-cmak-mode-config)
-            
-            ;; flycheckに関する設定を読み込む. (調子が悪いのでメンテナンスが必要.)
-            ;; (hp-load-flycheck-config)
-            
-            ;; yasに関する設定を読み込む.            
-            (hp-load-yas-config)
-            
-            ;; ruby-modeに関する設定を読み込む.
-            (hp-load-ruby-mode-config)
-
-            ;; js2-modeに関する設定を読み込む.            
-            (hp-load-js2-mode-config)
-            
-            ;; web-modeに関する設定を読み込む.
-            (hp-load-web-mode-config)
-
-            ;; company-modeに関する設定を読み込む.
-            (hp-load-company-mode-config)))                          
+            (message "Run emacs-startup-hook")
+            (hp-emacs-startup)))                          
 
 ;;; パッケージ
 (require 'package)
@@ -198,82 +165,17 @@
   (when (file-directory-p (symbol-value 'hp-org-mode-dir))
     (hp-expand-load-path hp-org-mode-dir)))
 
-(defun hp-load-mode-line-config ()
-  "モードラインの設定を読み込む. プライベートな関数として扱うこと."
-  ;; モードラインに行番号表示
-  (line-number-mode t)
-
-  ;; モードラインに列番号表示
-  (column-number-mode t))
-
-(defun hp-load-filer-config ()
-  "Emacsのファイラに関する設定をする. プライベートな関数として扱うこと."
-  ;; スクロールを1行毎にする
-  (setq scroll-conservatively 35
-        scroll-margin 0
-        scroll-step 1)
-
-  ;; TODO: ここにあるべき？
-  ;; ドラッグ&ドロップ, あるいは右クリック経由のコンテキストメニューなどで
-  ;; (define-key global-map [ns-drag-file] 'ns-find-file)
-
-  ;; ファイルを開くときには新しいウィンドウで開かずに新規バッファで開く
-  (setq ns-pop-up-frames nil)
-    
-  ;; symlinkを追いかけるかの問いに, 常にYESと返す
-  (setq vc-follow-symlinks t))
-
-(defun hp-load-paren-config ()
-  "括弧に関する設定をする. プライベートな関数として扱うこと."
-
-  ;; 括弧の範囲内を強調表示
-  (show-paren-mode t)
-  (setq show-paren-delay 0)
-  (setq show-paren-style 'parenthesis) 
-
-  ;; 括弧の範囲色
-  ;; (set-face-background 'show-paren-match-face "#500")
-)
-
-(defun hp-load-text-editing-config ()
-  "文字の取り扱いに関する設定を読み込む. プライベートな関数として扱うこと."
-  ;; 長い文字列は右端で折り返す
-  (setq truncate-lines nil)
-  (setq truncate-partial-width-windows nil)
-
-  ;; 大文字と小文字を区別しない
-  (setq completion-ignore-case t)
-
-  ;; タブで字下げする場合に半角スペースを利用する
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width hp-default-tab-space-length))
-
 (defun hp-load-helm-config ()
   "helmに関する設定を読み込む. プライベートな関数として扱うこと."  
 
   ;; helm-modeの設定を読み込む.
   (when (require 'helm-config nil t)
-    (let ((ad-redefinition-action 'accept))
-      (helm-mode 1))
-
-    ;; helmのソースのヘッダのスタイル
-    (set-face-attribute 'helm-source-header nil :foreground "Black" :background "Yellow" :height 1.3)
-
-    ;; helm-find-filesのスタイル
-    (set-face-attribute 'helm-ff-directory nil :foreground "Blue" :background nil)              
-    (set-face-attribute 'helm-ff-dotted-directory nil :foreground "Blue" :background nil)
-    (set-face-attribute 'helm-ff-symlink nil :foreground "Black" :background nil)               
-    (set-face-attribute 'helm-ff-dotted-symlink-directory nil :foreground "Black" :background nil)              
-    (set-face-attribute 'helm-ff-file nil :foreground "Black" :background nil)          
-    (set-face-attribute 'helm-ff-executable nil :foreground "Black" :background nil)            
-
-    ;; helmで選択するときのスタイル
-    (set-face-attribute 'helm-selection nil :foreground "Black" :background "khaki")                
-    (set-face-attribute 'helm-selection-line nil :foreground "khaki" :background nil)           
-    (set-face-attribute 'helm-visible-mark nil :foreground "khaki")
-    
+    (let ((ad-redefinition-action 'accept)) (helm-mode 1))
     ;; キーバインディングの設定を読み込む.
     (hp-load-helm-mode-keybinding-config))
+
+  ;; helm-ag or ripgrep
+  (setq helm-ag-base-command "rg -S --vimgrep --no-heading") 
   
   ;; helm-swoop
   ;; (autoload 'helm-swoop "helm-swoop" "" t)
@@ -283,12 +185,14 @@
   (autoload 'helm-gtags-mode "helm-gtags" "" t)     
   (with-eval-after-load 'helm-gtags
     ;; キーバインディングの設定を読み込む.
-    (hp-load-helm-gtags-mode-keybinding-config))
+    ;; (hp-load-helm-gtags-mode-keybinding-config)
+    )
+  
   (add-hook 'c-mode-hook 'helm-gtags-mode)
   (add-hook 'c++-mode-hook 'helm-gtags-mode))
 
 (defun hp-load-helm-mode-keybinding-config ()
-  "helm-modeのキーバインディングに関する設定を読み込む. プライベートな関数として扱うこと."
+  "helm -modeのキーバインディングに関する設定を読み込む. プライベートな関数として扱うこと."
   ;; キーバインディング
   (define-key helm-map            (kbd "C-h") 'delete-backward-char)
   (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
@@ -302,7 +206,7 @@
   (define-key global-map (kbd "C-x C-f") 'helm-find-files)
   
   ;; 最近開いたファイルを絞り込むためのキーバインディグ
-  (define-key global-map (kbd "C-x C-r") 'helm-recentf)
+  ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)
   
   ;; キリングを絞り込むためのキーバインディング
   (define-key global-map (kbd "M-y")     'helm-show-kill-ring)
@@ -323,215 +227,131 @@
   (define-key global-map (kbd "M-r")     'helm-resume))  
 
 
-(defun hp-load-helm-gtags-mode-keybinding-config ()
-  "helm-gtags-modeのキーバインディングを初期化する"
+;; (defun hp-load-helm-gtags-mode-keybinding-config ()
+;;   "helm-gtags-modeのキーバインディングを初期化する"
   
-  ;; (setq helm-gtags-suggested-key-mapping t)
-  ;; (setq helm-gtags-prefix-key "\C-c")
+;;   ;; (setq helm-gtags-suggested-key-mapping t)
+;;   ;; (setq helm-gtags-prefix-key "\C-c")
   
-  ;; helm-gtags-find-tag               関数の定義場所の検索
-  ;; helm-gtags-find-rtag              関数や使用箇所の検索
-  ;; helm-gtags-find-symbol            変数の使用箇所の検索
-  ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
-  ;; helm-gtags-parse-file             関数の定義一覧
-  ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
-  (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
-  (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
-  (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
-  (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
-  (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
-  (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function))            
-
-(defun hp-load-undo-config ()
-  "アンドゥに関する設定を読み込む. プライベートな関数として扱うこと."
-
-  ;; undohist
-  (when (require 'undohist nil t)
-    ;; undoの履歴をウィンドウを閉じても保持する
-    (undohist-initialize))
-
-  ;; undo-tree
-  (when (require 'undo-tree nil t)
-    ;; undoの樹形図を表示する C-x u
-    (global-undo-tree-mode)))
+;;   ;; helm-gtags-find-tag               関数の定義場所の検索
+;;   ;; helm-gtags-find-rtag              関数や使用箇所の検索
+;;   ;; helm-gtags-find-symbol            変数の使用箇所の検索
+;;   ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
+;;   ;; helm-gtags-parse-file             関数の定義一覧
+;;   ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
+;;   (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function))            
 
 (defun hp-load-org-mode-config ()
   "org-modeに関する設定を読み込む. プライベートな関数として扱うこと."
+
+  ;; Emacsにバンドルされていないorg-mode, 最新版のorg-modeを使う場合は (require org-install) で読み込む.
+  ;;
+  ;; Running the latest version of org-mode
+  ;; http://orgmode.org/worg/org-tutorials/org4beginners.html
   (when (require 'org-install nil t)
-    ;; Emacsにバンドルされていないorg-mode, 最新版のorg-modeを使う場合は (require org-install) で読み込む.
-    ;; 下記に詳述あり.
-    ;; Running the latest version of org-mode
-    ;; http://orgmode.org/worg/org-tutorials/org4beginners.html
-    
-    ;; org-modeのhookについては下記が詳しい.
-    ;; http://orgmode.org/tmp/worg/org-configs/org-hooks.html
-    
-    ;; org-load-hook (org.elが読み込まれた)
-    (add-hook 'org-load-hook	      
-              (lambda ()
-                ;; #+BEGIN_SRC - #+END_SRCのテキストスタイル
-                (set-face-attribute 'org-block nil :foreground "black")                 
-                (setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
-                                            ("python" (:background "#E5FFB8"))))
 
-                ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
-                (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-                
-                ;; orgファイルを格納するディレクトリ.
-                (setq org-directory "~/Documents/sources/notebook")
-      
-                ;; org-default-notes-fileのファイル名.
-                (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org"))                
+  (defun hp-org-load ()
+    (setq truncate-lines nil) ;; org-modeではテキストを折り返す
+    (setq truncate-partial-width-windows nil)
+    (add-to-list 'auto-mode-alist '("\\.org$" . org-mode)) ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
+    (setq org-directory "~/Documents/sources/notebook") ;; orgファイルを格納するディレクトリ.
+    (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")) ;; org-default-notes-fileのファイル名.
+    (load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el") ;; org-modeの設定値を読み込む.
+    )
+     
+  ;; org-modeのhookについては下記が詳しい.
+  ;; http://orgmode.org/tmp/worg/org-configs/org-hooks.html
+  
+  ;; org-load-hook (org.elが読み込まれた)
+  (add-hook 'org-load-hook
+            (lambda ()
+              (message "Run org-load-hook at hp-load-org-mode-config")
+              (hp-org-load)
+              ))
+    
+  ;; org-mode-hook (org-modeが起動した)    
+  (add-hook 'org-mode-hook	      
+ 	        (lambda ()
+              (message "Run org-mode-hook at hp-load-org-mode-config")
 
-                ;; org-modeの設定値を読み込む.
-                (load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el")
-                
-                ;; org-modeのTODOステータスに関する設定を読み込む.
-                (hp-load-org-todo-keywords-config)
-                
-                ;; org-modeのTAGに関する設定を読み込む.
-                (hp-load-org-tags-config)
+              (setq org-startup-truncated nil)  ;; orgファイルは折り畳んだ状態で開く.
+              (setq org-hide-leading-stars t)   ;; 必要最低限の「*」のみ表示する (効果はorgファイルに #+STARTUP: hidestars と記述した場合と同じ)
+              (setq org-src-fontify-natively t) ;; コードハイライト
+
+              (add-to-list 'org-src-lang-modes '("csharp" . csharp))
               
-                ;; org-effortに関する設定を読み込む.
-                (hp-load-org-effort-config)
+              ;; TODOステータス (C-c C-tでミニバッファが開く)
+              (setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d!)") (sequence "WAITING(w@/!)" "|") (sequence "|" "CANCELED(c@/!)")))
+
+              ;; タグ
+              (setq org-tag-alist '(("@HOME" . ?h)
+                                    ("@OFFICE" . ?o)
+                                    ("@TSUTAYA")
+                                    ("@ITOYOKADO" . ?i)
+                                    ("@CLEANERS" . ?x)
+                                    ("@POSTOFFICE" .?y)
+                                    ("@BANK" . ?b)
+                                    ("@LUNCHTIME")
+                                    ("PHONE" . ?p)
+                                    ("MAIL" . ?m)
+                                    ("READING" . ?r)
+                                    ("WATCHING")
+                                    ("CONFERENCE" . ?c)
+                                    ("TALKING" . ?t)
+                                    ("Scheduling" . ?s)
+                                    ("Writting" . ?w)
+                                    ("Payment")))
+              (setq org-global-properties (quote (("Effort_ALL" . "00:10 00:15 00:30 01:00 01:30 02:00 03:00 04:00 08:00 16:00"))))
+              (setq org-columns-default-format "%3PRIORITY(P) %80ITEM(Task) %10TAGS(Context) %5Effort(Effort){:} %5CLOCKSUM(Clock)")
+              
+              (setq org-drawers (quote ("PROPERTIES" "LOGBOOK" "CLOCK")))
+              (setq org-log-done (quote time))
+              (setq org-log-into-drawer t)
+
+              ;; org-capture
+              (defvar hp-org-capture-templates
+                '(("t" "TODOをInboxに追加する" entry (file+headline org-default-notes-file "Inbox") "** TODO %?\n   :PROPERTIES:\n   :CREATE: %U\n   :END:")
+                  ("r" "興味のある本を追加する" entry (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
+                  ("i" "Add interrupted task" entry (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)         
+                  ("w" "英単語をEnglish > 英単語に追加する" checkitem (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
+                "org-captureテンプレート")
+              (setq org-capture-templates hp-org-capture-templates)
+              
+              ;; Save clock data in the CLOCK drawer and state changes and notes in the LOGBOOK drawer
+              (setq org-clock-into-drawer "CLOCK")
+              ))
+            ;;(abbrev-mode 1)
+            ;;(electric-pair-mode t)
+            ;;(electric-indent-mode t)
+            ;;(electric-layout-mode t)
+  )
+  )
+
+;; ;; org-babel
+;; (org-babel-do-load-languages 'org-babel-load-languages
+;;                              '((emacs-lisp . t)
+;;                                (perl . t)
+;;                                (python . t)
+;;                                (js . t)))
+
+;; 		        ;; org-habit
+;; 		        ;; (autoload 'org-habit-mode "org-habit" nil t)
+;; 		        ;; (when (require 'org-habit nil t))
                 
-                ;; org-captureに関する設定を読み込む.
-                (hp-load-org-capture-config)
-                                
-                ;; org-drawersに関する設定を読み込む.
-                (hp-load-org-drawers-config)
-
-                ;; org-mode時のテキスト編集に関する設定を読み込む.
-                (hp-load-org-text-editing-config)
-
-                ;; org-mode時のキーバインディング
-                (local-set-key (kbd "C-c C-x i") 'org-clock-in)
-                (local-set-key (kbd "C-c C-x o") 'org-clock-out)
-                ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
-                ))
-    
-    ;; org-mode-hook (org-modeが起動した)    
-    (add-hook 'org-mode-hook	      
-	      (lambda ()
-                ;; org-babel
-                (org-babel-do-load-languages 'org-babel-load-languages
-                                             '((emacs-lisp . t)
-                                               (perl . t)
-                                               (python . t)
-                                               (js . t)))
-
-		;; org-habit
-		;; (autoload 'org-habit-mode "org-habit" nil t)
-		;; (when (require 'org-habit nil t))
-                
-                ;; Libre Office Writer
-                (setq org-export-odt-convert-processes 
-                      '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
-                        ("unoconv" "unoconv -f %f -o %d %i")))))
+;;                 ;; Libre Office Writer
+;;                 (setq org-export-odt-convert-processes 
+;;                       '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")
+;;                         ("unoconv" "unoconv -f %f -o %d %i")))))
  
-    (defun hp-org-revert-subtasks ()
-      "現タスクの子タスクをDONEからTODOに変えます"
-      (interactive)
-      (when (eq major-mode 'org-mode)
-        (org-map-entries
-         '(progn (if (equal (org-entry-get (point) "TODO") "DONE") (org-todo "TODO"))
-                 (hp-org-revert-subtasks))
-         (format "LEVEL=%d" (1+ (org-reduced-level (org-outline-level))))
-         'tree 'archive 'comment)))
-    
-    (defun hp-load-org-todo-keywords-config ()
-      ;; org-modeのTODOステータス(C-c C-tでミニバッファが開く)
-      (setq org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d!)")
-                                (sequence "WAITING(w@/!)" "|")
-                                (sequence "|" "CANCELED(c@/!)")))
-      
-      ;; Taskの属性名につける装飾
-      (setq org-todo-keyword-faces
-            '(("TODO"     . org-warning)
-              ("CANCELED" . shadow))))
-    
-    (defun hp-load-org-tags-config ()
-      "Private function."
-      (setq org-tag-alist '(("@HOME" . ?h)
-                            ("@OFFICE" . ?o)
-                            ("@TSUTAYA")
-                            ("@ITOYOKADO" . ?i)
-                            ("@CLEANERS" . ?x)
-                            ("@POSTOFFICE" .?y)
-                            ("@BANK" . ?b)
-                            ("@LUNCHTIME")
-                            ("PHONE" . ?p)
-                            ("MAIL" . ?m)
-                            ("READING" . ?r)
-                            ("WATCHING")
-                            ("CONFERENCE" . ?c)
-                            ("TALKING" . ?t)
-                            ("Scheduling" . ?s)
-                            ("Writting" . ?w)
-                            ("Payment"))))
-    
-    (defun hp-load-org-capture-config ()
-      "Private function."
-      (defvar hp-org-capture-templates
-        '(("t" "TODOをInboxに追加する" entry
-           (file+headline org-default-notes-file "Inbox") "** TODO %?\n   :PROPERTIES:\n   :CREATE: %U\n   :END:")
-          ("r" "興味のある本を追加する" entry
-           (file+headline "~/org/book.org" "Inbox") "** TODO %?\n\t")
-          ("i" "Add interrupted task" entry
-           (file+headline "~/src/org/diary.org" "Inbox") "** %?\n\t" :clock-in t :clock-resume t)         
-          ("w" "英単語をEnglish > 英単語に追加する" checkitem
-           (file+olp org-default-notes-file "English" "英単語") "- [ ] %?\n\t"))
-        "org-captureテンプレート")
-      (setq org-capture-templates hp-org-capture-templates))
-    
-    (defun hp-load-org-effort-config ()
-      "Private function."
-      (setq org-global-properties (quote ((
-                                           "Effort_ALL" . "00:10 00:15 00:30 01:00 01:30 02:00 03:00 04:00 08:00 16:00"))))
-      (setq org-columns-default-format "%3PRIORITY(P) %80ITEM(Task) %10TAGS(Context) %5Effort(Effort){:} %5CLOCKSUM(Clock)"))  
-    
-    (defun hp-load-org-drawers-config ()
-      "Private function."
-      (setq org-drawers (quote ("PROPERTIES" "LOGBOOK" "CLOCK")))
-      (setq org-log-done (quote time))
-      (setq org-log-into-drawer t)
-      ;; Save clock data in the CLOCK drawer and state changes and notes in the LOGBOOK drawer
-      (setq org-clock-into-drawer "CLOCK"))
-    
-    (defun hp-load-org-text-editing-config ()
-      "Private function."
-      (abbrev-mode 1)
-      (electric-pair-mode t)
-      (electric-indent-mode t)
-      (electric-layout-mode t)
-      
-      ;; orgファイルは折り畳んだ状態で開く.
-      (setq org-startup-truncated nil) 
-      
-      ;; 必要最低限の「*」のみ表示する (効果はorgファイルに #+STARTUP: hidestars と記述した場合と同じ)
-      (setq org-hide-leading-stars t)
-      
-      ;; コードハイライト
-      (setq org-src-fontify-natively t)
-      (add-to-list 'org-src-lang-modes '("csharp" . csharp)))))
-
-(defun hp-load-org-agenda-moe-config ()
+(defun hp-load-org-agenda-mode-config ()
   "org-agenda-modeに関する設定を読み込む. プライベートな関数として扱うこと."
-  (when (require 'org-agenda nil t)
 
-    (add-hook 'org-agenda-mode-hook
-              (lambda ()
-                ;; アジェンダに表示する対象のファイル
-                (setq org-agenda-files (list org-directory))
-                
-                ;; アジェンダ表示時にカーソル行をハイライトする
-                (hl-line-mode 1)
-                (setq hl-line-face 'underline)
-                
-                ;; アジェンダでのclock reportの設定
-                (setq org-agenda-clockreport-parameter-plist
-                      (quote (:link t :maxlevel 7 :fileskip0 t :compact t :narrow 80)))))
-    
+  (when (require 'org-agenda nil t)
     (defun hp-load-org-agenda-custom-commands ()
       "Private function."
       (org-add-agenda-custom-command
@@ -623,9 +443,15 @@
                     (org-agenda-sorting-strategy
                      '(todo-state-down effort-up category-keep))
                     ))))))
-    
-    ;; org-agenda-custom-commandの設定を読み込む.
-    (hp-load-org-agenda-custom-commands)))
+    (add-hook 'org-agenda-mode-hook
+              (lambda ()
+                (setq org-agenda-files (list org-directory)) ;; アジェンダに表示する対象のファイル
+                (hl-line-mode 1) ;; アジェンダ表示時にカーソル行をハイライトする
+                (setq org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 7 :fileskip0 t :compact t :narrow 80))) ;; アジェンダでのclock reportの設定
+                (hp-load-org-agenda-custom-commands) ;; org-agenda-custom-commandの設定を読み込む.
+                ) 
+              ) 
+    ))
 
 (defun hp-load-auto-install-config ()
   "auto-installに関する設定をする. プライベートな関数として扱うこと."  
@@ -636,6 +462,15 @@
     ;; http://d.hatena.ne.jp/rubikitch/20091221/autoinstall
     (auto-install-compatibility-setup)))
 
+(defun hp-emacs-lisp-mode-hook ()
+  "emacs-lisp-modeに関する設定をする。プライベートな関数として扱うこと。"
+  (message "Load hp-emacs-lisp-mode-hook")
+  (hs-minor-mode 1))
+
+(defun hp-lisp-mode-hook ()
+  "lisp-modeに関する設定をする。プライベートな関数として扱うこと。"
+  (hs-minor-mode 1))
+
 (defun hp-load-cmak-mode-config ()
   "cmake-modeに関する設定をする. プライベートな関数として扱うこと."  
   (when (locate-library "cmake-mode")
@@ -644,14 +479,14 @@
     (add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-mode))))
 
 ;; 調子が悪いのでメンテナンスが必要.
-(defun hp-load-flycheck-config ()
-  "flycheckに関する設定をする. プライベートな関数として扱うこと."  
-  (when (require 'flycheck nil t)
-    (add-hook 'after-init-hook #'global-flycheck-mode)
-    ;;(require 'helm-flycheck)
-    (eval-after-load 'flycheck
-      '(define-key flycheck-mode-map (kbd "C-+") 'helm-flycheck))
-    (add-to-list 'flycheck-checkers 'swift)))
+;; (defun hp-load-flycheck-config ()
+;;   "flycheckに関する設定をする. プライベートな関数として扱うこと."  
+;;   (when (require 'flycheck nil t)
+;;     (add-hook 'after-init-hook #'global-flycheck-mode)
+;;     ;;(require 'helm-flycheck)
+;;     (eval-after-load 'flycheck
+;;       '(define-key flycheck-mode-map (kbd "C-+") 'helm-flycheck))
+;;     (add-to-list 'flycheck-checkers 'swift)))
 
 ;; ;; ;; flycheck
 ;; ;; (autoload 'flycheck-mode "flycheck" nil t)
@@ -660,24 +495,24 @@
 ;; ;;   (define-key global-map (kbd "C-x C-p") 'flycheck-previous-error)
 ;; ;;   (define-key global-map (kbd "C-x C-l") 'list-flycheck-errors))
 
-(defun hp-load-yas-config ()
-  "yasに関する設定をする. プライベートな関数として扱うこと."  
-  (autoload 'yas-global-mode "yasnippet" nil t)
-  (with-eval-after-load 'yas-global-mode
-    ;; ユーザ定義のスニペットを保存するフォルダ
-    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+;; (defun hp-load-yas-config ()
+;;   "yasに関する設定をする. プライベートな関数として扱うこと."  
+;;   (autoload 'yas-global-mode "yasnippet" nil t)
+;;   (with-eval-after-load 'yas-global-mode
+;;     ;; ユーザ定義のスニペットを保存するフォルダ
+;;     (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
     
-    ;; 操作とキーボード
-    (custom-set-variables '(yas-trigger-key "TAB"))
+;;     ;; 操作とキーボード
+;;     (custom-set-variables '(yas-trigger-key "TAB"))
     
-    ;; 既存スニペットを挿入する
-    (define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;;     ;; 既存スニペットを挿入する
+;;     (define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
     
-    ;; 新規スニペットを作成するバッファを用意する 
-    (define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet) 
+;;     ;; 新規スニペットを作成するバッファを用意する 
+;;     (define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet) 
     
-    ;; 既存スニペットを閲覧・編集する
-    (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)))
+;;     ;; 既存スニペットを閲覧・編集する
+;;     (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)))
 
 (defun hp-load-ruby-mode-config ()
   "ruby-modeに関する設定をする. プライベートな関数として扱うこと."
@@ -731,16 +566,6 @@
         (define-key company-active-map (kbd "C-p") 'company-select-previous)
         (define-key company-active-map (kbd "C-h") nil))
       
-      (defun hp-initialize-company-face-attribute ()
-        "company-modeの配色を初期化します"
-        (set-face-attribute 'company-tooltip nil :foreground "black" :background "lightgrey")
-        (set-face-attribute 'company-tooltip-common nil :foreground "black" :background "lightgrey")
-        (set-face-attribute 'company-tooltip-common-selection nil :foreground "white" :background "steelblue")
-        (set-face-attribute 'company-tooltip-selection nil :foreground "black" :background "steelblue")
-        (set-face-attribute 'company-preview-common nil :background nil :foreground "lightgrey" :underline t)
-        (set-face-attribute 'company-scrollbar-fg nil :background "orange")
-        (set-face-attribute 'company-scrollbar-bg nil :background "gray40"))
-
       ;; 全バッファで有効にする 
       (global-company-mode) 
       
@@ -753,7 +578,6 @@
       ;; 候補の一番下でさらに下に行こうとすると一番上に戻る  
       (setq company-selection-wrap-around t)
 
-      (hp-initialize-company-face-attribute)
       (hp-initialize-company-keybinding)
       
       (when (require 'irony nil t)
@@ -762,23 +586,6 @@
         (add-hook 'objc-mode-hook 'irony-mode)
         (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
         (add-to-list 'company-backends 'company-irony))))
-
-;;;  Emacsの配色
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background nil :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
- '(border ((t (:background "light green"))))
- '(cursor ((((class color) (background dark)) (:background "#00AA00")) (((class color) (background light)) (:background "#999999")) (t nil)))
- '(fringe ((t nil)))
- '(helm-M-x-key ((t (:foreground "Black"))))
- '(helm-buffer-directory ((t nil)))
- '(helm-buffer-file ((t (:inherit nil))))
- '(helm-buffer-size ((t nil)))
- '(region ((t (:background "khaki"))))
- '(show-paren-match ((t (:background "Yellow")))))
 
 ;;; フォント設定
 (defun hp-load-font-config ()
@@ -866,9 +673,6 @@
 (define-key global-map (kbd "M-;") nil) 
 (define-key global-map (kbd "C-;") 'comment-dwim) 
 
-;; カッコのスタートからエンドまでをハイライト
-(define-key global-map (kbd "M-;") 'show-paren-mode)
-
 ;; 文字コードと改行コードの変更する関数
 (define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
 
@@ -921,13 +725,34 @@
   ;; フレームサイズの調整
   (global-unset-key (kbd "C-x ^"))
   (global-unset-key (kbd "<C-x {>"))
-  (global-unset-key (kbd "<C-x }>"))
-  
+  (global-unset-key (kbd "<C-x }>"))  
   (global-set-key (kbd "<C-S-up>") 'enlarge-window)
   (global-set-key (kbd "<C-S-down>") 'shrink-window)
   (global-set-key (kbd "<C-S-right>") 'enlarge-window-horizontally)
   (global-set-key (kbd "<C-S-left>") 'shrink-window-horizontally)
 
+  ;; バッファの切り替え
+  (global-unset-key (kbd "C-x <left>"))  ;; 初期値
+  (global-unset-key (kbd "C-x <right>")) ;; 初期値
+  (global-set-key (kbd "C-x {") 'previous-buffer)
+  (global-set-key (kbd "C-x }") 'next-buffer)  
+
+  ;; バッファ内の移動
+  (global-unset-key (kbd "<M-<>")) ;; 初期値
+  (global-unset-key (kbd "<M->>")) ;; 初期値
+  (global-set-key (kbd "C-x <left>") 'beginning-of-buffer)
+  (global-set-key (kbd "C-x <right>") 'end-of-buffer)
+
+  ;; バッファの保存、再読み込み
+  (global-set-key (kbd "C-x C-s") 'save-buffer)
+  (global-set-key (kbd "C-x C-r") 'eval-buffer)
+
+  ;; hs-minor-mode
+  (global-set-key (kbd "C-c /") 'hs-toggle-hiding)
+  
+  ;; helm-mode
+  (global-set-key (kbd "C-x g g") 'helm-ag)
+  
   (add-hook 'org-mode-hook
             (lambda ()
               "Custmize org-mode key binding."
@@ -940,6 +765,7 @@
               (local-unset-key (kbd "<C-S-down>"))
               (local-unset-key (kbd "<C-S-right>"))
               (local-unset-key (kbd "<C-S-left>"))
+              ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
 
               ;; TABとC-iは同じなので
               ;; - org-clock-outのキーバインドはC-c C-x C-o
@@ -952,24 +778,109 @@
               ;; (local-unset-key (kbd "C-c C-x TAB"))
               ;; (local-set-key (kbd "C-c C-x C-i") 'org-clock-in)            
               ))
+
+  (add-hook 'gdb-mode-hook
+            (lambda ()
+              "Custmize c-mode"
+
+              (setq gdb-many-windows t)
+
+              ;;; I/O バッファを表示
+              (setq gdb-use-separate-io-buffer t)
+
+              ;;; t にすると mini buffer に値が表示される
+              (setq gud-tooltip-echo-area nil)
+
+              (gud-tooltip-mode t)
+              ))
   
   (custom-set-faces
-   '(helm-source-header                  ((t (:foreground "#17202A" :background "#F8F9F9" :bold t))))   
-;;   '(helm-visible-mark                   ((t (:inherit highlight ))))
-   '(helm-selection                      ((t (:inherit highlight ))))
-;;   '(helm-selection                      ((t (:foreground "#000000" :background "#D6EAF8" :bold t))))
-   '(helm-selection-line                 ((t (:inherit highlight ))))   
-   '(helm-ff-directory                   ((t (:inherit dired-directory ))))
-   '(helm-bookmark-directory             ((t (:inherit helm-ff-directory ))))
-   '(helm-buffer-directory               ((t (:inherit helm-ff-directory ))))
-   '(helm-ff-dotted-directory            ((t (:inherit helm-ff-directory ))))
-   '(helm-ff-file                        ((t (:inherit default ))))
-   '(helm-bookmark-file                  ((t (:inherit helm-ff-file ))))
-   '(helm-buffer-file                    ((t (:inherit helm-ff-file ))))
-   '(helm-grep-file                      ((t (:inherit helm-ff-file ))))
-   '(helm-etags-file                     ((t (:inherit helm-ff-file ))))
-   '(helm-ff-executable                  ((t (:inherit helm-ff-file :foreground "#7FFF7F" :bold t))))
-   '(helm-ff-symlink                     ((t (:inherit default :foreground "#7FFFFF" :bold t))))
-   '(helm-ff-dotted-symlink-directory    ((t (:inherit helm-ff-symlink ))))
-   '(helm-ff-invalid-symlink             ((t (:inherit default :foreground "#FF7F7F" ))))
-   ))
+   ;; M-x describe-face       => カーソルが当たっている箇所のフェイスを表示する
+   ;; M-x list-faces-display  => 現在の設定をバッファに表示する
+   ;; M-x list-colors-display => 色を一覧表示する
+   ;;
+   ;; #D6EAF8 ライトブルー (紫に近い)
+   ;; #0062A0 コバルトブルー
+   ;; #f1f1f1 スノーホワイト
+   
+   '(default     ((t (:inherit nil :stipple nil :background nil :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
+   '(bold        ((t (:bold t)))) ;; どこで使用されているのか把握できていない
+   '(italic      ((t (:italic t)))) ;; どこで使用されているのか把握できていない
+   '(bold-italic ((t (:bold t :italic t)))) ;; どこで使用されているのか把握できていない
+   '(underline   ((t (:underline t)))) ;; どこで使用されているのか把握できていない
+   '(highlight   ((t (:background "#D6EAF8" :bold t)))) ;; カーソルがある行に帯を出す
+   ;;(setq hl-line-face 'underline)
+   
+   ;; 選択範囲
+   '(region ((t (:background "#D6EAF8")))) 
+
+   ;; paren
+   '(show-paren-match ((t (:background "Yellow"))))
+
+   ;; mode-line
+   '(mode-line          ((t (:foreground "#ffffff" :background "#0062A0")))) ;; アクティブ時
+   '(mode-line-inactive ((t (:foreground "#000000" :background "#f1f1f1")))) ;; 非アクティブ時
+   '(minibuffer-prompt  ((t (:foreground "#0062A0" :bold t))))
+
+   ;; isearch
+   '(isearch ((t (:foreground nil :background "Yellow" :bold t))))
+   '(lazy-highlight ((t (:foreground nil :background "light yellow" :bold nil))))
+   
+   ;; dired-mode
+   '(dired-header    ((t (:foreground nil :background nil :bold t)))) ;; ディレクトリパス
+   '(dired-directory ((t (:foreground "Blue1" :bold nil)))) ;; ディレクトリ名
+   '(dired-symlink   ((t (:foreground "Purple" :bold nil)))) ;; シンボリックリンク
+   '(dired-mark      ((t (:foreground "dark cyan" :bold t)))) ;; 項目選択時に行頭に表示される「*」
+   '(dired-marked    ((t (:inherit dired-mark)))) ;; 項目選択時のファイル名、ディレクトリ名
+
+   ;; helm-mode
+   '(helm-source-header                  ((t (:foreground nil :background "#f1f1f1" :bold t))))      
+   '(helm-visible-mark                   ((t (:inherit highlight))))
+   '(helm-selection                      ((t (:inherit highlight))))
+   '(helm-selection-line                 ((t (:inherit highlight))))
+   '(helm-ff-directory                   ((t (:inherit dired-directory))))
+   '(helm-ff-dotted-directory            ((t (:inherit helm-ff-directory))))
+   '(helm-bookmark-directory             ((t (:inherit helm-ff-directory))))
+   '(helm-buffer-directory               ((t (:inherit helm-ff-directory))))
+   '(helm-ff-file                        ((t (:inherit default))))
+   '(helm-bookmark-file                  ((t (:inherit helm-ff-file))))
+   '(helm-buffer-file                    ((t (:inherit helm-ff-file))))
+   '(helm-grep-file                      ((t (:inherit helm-ff-file))))
+   '(helm-etags-file                     ((t (:inherit helm-ff-file))))
+   '(helm-ff-executable                  ((t (:inherit helm-ff-file))))
+   '(helm-ff-symlink                     ((t (:inherit dired-symlink))))
+   '(helm-ff-dotted-symlink-directory    ((t (:inherit helm-ff-symlink))))
+   '(helm-ff-truename                    ((t (:inherit helm-ff-symlink))))
+   '(helm-ff-invalid-symlink             ((t (:inherit error))))
+
+   ;; company-mode
+   (with-eval-after-load 'company-mode      
+     (set-face-attribute 'company-tooltip nil :foreground "black" :background "lightgrey")
+     (set-face-attribute 'company-tooltip-common nil :foreground "black" :background "lightgrey")
+     (set-face-attribute 'company-tooltip-common-selection nil :foreground "white" :background "steelblue")
+     (set-face-attribute 'company-tooltip-selection nil :foreground "black" :background "steelblue")
+     (set-face-attribute 'company-preview-common nil :background nil :foreground "lightgrey" :underline t)
+     (set-face-attribute 'company-scrollbar-fg nil :background "orange")
+     (set-face-attribute 'company-scrollbar-bg nil :background "gray40"))
+
+   ;; org-mode
+   (with-eval-after-load 'org-mode      
+     (set-face-attribute 'org-block nil :foreground "black") ;; #+BEGIN_SRC - #+END_SRCの装飾
+     (setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
+                                 ("python" (:background "#E5FFB8"))))
+     (setq org-todo-keyword-faces
+           '(("TODO"     . org-warning)
+             ("CANCELED" . shadow)))) ;; Taskの属性名につける装飾
+   )
+  )
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (helm-ag zoom-window yasnippet web-mode use-package undohist undo-tree swift-mode ruby-additional plantuml-mode osx-dictionary neotree markdown-mode js2-mode helm-swoop helm-gtags foreign-regexp flycheck dired-sidebar dired-recent company-irony cmake-mode))))
+
+(message "Loaded init.el")
