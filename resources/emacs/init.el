@@ -109,6 +109,8 @@
   ;; (hp-load-js2-mode-config)     ;; js2-modeの設定 
   ;; (hp-load-web-mode-config)     ;; web-modeの設定
   ;; (hp-load-company-mode-config) ;; company-modeの設定
+  (add-hook 'c-mode-hook 'helm-gtags-mode)
+  (add-hook 'c++-mode-hook 'helm-gtags-mode)
 )
 
 ;; Emacsの初期化時に指定したい設定
@@ -180,9 +182,6 @@
   (when (require 'helm-swoop nil t))
   
   ;; helm-gtags-mode
-  (add-hook 'c-mode-hook 'helm-gtags-mode)
-  (add-hook 'c++-mode-hook 'helm-gtags-mode))
-
   (autoload 'helm-gtags-mode "helm-gtags" "" t))
   
 (defun hp-load-org-mode-config ()
