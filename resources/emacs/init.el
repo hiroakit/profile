@@ -689,10 +689,6 @@
 (global-set-key (kbd "C-c C-d m") 'hp-insert-current-month-text)
 (global-set-key (kbd "C-c C-d d") 'hp-insert-current-day-text)
 
-;; show-all
-;; show-entry
-;; hide-entry
-
 ;; 一時的なorgのバッファを作成
 (global-set-key (kbd "C-c t") 'hp-create-temp-org-buffer)
 
