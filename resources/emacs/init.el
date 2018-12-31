@@ -102,7 +102,7 @@
   (hp-load-org-mode-config)        ;; org-modeの設定
   (hp-load-org-agenda-mode-config) ;; org-agenda-modeの設定
   ;; (hp-load-auto-install-config) ;; auto-installの設定
-  ;; (hp-load-cmak-mode-config)    ;; cmake-modeの設定          
+  ;; (hp-load-cmake-mode-config)    ;; cmake-modeの設定          
   ;; (hp-load-flycheck-config)     ;; flycheckの設定
   ;; (hp-load-yas-config)          ;; yasの設定
   ;; (hp-load-ruby-mode-config)    ;; ruby-modeの設定
@@ -471,7 +471,7 @@
   "lisp-modeに関する設定をする。プライベートな関数として扱うこと。"
   (hs-minor-mode 1))
 
-(defun hp-load-cmak-mode-config ()
+(defun hp-load-cmake-mode-config ()
   "cmake-modeに関する設定をする. プライベートな関数として扱うこと."  
   (when (locate-library "cmake-mode")
     (autoload 'cmake-mode' "cmake-mode" "" t)
