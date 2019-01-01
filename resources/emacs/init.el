@@ -3,10 +3,10 @@
 (message "Run init.el")
 
 ;; 定数宣言
+(defconst hp-core-conf (concat user-emacs-directory "init.el"))
 (defconst hp-elpa-dir (concat user-emacs-directory "elpa"))
 (defconst hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
 (defconst hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-9.1.12/lisp"))
-(defconst hp-core-conf "~/.emacs.d/init.el")
 (defconst hp-org-mode-local-config-file (concat (file-name-as-directory hp-site-lisp-dir) "hp-org-mode-local-config.el"))
 (defconst hp-default-emacs-frame-width-size 120 "フレームの横幅の初期値")
 (defconst hp-default-tab-space-length 4 "タブを半角スペースで置き換える際の文字数")
