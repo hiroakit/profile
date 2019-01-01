@@ -7,6 +7,7 @@
 (defconst hp-site-lisp-dir (concat user-emacs-directory "site-lisp"))
 (defconst hp-org-mode-dir (concat (getenv "HOME") "/src/org-mode/org-9.1.12/lisp"))
 (defconst hp-core-conf "~/.emacs.d/init.el")
+(defconst hp-org-mode-local-config-file (concat (file-name-as-directory hp-site-lisp-dir) "hp-org-mode-local-config.el"))
 (defconst hp-default-emacs-frame-width-size 120 "フレームの横幅の初期値")
 (defconst hp-default-tab-space-length 4 "タブを半角スペースで置き換える際の文字数")
 (defvar hp-melpa-url "http://melpa.milkbox.net/packages/")
@@ -534,9 +535,8 @@
     (setq truncate-partial-width-windows nil)
     (add-to-list 'auto-mode-alist '("\\.org$" . org-mode)) ;; ファイルの拡張子が org だった場合，org-modeを起動するよう登録する.
     (setq org-directory "~/Documents/sources/notebook") ;; orgファイルを格納するディレクトリ.
-    (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")) ;; org-default-notes-fileのファイル名.
-    (load "~/.emacs.d/site-lisp/hp-org-mode-local-config.el") ;; org-modeの設定値を読み込む.
-    )
+    (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org"))  ;; org-default-notes-fileのファイル名.    
+    (when (file-exists-p hp-org-mode-local-config-file) (load hp-org-mode-local-config-file))) ;; この環境固有のorg-mode設定を読み込む
      
   ;; org-modeのhookについては下記が詳しい.
   ;; http://orgmode.org/tmp/worg/org-configs/org-hooks.html
