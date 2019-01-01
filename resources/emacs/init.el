@@ -10,13 +10,12 @@
 (defconst hp-org-mode-local-config-file (concat (file-name-as-directory hp-site-lisp-dir) "hp-org-mode-local-config.el"))
 (defconst hp-default-emacs-frame-width-size 120 "フレームの横幅の初期値")
 (defconst hp-default-tab-space-length 4 "タブを半角スペースで置き換える際の文字数")
-(defvar hp-melpa-url "http://melpa.milkbox.net/packages/")
-(defvar hp-marmalade-url "http://marmalade-repo.org/packages/")
 (defvar hp-use-package-list '(
     ;; 以下に使用するパッケージを記述する
     cmake-mode
     company
     company-irony
+    dired-sidebar
     flycheck
     foreign-regexp
     helm
@@ -24,7 +23,7 @@
     helm-swoop
     irony
     js2-mode
-    neotree
+    org
     osx-dictionary
     ruby-mode
     ruby-additional
@@ -471,18 +470,19 @@
             (hp-emacs-startup)))                          
 
 ;;; パッケージ
+;;
+;; package.elはEmacsに同梱されている
 (require 'package)
-(add-to-list 'package-archives (cons "melpa" hp-melpa-url))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
-;;; 未インストールのパッケージを探す
-(let ((not-installed 
-       (loop for x in hp-use-package-list
-             when (not (package-installed-p x)) collect x)))
-  (when not-installed
+;; 未インストールのパッケージを探してインストールする
+(let ((not-installed-packages (loop for pkg in hp-use-package-list
+                                    unless (package-installed-p pkg) collect pkg)))
+  (when not-installed-packages
     (package-refresh-contents)
-    (dolist 
-        (pkg not-installed)
+    (dolist (pkg not-installed-packages)
         (package-install pkg))))
 
 (defun hp-expand-load-path (&rest paths)
