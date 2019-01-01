@@ -124,6 +124,254 @@
   ;; Space between lines
   (set-default 'line-spacing 1))))                                       
 
+;;; フェイス設定
+(defun hp-load-faces-config ()  
+  (custom-set-faces
+   ;; M-x describe-face       => カーソルが当たっている箇所のフェイスを表示する
+   ;; M-x list-faces-display  => 現在の設定をバッファに表示する
+   ;; M-x list-colors-display => 色を一覧表示する
+   ;;
+   ;; #D6EAF8 ライトブルー (紫に近い)
+   ;; #0062A0 コバルトブルー
+   ;; #f1f1f1 スノーホワイト
+   
+   '(default     ((t (:inherit nil :stipple nil :background nil :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
+   '(bold        ((t (:bold t)))) ;; どこで使用されているのか把握できていない
+   '(italic      ((t (:italic t)))) ;; どこで使用されているのか把握できていない
+   '(bold-italic ((t (:bold t :italic t)))) ;; どこで使用されているのか把握できていない
+   '(underline   ((t (:underline t)))) ;; どこで使用されているのか把握できていない
+   '(highlight   ((t (:foreground "gray0" :background "#D6EAF8" :bold t)))) ;; カーソルがある行に帯を出す foregroundはhelm-swoopの検索結果をハイライトすること考慮している
+   ;;(setq hl-line-face 'underline)
+   
+   ;; 選択範囲
+   '(region ((t (:background "#D6EAF8")))) 
+
+   ;; paren
+   '(show-paren-match ((t (:background "Yellow"))))
+
+   ;; mode-line
+   '(mode-line          ((t (:foreground "#ffffff" :background "#0062A0")))) ;; アクティブ時
+   '(mode-line-inactive ((t (:foreground "#000000" :background "#f1f1f1")))) ;; 非アクティブ時
+   '(minibuffer-prompt  ((t (:foreground "#0062A0" :bold t))))
+
+   ;; isearch
+   '(isearch ((t (:foreground nil :background "Yellow" :bold t))))
+   '(lazy-highlight ((t (:foreground nil :background "light yellow" :bold nil))))
+   
+   ;; dired-mode
+   '(dired-header    ((t (:foreground nil :background nil :bold t)))) ;; ディレクトリパス
+   '(dired-directory ((t (:foreground "Blue1" :bold nil)))) ;; ディレクトリ名
+   '(dired-symlink   ((t (:foreground "Purple" :bold nil)))) ;; シンボリックリンク
+   '(dired-mark      ((t (:foreground "dark cyan" :bold t)))) ;; 項目選択時に行頭に表示される「*」
+   '(dired-marked    ((t (:inherit dired-mark)))) ;; 項目選択時のファイル名、ディレクトリ名
+
+   ;; helm-mode
+   '(helm-source-header                  ((t (:foreground nil :background "#f1f1f1" :bold t))))      
+   '(helm-visible-mark                   ((t (:inherit highlight))))
+   '(helm-selection                      ((t (:inherit highlight))))
+   '(helm-selection-line                 ((t (:inherit highlight))))
+   '(helm-ff-directory                   ((t (:inherit dired-directory))))
+   '(helm-ff-dotted-directory            ((t (:inherit helm-ff-directory))))
+   '(helm-bookmark-directory             ((t (:inherit helm-ff-directory))))
+   '(helm-buffer-directory               ((t (:inherit helm-ff-directory))))
+   '(helm-ff-file                        ((t (:inherit default))))
+   '(helm-bookmark-file                  ((t (:inherit helm-ff-file))))
+   '(helm-buffer-file                    ((t (:inherit helm-ff-file))))
+   '(helm-grep-file                      ((t (:inherit helm-ff-file))))
+   '(helm-etags-file                     ((t (:inherit helm-ff-file))))
+   '(helm-ff-executable                  ((t (:inherit helm-ff-file))))
+   '(helm-ff-symlink                     ((t (:inherit dired-symlink))))
+   '(helm-ff-dotted-symlink-directory    ((t (:inherit helm-ff-symlink))))
+   '(helm-ff-truename                    ((t (:inherit helm-ff-symlink))))
+   '(helm-ff-invalid-symlink             ((t (:inherit error))))
+
+   ;; company-mode
+   (with-eval-after-load 'company-mode      
+     (set-face-attribute 'company-tooltip nil :foreground "black" :background "lightgrey")
+     (set-face-attribute 'company-tooltip-common nil :foreground "black" :background "lightgrey")
+     (set-face-attribute 'company-tooltip-common-selection nil :foreground "white" :background "steelblue")
+     (set-face-attribute 'company-tooltip-selection nil :foreground "black" :background "steelblue")
+     (set-face-attribute 'company-preview-common nil :background nil :foreground "lightgrey" :underline t)
+     (set-face-attribute 'company-scrollbar-fg nil :background "orange")
+     (set-face-attribute 'company-scrollbar-bg nil :background "gray40"))
+
+   ;; org-mode
+   (with-eval-after-load 'org-mode      
+     (set-face-attribute 'org-block nil :foreground "black") ;; #+BEGIN_SRC - #+END_SRCの装飾
+     (setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
+                                 ("python" (:background "#E5FFB8"))))
+     (setq org-todo-keyword-faces
+           '(("TODO"     . org-warning)
+             ("CANCELED" . shadow)))) ;; Taskの属性名につける装飾
+   )
+)
+
+;;; キーバインディング設定
+(defun hp-load-key-binding-config ()
+  ;;(when (not window-system)
+  ;; Emacs全般
+  (global-set-key (kbd "C-x j") 'goto-line)
+
+  ;; macOSのEmacs.app向け
+  (when (equal window-system 'ns)
+    ;; C-zを無効にする
+    (global-unset-key "\C-z")
+
+    ;; \C-+ で拡大
+    (global-set-key [(control ?+)] (lambda () (interactive) (text-scale-increase 1)))
+    ;; \C-- で縮小
+    (global-set-key [(control ?-)] (lambda () (interactive) (text-scale-decrease 1)))
+    ;; \C-0 でデフォルトに戻す
+    (global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))  
+    ) 
+  
+  ;; org-mode
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c b") 'org-iswitchb)
+
+  ;; frameの境界線を動かす
+  (define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
+  
+  ;; コメントアウトのキーバインディングををCtrl押しながらに変更する
+  (define-key global-map (kbd "M-;") nil) 
+  (define-key global-map (kbd "C-;") 'comment-dwim) 
+  
+  ;; 文字コードと改行コードの変更する関数
+  (define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
+  
+  ;; 矩形範囲の拡大・縮小
+  (global-set-key (kbd "C-c r u") 'er/expand-region)
+  (global-set-key (kbd "C-c r d") 'er/contract-region)
+  
+  ;; 補完の起動
+  (global-set-key (kbd "C-c .") 'company-complete)
+
+  ;; 日時の取得
+  (global-set-key (kbd "C-c C-d c") 'hp-insert-current-date-text)
+  (global-set-key (kbd "C-c C-d y") 'hp-insert-current-year-text)
+  (global-set-key (kbd "C-c C-d m") 'hp-insert-current-month-text)
+  (global-set-key (kbd "C-c C-d d") 'hp-insert-current-day-text)
+  
+  ;; 一時的なorgのバッファを作成
+  (global-set-key (kbd "C-c t") 'hp-create-temp-org-buffer)
+  
+  ;; 現在のディレクトリをFinderで開く
+  (global-set-key (kbd "C-c f") 'hp-open-current-directory)
+  
+  ;; フレームサイズの調整
+  (global-unset-key (kbd "C-x ^"))
+  (global-unset-key (kbd "<C-x {>"))
+  (global-unset-key (kbd "<C-x }>"))  
+  (global-set-key (kbd "<C-S-up>") 'enlarge-window)
+  (global-set-key (kbd "<C-S-down>") 'shrink-window)
+  (global-set-key (kbd "<C-S-right>") 'enlarge-window-horizontally)
+  (global-set-key (kbd "<C-S-left>") 'shrink-window-horizontally)
+  
+  ;; バッファの切り替え
+  (global-unset-key (kbd "C-x <left>"))  ;; 初期値
+  (global-unset-key (kbd "C-x <right>")) ;; 初期値
+  (global-set-key (kbd "C-x {") 'previous-buffer)
+  (global-set-key (kbd "C-x }") 'next-buffer)  
+
+  ;; バッファ内の移動
+  (global-unset-key (kbd "<M-<>")) ;; 初期値
+  (global-unset-key (kbd "<M->>")) ;; 初期値
+  (global-set-key (kbd "C-x <left>") 'beginning-of-buffer)
+  (global-set-key (kbd "C-x <right>") 'end-of-buffer)
+
+  ;; バッファの保存、再読み込み
+  (global-set-key (kbd "C-x C-s") 'save-buffer)
+  (global-set-key (kbd "C-x C-r") 'eval-buffer)
+
+  ;; hs-minor-mode
+  (global-set-key (kbd "C-c /") 'hs-toggle-hiding)
+  
+  ;; helm-mode
+  (with-eval-after-load 'helm-mode      
+    (define-key helm-map            (kbd "C-h") 'delete-backward-char)
+    (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+    (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+    (define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
+    (define-key global-map (kbd "M-x")     'helm-M-x)            ;; Emacsのコマンドを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-f") 'helm-find-files)     ;; ファイル探す際に絞り込むためのキーバインディグ
+    ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)     ;; 最近開いたファイルを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "M-y")     'helm-show-kill-ring) ;; キリングを絞り込むためのキーバインディング
+    (define-key global-map (kbd "C-c i")   'helm-imenu)          ;; バッファ内に存在する関数を絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-b") 'helm-buffers-list)   ;; バッファを絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-x") 'helm-for-files)      ;; 絞り込み対象をとても広く取ってから絞り込むためのキーバインディグ
+    (define-key global-map (kbd "C-x C-m") 'helm-mini)           ;; 絞り込み対象をやや広く取ってから絞り込むためのキーバインディグ
+    (define-key global-map (kbd "M-r")     'helm-resume)         ;; 前回のhelmコマンドの続きから絞り込むためのキーバインディグ
+    (global-set-key (kbd "C-x g g") 'helm-ag)                    ;; 
+    )
+
+  (with-eval-after-load 'helm-gtags
+    ;; (setq helm-gtags-suggested-key-mapping t)
+    ;; (setq helm-gtags-prefix-key "\C-c")
+    
+    ;; helm-gtags-find-tag               関数の定義場所の検索
+    ;; helm-gtags-find-rtag              関数や使用箇所の検索
+    ;; helm-gtags-find-symbol            変数の使用箇所の検索
+    ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
+    ;; helm-gtags-parse-file             関数の定義一覧
+    ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
+    (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
+    (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
+    (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
+    (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
+    (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
+    (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function)
+    )
+
+  (with-eval-after-load 'company-mode
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") 'company-select-next)
+    (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    (define-key company-active-map (kbd "C-h") nil))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              "Custmize org-mode key binding."
+
+              (message "Run org-mode-hook at not window-system")
+
+              ;; org-modeのlocal-mapよりもglobal-mapを優先させる。
+              ;; フレームサイズの調整が楽な方が嬉しいから。
+              (local-unset-key (kbd "<C-S-up>"))
+              (local-unset-key (kbd "<C-S-down>"))
+              (local-unset-key (kbd "<C-S-right>"))
+              (local-unset-key (kbd "<C-S-left>"))
+              ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
+
+              ;; TABとC-iは同じなので
+              ;; - org-clock-outのキーバインドはC-c C-x C-o
+              ;; - org-clock-inのキーバインドはC-c C-x TAB
+              ;;
+              ;; In ASCII, C-i and <TAB> are the same character.
+              ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
+              ;;
+              ;; だから以下の設定は無意味
+              ;; (local-unset-key (kbd "C-c C-x TAB"))
+              ;; (local-set-key (kbd "C-c C-x C-i") 'org-clock-in)            
+              ))
+
+  (add-hook 'gdb-mode-hook
+            (lambda ()
+              "Custmize c-mode"
+
+              (setq gdb-many-windows t)
+
+              ;;; I/O バッファを表示
+              (setq gdb-use-separate-io-buffer t)
+
+              ;;; t にすると mini buffer に値が表示される
+              (setq gud-tooltip-echo-area nil)
+
+              (gud-tooltip-mode t)
+              ))
+  )
+
 ;;; Emacs初期化
 ;;
 ;; Emacs初期化のライフサイクル
@@ -142,7 +390,9 @@
   (tool-bar-mode -1)                ;; ツールバーを表示しない
   (menu-bar-mode -1)                ;; メニューバーを表示しない  
   (set-scroll-bar-mode nil)         ;; スクロールバーを表示しない
-  (hp-load-font-config)             ;; フォントに関する設定を読み込む. 
+  (hp-load-font-config)             ;; フォントに関する設定を読み込む.
+  (hp-load-faces-config)            ;; フェイスの設定を読み込む
+  (hp-load-key-binding-config)      ;; キーバインディングの設定を読み込む
 )
 
 (defun hp-emacs-after-init ()
@@ -163,7 +413,7 @@
   (setq-default indent-tabs-mode nil) ;; タブで字下げする場合に半角スペースを利用する
   (setq-default tab-width hp-default-tab-space-length)
   
-  (when (equal window-system 'ns) (global-unset-key "\C-z")) ;; C-zを無効にする.
+  
 
   ;; 括弧の範囲内を強調表示
   (show-paren-mode t)
@@ -578,14 +828,6 @@
     "company-modeに関する設定をする. プライベートな関数として扱うこと."
     (autoload 'company-mode "company" nil t)
     (with-eval-after-load 'company-mode      
-      (defun hp-initialize-company-keybinding ()
-        "company-modeのキーバインディングを初期化します"
-        (define-key company-active-map (kbd "M-n") nil)
-        (define-key company-active-map (kbd "M-p") nil)
-        (define-key company-active-map (kbd "C-n") 'company-select-next)
-        (define-key company-active-map (kbd "C-p") 'company-select-previous)
-        (define-key company-active-map (kbd "C-h") nil))
-      
       ;; 全バッファで有効にする 
       (global-company-mode) 
       
@@ -597,8 +839,6 @@
       
       ;; 候補の一番下でさらに下に行こうとすると一番上に戻る  
       (setq company-selection-wrap-around t)
-
-      (hp-initialize-company-keybinding)
       
       (when (require 'irony nil t)
         (add-hook 'c-mode-hook 'irony-mode)
@@ -606,43 +846,6 @@
         (add-hook 'objc-mode-hook 'irony-mode)
         (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
         (add-to-list 'company-backends 'company-irony))))
-
-;; Emacs全般
-(global-set-key (kbd "C-x j") 'goto-line)
-
-;; org-mode
-(global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c b") 'org-iswitchb)
-
-;; frameの境界線を動かす
-(define-key global-map (kbd "C-c C-r") 'hp-move-frame-line)
-
-;; コメントアウトのキーバインディングををCtrl押しながらに変更する
-(define-key global-map (kbd "M-;") nil) 
-(define-key global-map (kbd "C-;") 'comment-dwim) 
-
-;; 文字コードと改行コードの変更する関数
-(define-key global-map (kbd "C-c C-e") 'set-buffer-file-coding-system) 
-
-;; 矩形範囲の拡大・縮小
-(global-set-key (kbd "C-c r u") 'er/expand-region)
-(global-set-key (kbd "C-c r d") 'er/contract-region)
-
-;; 補完の起動
-(global-set-key (kbd "C-c .") 'company-complete)
-
-;; 日時の取得
-(global-set-key (kbd "C-c C-d c") 'hp-insert-current-date-text)
-(global-set-key (kbd "C-c C-d y") 'hp-insert-current-year-text)
-(global-set-key (kbd "C-c C-d m") 'hp-insert-current-month-text)
-(global-set-key (kbd "C-c C-d d") 'hp-insert-current-day-text)
-
-;; 一時的なorgのバッファを作成
-(global-set-key (kbd "C-c t") 'hp-create-temp-org-buffer)
-
-;; 現在のディレクトリをFinderで開く
-(global-set-key (kbd "C-c f") 'hp-open-current-directory)
 
 ;; org-time-stamp, org-time-stamp-inactiveの曜日表記を英語にする
 (setq system-time-locale "C")
@@ -665,192 +868,6 @@
         (process-send-eof proc))))
   (setq interprogram-cut-function 'hp-paste-to-macOS)
   (setq interprogram-paste-function 'hp-copy-from-macOS))
-
-(when (not window-system)
-  ;; フレームサイズの調整
-  (global-unset-key (kbd "C-x ^"))
-  (global-unset-key (kbd "<C-x {>"))
-  (global-unset-key (kbd "<C-x }>"))  
-  (global-set-key (kbd "<C-S-up>") 'enlarge-window)
-  (global-set-key (kbd "<C-S-down>") 'shrink-window)
-  (global-set-key (kbd "<C-S-right>") 'enlarge-window-horizontally)
-  (global-set-key (kbd "<C-S-left>") 'shrink-window-horizontally)
-
-  ;; バッファの切り替え
-  (global-unset-key (kbd "C-x <left>"))  ;; 初期値
-  (global-unset-key (kbd "C-x <right>")) ;; 初期値
-  (global-set-key (kbd "C-x {") 'previous-buffer)
-  (global-set-key (kbd "C-x }") 'next-buffer)  
-
-  ;; バッファ内の移動
-  (global-unset-key (kbd "<M-<>")) ;; 初期値
-  (global-unset-key (kbd "<M->>")) ;; 初期値
-  (global-set-key (kbd "C-x <left>") 'beginning-of-buffer)
-  (global-set-key (kbd "C-x <right>") 'end-of-buffer)
-
-  ;; バッファの保存、再読み込み
-  (global-set-key (kbd "C-x C-s") 'save-buffer)
-  (global-set-key (kbd "C-x C-r") 'eval-buffer)
-
-  ;; hs-minor-mode
-  (global-set-key (kbd "C-c /") 'hs-toggle-hiding)
-  
-  ;; helm-mode
-  (with-eval-after-load 'helm-mode      
-    (define-key helm-map            (kbd "C-h") 'delete-backward-char)
-    (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
-    (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
-    (define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
-    (define-key global-map (kbd "M-x")     'helm-M-x)            ;; Emacsのコマンドを絞り込むためのキーバインディグ
-    (define-key global-map (kbd "C-x C-f") 'helm-find-files)     ;; ファイル探す際に絞り込むためのキーバインディグ
-    ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)     ;; 最近開いたファイルを絞り込むためのキーバインディグ
-    (define-key global-map (kbd "M-y")     'helm-show-kill-ring) ;; キリングを絞り込むためのキーバインディング
-    (define-key global-map (kbd "C-c i")   'helm-imenu)          ;; バッファ内に存在する関数を絞り込むためのキーバインディグ
-    (define-key global-map (kbd "C-x C-b") 'helm-buffers-list)   ;; バッファを絞り込むためのキーバインディグ
-    (define-key global-map (kbd "C-x C-x") 'helm-for-files)      ;; 絞り込み対象をとても広く取ってから絞り込むためのキーバインディグ
-    (define-key global-map (kbd "C-x C-m") 'helm-mini)           ;; 絞り込み対象をやや広く取ってから絞り込むためのキーバインディグ
-    (define-key global-map (kbd "M-r")     'helm-resume)         ;; 前回のhelmコマンドの続きから絞り込むためのキーバインディグ
-    (global-set-key (kbd "C-x g g") 'helm-ag)                    ;; 
-    )
-
-  (with-eval-after-load 'helm-gtags
-    ;; (setq helm-gtags-suggested-key-mapping t)
-    ;; (setq helm-gtags-prefix-key "\C-c")
-    
-    ;; helm-gtags-find-tag               関数の定義場所の検索
-    ;; helm-gtags-find-rtag              関数や使用箇所の検索
-    ;; helm-gtags-find-symbol            変数の使用箇所の検索
-    ;; helm-gtags-pop-stack              タグジャンプした箇所からひとつ戻る
-    ;; helm-gtags-parse-file             関数の定義一覧
-    ;; helm-gtags-tags-in-this-function  関数内のタグ一覧
-    (define-key helm-gtags-mode-map (kbd "C-c C-t") 'helm-gtags-find-tag)
-    (define-key helm-gtags-mode-map (kbd "C-c C-r") 'helm-gtags-find-rtag)
-    (define-key helm-gtags-mode-map (kbd "C-c C-s") 'helm-gtags-find-symbol)
-    (define-key helm-gtags-mode-map (kbd "C-c C-p") 'helm-gtags-pop-stack)
-    (define-key helm-gtags-mode-map (kbd "C-c C-f") 'helm-gtags-parse-file)
-    (define-key helm-gtags-mode-map (kbd "C-c C-a") 'helm-gtags-tags-in-this-function)
-    )
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              "Custmize org-mode key binding."
-
-              (message "Run org-mode-hook at not window-system")
-
-              ;; org-modeのlocal-mapよりもglobal-mapを優先させる。
-              ;; フレームサイズの調整が楽な方が嬉しいから。
-              (local-unset-key (kbd "<C-S-up>"))
-              (local-unset-key (kbd "<C-S-down>"))
-              (local-unset-key (kbd "<C-S-right>"))
-              (local-unset-key (kbd "<C-S-left>"))
-              ;;(local-set-key (kbd "C-c c") 'hp-show-org-conf)
-
-              ;; TABとC-iは同じなので
-              ;; - org-clock-outのキーバインドはC-c C-x C-o
-              ;; - org-clock-inのキーバインドはC-c C-x TAB
-              ;;
-              ;; In ASCII, C-i and <TAB> are the same character.
-              ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
-              ;;
-              ;; だから以下の設定は無意味
-              ;; (local-unset-key (kbd "C-c C-x TAB"))
-              ;; (local-set-key (kbd "C-c C-x C-i") 'org-clock-in)            
-              ))
-
-  (add-hook 'gdb-mode-hook
-            (lambda ()
-              "Custmize c-mode"
-
-              (setq gdb-many-windows t)
-
-              ;;; I/O バッファを表示
-              (setq gdb-use-separate-io-buffer t)
-
-              ;;; t にすると mini buffer に値が表示される
-              (setq gud-tooltip-echo-area nil)
-
-              (gud-tooltip-mode t)
-              ))
-  
-  (custom-set-faces
-   ;; M-x describe-face       => カーソルが当たっている箇所のフェイスを表示する
-   ;; M-x list-faces-display  => 現在の設定をバッファに表示する
-   ;; M-x list-colors-display => 色を一覧表示する
-   ;;
-   ;; #D6EAF8 ライトブルー (紫に近い)
-   ;; #0062A0 コバルトブルー
-   ;; #f1f1f1 スノーホワイト
-   
-   '(default     ((t (:inherit nil :stipple nil :background nil :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
-   '(bold        ((t (:bold t)))) ;; どこで使用されているのか把握できていない
-   '(italic      ((t (:italic t)))) ;; どこで使用されているのか把握できていない
-   '(bold-italic ((t (:bold t :italic t)))) ;; どこで使用されているのか把握できていない
-   '(underline   ((t (:underline t)))) ;; どこで使用されているのか把握できていない
-   '(highlight   ((t (:foreground "gray0" :background "#D6EAF8" :bold t)))) ;; カーソルがある行に帯を出す foregroundはhelm-swoopの検索結果をハイライトすること考慮している
-   ;;(setq hl-line-face 'underline)
-   
-   ;; 選択範囲
-   '(region ((t (:background "#D6EAF8")))) 
-
-   ;; paren
-   '(show-paren-match ((t (:background "Yellow"))))
-
-   ;; mode-line
-   '(mode-line          ((t (:foreground "#ffffff" :background "#0062A0")))) ;; アクティブ時
-   '(mode-line-inactive ((t (:foreground "#000000" :background "#f1f1f1")))) ;; 非アクティブ時
-   '(minibuffer-prompt  ((t (:foreground "#0062A0" :bold t))))
-
-   ;; isearch
-   '(isearch ((t (:foreground nil :background "Yellow" :bold t))))
-   '(lazy-highlight ((t (:foreground nil :background "light yellow" :bold nil))))
-   
-   ;; dired-mode
-   '(dired-header    ((t (:foreground nil :background nil :bold t)))) ;; ディレクトリパス
-   '(dired-directory ((t (:foreground "Blue1" :bold nil)))) ;; ディレクトリ名
-   '(dired-symlink   ((t (:foreground "Purple" :bold nil)))) ;; シンボリックリンク
-   '(dired-mark      ((t (:foreground "dark cyan" :bold t)))) ;; 項目選択時に行頭に表示される「*」
-   '(dired-marked    ((t (:inherit dired-mark)))) ;; 項目選択時のファイル名、ディレクトリ名
-
-   ;; helm-mode
-   '(helm-source-header                  ((t (:foreground nil :background "#f1f1f1" :bold t))))      
-   '(helm-visible-mark                   ((t (:inherit highlight))))
-   '(helm-selection                      ((t (:inherit highlight))))
-   '(helm-selection-line                 ((t (:inherit highlight))))
-   '(helm-ff-directory                   ((t (:inherit dired-directory))))
-   '(helm-ff-dotted-directory            ((t (:inherit helm-ff-directory))))
-   '(helm-bookmark-directory             ((t (:inherit helm-ff-directory))))
-   '(helm-buffer-directory               ((t (:inherit helm-ff-directory))))
-   '(helm-ff-file                        ((t (:inherit default))))
-   '(helm-bookmark-file                  ((t (:inherit helm-ff-file))))
-   '(helm-buffer-file                    ((t (:inherit helm-ff-file))))
-   '(helm-grep-file                      ((t (:inherit helm-ff-file))))
-   '(helm-etags-file                     ((t (:inherit helm-ff-file))))
-   '(helm-ff-executable                  ((t (:inherit helm-ff-file))))
-   '(helm-ff-symlink                     ((t (:inherit dired-symlink))))
-   '(helm-ff-dotted-symlink-directory    ((t (:inherit helm-ff-symlink))))
-   '(helm-ff-truename                    ((t (:inherit helm-ff-symlink))))
-   '(helm-ff-invalid-symlink             ((t (:inherit error))))
-
-   ;; company-mode
-   (with-eval-after-load 'company-mode      
-     (set-face-attribute 'company-tooltip nil :foreground "black" :background "lightgrey")
-     (set-face-attribute 'company-tooltip-common nil :foreground "black" :background "lightgrey")
-     (set-face-attribute 'company-tooltip-common-selection nil :foreground "white" :background "steelblue")
-     (set-face-attribute 'company-tooltip-selection nil :foreground "black" :background "steelblue")
-     (set-face-attribute 'company-preview-common nil :background nil :foreground "lightgrey" :underline t)
-     (set-face-attribute 'company-scrollbar-fg nil :background "orange")
-     (set-face-attribute 'company-scrollbar-bg nil :background "gray40"))
-
-   ;; org-mode
-   (with-eval-after-load 'org-mode      
-     (set-face-attribute 'org-block nil :foreground "black") ;; #+BEGIN_SRC - #+END_SRCの装飾
-     (setq org-src-block-faces '(("emacs-lisp" (:background "#EEE2FF"))
-                                 ("python" (:background "#E5FFB8"))))
-     (setq org-todo-keyword-faces
-           '(("TODO"     . org-warning)
-             ("CANCELED" . shadow)))) ;; Taskの属性名につける装飾
-   )
-  )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
