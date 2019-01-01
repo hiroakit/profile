@@ -771,7 +771,7 @@
    '(italic      ((t (:italic t)))) ;; どこで使用されているのか把握できていない
    '(bold-italic ((t (:bold t :italic t)))) ;; どこで使用されているのか把握できていない
    '(underline   ((t (:underline t)))) ;; どこで使用されているのか把握できていない
-   '(highlight   ((t (:background "#D6EAF8" :bold t)))) ;; カーソルがある行に帯を出す
+   '(highlight   ((t (:foreground "gray0" :background "#D6EAF8" :bold t)))) ;; カーソルがある行に帯を出す foregroundはhelm-swoopの検索結果をハイライトすること考慮している
    ;;(setq hl-line-face 'underline)
    
    ;; 選択範囲
