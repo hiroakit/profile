@@ -1,5 +1,5 @@
-#!/usr/local/bin/zsh
-
+# .zalias
+# This file is original. NOT definition by zsh
 #
 # Command Alias
 #
@@ -8,7 +8,6 @@ alias -g G='| grep'
 alias -g H='| head'
 alias -g T='| tail'
 
-alias ls="ls -G -w -a -l"
 alias du="du -h"
 alias df="df -h"
 alias mv='nocorrect mv'
@@ -20,14 +19,22 @@ alias su="su -l"
 
 case "${OSTYPE}" in
     darwin*)
-	alias emacs="/usr/local/bin/emacs -nw"
-	;;
+        # macOS has BSD ls which isn't time-style option on defalut.
+        # G option maybe has macOS only.
+        alias ls="ls -G"
+        alias la="ls -a"
+        alias ll="ls -la"
+        alias emacs="/usr/local/bin/emacs -nw"
+        ;;
     linux*)
-	alias emacs="/usr/bin/emacs"
-	;;
+        alias emacs="/usr/bin/emacs"
+        ;;
     freebsd*)
-	;;
-    cygwin*)
-	alias emacs="/usr/bin/emacs"
-	;;    
+        ;;
+    msys*)
+        alias ls="ls --color=auto --time-style=long-iso -FH"
+        alias la="ls -a"
+        alias ll="ls -la"
+        alias emacs="/usr/bin/emacs"
+        ;;    
 esac
