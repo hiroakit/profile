@@ -24,3 +24,5 @@ zsh/zaw/
 # Mac
 *.DS_Store
 
+resources/emacs/.lsp-session-v1
+resources/emacs/dired-history
