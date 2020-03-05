@@ -27,14 +27,17 @@ case "${OSTYPE}" in
         alias emacs="/usr/local/bin/emacs -nw"
         ;;
     linux*)
-	    alias emacs="/usr/bin/emacs"
-	    ;;
+        alias ls="ls --color=auto --time-style=long-iso -FH"
+        alias la="ls -a"
+        alias ll="ls -la"
+        alias emacs="/usr/bin/emacs"
+        ;;
     freebsd*)
-	    ;;
+        ;;
     msys*)
-	    alias ls="ls --color=auto --time-style=long-iso -FH"
-	    alias la="ls -a"
-	    alias ll="ls -la"
-	    alias emacs="/usr/bin/emacs"
-	    ;;    
+        alias ls="ls --color=auto --time-style=long-iso -FH"
+        alias la="ls -a"
+        alias ll="ls -la"
+        alias emacs="/usr/bin/emacs"
+        ;;    
 esac

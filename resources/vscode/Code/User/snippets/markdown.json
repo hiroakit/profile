@@ -1,0 +1,44 @@
+{
+	// Using JSONC format
+	// 
+	// Help
+	// https://code.visualstudio.com/docs/editor/userdefinedsnippets
+	"Daily Scrum Format": {
+		"prefix": "DailyScrum",
+		"body": [
+			"# 朝会 $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE",
+			"",
+			"## 前回やったこと",
+			"",
+			"- [ ] Project A",
+			"  - [ ] Issue A",
+			"  - [ ] Issue B",
+			"  - [ ] Issue C",
+			"- [ ] Project B",
+			"  - [ ] Issue A",
+			"  - [ ] Issue B",
+			"  - [ ] Issue C",
+			"",
+			"## 本日やること",
+			"",
+			"- [ ] Project A",
+			"  - [ ] Issue A",
+			"  - [ ] Issue B",
+			"  - [ ] Issue C",
+			"- [ ] Project B",
+			"  - [ ] Issue A",
+			"  - [ ] Issue B",
+			"  - [ ] Issue C",
+			"",
+			"## 共有事項",
+			"",
+			"- something",
+			"",
+			"## 目安時間",
+			"",
+			"- 9:30-18:30",
+			""
+		],
+		"description": "Daily scrum format"
+	}	
+}
