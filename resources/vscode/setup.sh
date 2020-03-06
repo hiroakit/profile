@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Visual Studio Code setup script
+# Supported macOS, MSYS2 on Windows
 
 set -o pipefail
 set -e
@@ -41,7 +42,7 @@ install_extentions() {
 # Linking configuration files.
 install_configurations() {
     echo "Run ${FUNCNAME[0]}"
-
+    
     case "${OSTYPE}" in
         darwin*)
             set -x
@@ -59,6 +60,24 @@ install_configurations() {
         linux*)
             ;;
         msys*)
+            set -x
+
+            # convert windows style path to UNIX style path
+            # e.g, 
+            #   Before: C:\Users\johndoe\AppData\Roaming
+            #   After:  /c/Users/johndoe/AppData/Roaming
+            UNIX_STYLE_APPDATA=`cygpath -u ${APPDATA}`
+
+            # settings.json
+            cp \
+               "${BASE_PATH%/}/Code/User/settings.json" \
+               "${UNIX_STYLE_APPDATA}/Code/User/settings.json"
+
+            # snippets
+            cp -r\
+               "${BASE_PATH%/}/Code/User/snippets" \
+               "${UNIX_STYLE_APPDATA}/Code/User"
+            set +x        
             ;;    
     esac
 }
