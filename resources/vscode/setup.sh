@@ -35,6 +35,7 @@ install_extentions() {
     $(which code 2>&1 > /dev/null) || HAS_VSCODE=$?
     if [ ! "$HAS_VSCODE" = "0" ]; then
         echo >&2 'ERROR: NOT FOUND VSCode. Please check your machine'
+        exit ${HAS_CODE}
     fi
     
     PKG_LIST="${BASE_PATH%/}/packages.txt"
