@@ -26,13 +26,18 @@ fi
 
 # Install vscode extentions.
 #
-# code --install-extension
+# Using `code --install-extension`
 # See also: https://code.visualstudio.com/docs/editor/extension-gallery#_command-line-extension-management
 install_extentions() {
     echo "Run ${FUNCNAME[0]}"
+
+    HAS_VSCODE=0 # 0=true, 1>=false
+    $(which code 2>&1 > /dev/null) || HAS_VSCODE=$?
+    if [ ! "$HAS_VSCODE" = "0" ]; then
+        echo >&2 'ERROR: NOT FOUND VSCode. Please check your machine'
+    fi
     
     PKG_LIST="${BASE_PATH%/}/packages.txt"
-
     echo "Using ${PKG_LIST}"
     for package in $(cat ${PKG_LIST}); do
         code --install-extension $package 
