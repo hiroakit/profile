@@ -60,7 +60,16 @@ function TurnOnDeveloperMode () {
 TurnOnDeveloperMode
 
 # Thumbs.dbの生成をやめる
-Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoThumbnailCache" -Value "1";
+# Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoThumbnailCache" -Value "1";
+
+# エクスプローラーを開く際の初期表示画面 (0:クイックアクセス 1: PC)
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name LaunchTo -Value 1
+
+# エクスプローラーのクイックアクセスに最近使ったファイルを表示させない
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Value 0
+
+# エクスプローラーのクイックアクセスによく使うフォルダを表示させない
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowFrequent -Value 0
 
 # ファイルの拡張子を表示する
 # その後、Stop-ProcessでExplorerの停止(すぐに再起動する)
