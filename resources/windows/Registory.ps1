@@ -60,7 +60,7 @@ function TurnOnDeveloperMode () {
 TurnOnDeveloperMode
 
 # ファイルの拡張子を表示する
-Set-ItemProperty "HKCU:¥Software¥Microsoft¥Windows¥CurrentVersion¥Explorer¥Advanced" -Name "HideFileExt" -Value "0";
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value "0";
 
 # Explorerの停止(すぐに再起動する)
 Write-Host ("Rebooting Explorer.")
