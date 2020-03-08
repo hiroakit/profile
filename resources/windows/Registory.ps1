@@ -1,4 +1,7 @@
 # レジストリ変更スクリプト
+#
+# HKCU: => HKEY_CURRENT_USER
+# HKLM: => HKLM HKEY_LOCAL_MACHINE
 
 # ItemPropertyが存在する場合にtrue、それ以外にfalseを返す
 #
@@ -25,9 +28,10 @@ function HasItemProperty( $Path, $Name ){
 
 # 開発者モードを有効にする
 #
-# HKLM => HKLM HKEY_LOCAL_MACHINE
-# HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
-#
+# 該当パス:
+#   HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+# 
+# ノート:
 # AllowAllTrustedApps:1, AllowDevelopmentWithoutDevLicense:1 で開発者モードが有効になる
 function TurnOnDeveloperMode () {
   # レジストリのパス
@@ -52,4 +56,12 @@ function TurnOnDeveloperMode () {
   }
 }
 
+# 開発者モードを有効にする
 TurnOnDeveloperMode
+
+# ファイルの拡張子を表示する
+Set-ItemProperty "HKCU:¥Software¥Microsoft¥Windows¥CurrentVersion¥Explorer¥Advanced" -Name "HideFileExt" -Value "0";
+
+# Explorerの停止(すぐに再起動する)
+Write-Host ("Rebooting Explorer.")
+Stop-Process -Name Explorer -Force;
