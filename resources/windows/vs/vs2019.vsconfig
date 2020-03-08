@@ -109,7 +109,6 @@
     "Microsoft.Net.Component.3.5.DeveloperTools",
     "Microsoft.VisualStudio.Component.Unity",
     "Component.UnityEngine.x64",
-    "Component.UnityEngine.x86",
     "Microsoft.VisualStudio.Workload.ManagedGame",
     "Microsoft.VisualStudio.Component.VSSDK",
     "Microsoft.VisualStudio.ComponentGroup.VisualStudioExtension.Prerequisites",
