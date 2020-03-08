@@ -59,9 +59,11 @@ function TurnOnDeveloperMode () {
 # 開発者モードを有効にする
 TurnOnDeveloperMode
 
-# ファイルの拡張子を表示する
-Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value "0";
+# Thumbs.dbの生成をやめる
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoThumbnailCache" -Value "1";
 
-# Explorerの停止(すぐに再起動する)
+# ファイルの拡張子を表示する
+# その後、Stop-ProcessでExplorerの停止(すぐに再起動する)
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value "0";
 Write-Host ("Rebooting Explorer.")
 Stop-Process -Name Explorer -Force;
