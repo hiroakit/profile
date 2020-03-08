@@ -1,4 +1,13 @@
+# レジストリ変更スクリプト
+
 # ItemPropertyが存在する場合にtrue、それ以外にfalseを返す
+#
+# $Path
+#   レジストリのパスを指定します
+#   例) HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+# $Name 
+#   レジストリの項目名を指定します
+#   例) AllowAllTrustedApps
 function HasItemProperty( $Path, $Name ){
     # パスがレジストリに存在するか確認する
     if(!(Test-Path $Path)){
