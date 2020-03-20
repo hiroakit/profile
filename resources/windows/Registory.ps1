@@ -2,7 +2,7 @@
 #
 # HKCR: => HKEY_CLASSES_ROOT
 # HKCU: => HKEY_CURRENT_USER
-# HKLM: => HKLM HKEY_LOCAL_MACHINE
+# HKLM: => HKEY_LOCAL_MACHINE
 
 # ItemPropertyが存在する場合にtrue、それ以外にfalseを返す
 #
