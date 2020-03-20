@@ -60,6 +60,9 @@ function TurnOnDeveloperMode () {
 # 開発者モードを有効にする
 TurnOnDeveloperMode
 
+# HKEY_CLASSES_ROOTにPowerShellからアクセスできるように登録作業をする
+# New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+
 # Thumbs.dbの生成をやめる
 # Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoThumbnailCache" -Value "1";
 
