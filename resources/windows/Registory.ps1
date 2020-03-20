@@ -1,5 +1,6 @@
 # レジストリ変更スクリプト
 #
+# HKCR: => HKEY_CLASSES_ROOT
 # HKCU: => HKEY_CURRENT_USER
 # HKLM: => HKLM HKEY_LOCAL_MACHINE
 
