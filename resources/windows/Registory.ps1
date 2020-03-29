@@ -57,8 +57,30 @@ function TurnOnDeveloperMode () {
   }
 }
 
+# 日本語IMEのモード切替時に表示される画面中央の通知を無効にする
+# ShowImeModeNotificationの値 0: off, 1: on
+function TurnOffImeModeNotification () {
+    # レジストリのパス
+    $TargetRegistryPath = "HKCU:\Software\Microsoft\IME\15.0\IMEJP\MSIME"
+    
+    # レジストリのプロパティ名
+    $TargetRegistryName = "ShowImeModeNotification"
+
+    if (HasItemProperty $TargetRegistryPath $TargetRegistryName) {
+        Set-ItemProperty -Path $TargetRegistryPath -Name $TargetRegistryName -Value 0 
+        Write-Host ("Update $TargetRegistryName value.")
+        return
+    }
+
+    New-ItemProperty -Path $TargetRegistryPath -Name $TargetRegistryName -PropertyType DWord -Value 0
+    Write-Host ("Add $TargetRegistryName.")
+}
+
 # 開発者モードを有効にする
 TurnOnDeveloperMode
+
+# 日本語IMEモードの通知を無効にする
+TurnOffImeModeNotification
 
 # HKEY_CLASSES_ROOTにPowerShellからアクセスできるように登録作業をする
 # New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
