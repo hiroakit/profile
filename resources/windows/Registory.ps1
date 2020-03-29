@@ -33,28 +33,28 @@ function HasItemProperty( $Path, $Name ){
 #   HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
 # 
 # ノート:
-# AllowAllTrustedApps:1, AllowDevelopmentWithoutDevLicense:1 で開発者モードが有効になる
+#   AllowAllTrustedApps:1, AllowDevelopmentWithoutDevLicense:1 で開発者モードが有効になる
 function TurnOnDeveloperMode () {
-  # レジストリのパス
-  $DeveloperModePath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"
+    # レジストリのパス
+    $DeveloperModePath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"
+    
+    # AllowAllTrustedApps
+    if (HasItemProperty $DeveloperModePath AllowAllTrustedApps) {
+        Set-ItemProperty -Path $DeveloperModePath -Name AllowAllTrustedApps -Value 1 
+        Write-Host ("Update AllowAllTrustedApps value.")
+    } else {
+        New-ItemProperty -Path $DeveloperModePath -Name AllowAllTrustedApps -PropertyType DWord -Value 1
+        Write-Host ("Add AllowAllTrustedApps.")
+    }
 
-  # AllowAllTrustedApps
-  if (HasItemProperty $DeveloperModePath AllowAllTrustedApps) {
-    Set-ItemProperty -Path $DeveloperModePath -Name AllowAllTrustedApps -Value 1 
-    Write-Host ("Update AllowAllTrustedApps value.")
-  } else {
-    New-ItemProperty -Path $DeveloperModePath -Name AllowAllTrustedApps -PropertyType DWord -Value 1
-    Write-Host ("Add AllowAllTrustedApps.")
-  }
-
-  # AllowDevelopmentWithoutDevLicense
-  if (HasItemProperty $DeveloperModePath AllowDevelopmentWithoutDevLicense) {
-    Set-ItemProperty -Path $DeveloperModePath -Name AllowDevelopmentWithoutDevLicense -Value 1 
-    Write-Host ("Update AllowDevelopmentWithoutDevLicense value.")
-  } else {
-    New-ItemProperty -Path $DeveloperModePath -Name AllowDevelopmentWithoutDevLicense -PropertyType DWord -Value 1
-    Write-Host ("Add AllowDevelopmentWithoutDevLicense.")
-  }
+    # AllowDevelopmentWithoutDevLicense
+    if (HasItemProperty $DeveloperModePath AllowDevelopmentWithoutDevLicense) {
+        Set-ItemProperty -Path $DeveloperModePath -Name AllowDevelopmentWithoutDevLicense -Value 1 
+        Write-Host ("Update AllowDevelopmentWithoutDevLicense value.")
+    } else {
+        New-ItemProperty -Path $DeveloperModePath -Name AllowDevelopmentWithoutDevLicense -PropertyType DWord -Value 1
+        Write-Host ("Add AllowDevelopmentWithoutDevLicense.")
+    }
 }
 
 # 日本語IMEのモード切替時に表示される画面中央の通知を無効にする
