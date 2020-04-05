@@ -1,2 +1,3 @@
 yzhang.markdown-all-in-one
 ms-vscode.powershell
+ms-vscode.cpptools
