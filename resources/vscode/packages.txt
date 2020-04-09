@@ -2,3 +2,4 @@ yzhang.markdown-all-in-one
 ms-vscode.powershell
 ms-vscode.cpptools
 maelvalais.autoconf
+octref.vetur
