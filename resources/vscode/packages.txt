@@ -4,3 +4,4 @@ ms-vscode.cpptools
 ms-vscode.cmake-tools
 maelvalais.autoconf
 octref.vetur
+lextudio.restructuredtext
