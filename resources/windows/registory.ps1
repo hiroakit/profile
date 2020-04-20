@@ -1,5 +1,8 @@
 # レジストリ変更スクリプト
 #
+# PowerShellスクリプトの実行ポリシーを変更する必要があります。
+# Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+#
 # HKCR: => HKEY_CLASSES_ROOT
 # HKCU: => HKEY_CURRENT_USER
 # HKLM: => HKEY_LOCAL_MACHINE

@@ -1,2 +1,6 @@
 yzhang.markdown-all-in-one
 ms-vscode.powershell
+ms-vscode.cpptools
+ms-vscode.cmake-tools
+maelvalais.autoconf
+octref.vetur
