@@ -39,5 +39,9 @@ case "${OSTYPE}" in
         alias la="ls -a"
         alias ll="ls -la"
         alias emacs="/usr/bin/emacs"
+        case "${MSYSTEM}" in
+            MINGW*)
+                alias h-makepkg-mingw="MINGW_INSTALLS=mingw64 makepkg-mingw -sLf"
+            esac
         ;;    
 esac
