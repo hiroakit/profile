@@ -1,5 +1,39 @@
 ## .zshrc
 
+# # The Z Shell Manual v5.8
+# # http://zsh.sourceforge.net/Doc/zsh_us.pdf
+# #
+# # 13.2.5 Visual effects
+# # 理解できていないもの
+# # %E
+# # %S (%s)
+# # %{...%}
+# # %G
+
+# echo "hoge1"
+
+# export LSCOLORS=exfxcxdxbxegedabagaxex
+# #export LSCOLORS=gxfxcxdxbxegexabagacad
+# export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+
+# autoload -Uz compinit && compinit
+# autoload -Uz colors && colors
+# [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
+
+# zstyle ':completion:*' list-colors "${LS_COLORS}"
+
+# PROMPT="%B%F{green}%n@%m%b%f %~ %# " 
+
+# #--------------------------
+# # Command aliases
+# #--------------------------
+# if [ -r $ZDOTDIR/.zalias ]; then
+#    source $ZDOTDIR/.zalias
+# fi
+
+
+
+
 #-------------------------------------------
 # Common
 #-------------------------------------------
@@ -28,6 +62,9 @@ case "${OSTYPE}" in
 
 	# 様々なバージョンのFBXのSDKが格納されるディレクトリ
 	export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
+
+    # Projectsディレクトリ
+    export PROJ="${HOME}/Documents/Projects"
 esac
 
 #---------------------------------
