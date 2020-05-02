@@ -6,6 +6,8 @@ resources/emacs/url/cookies
 resources/emacs/url/cache
 resources/emacs/bookmarks
 resources/emacs/recentf
+resources/emacs/.lsp-session-v1
+resources/emacs/dired-history
 ac-comphist.dat
 auto-save-list
 hp-org-mode-local-config.el
@@ -20,9 +22,7 @@ elpa/
 # zsh
 zsh/zaw/
 .zcompdump
+resources/zsh/.zsh_history
 
 # Mac
 *.DS_Store
-
-resources/emacs/.lsp-session-v1
-resources/emacs/dired-history
