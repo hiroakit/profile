@@ -2,14 +2,14 @@
 
 homebrew_repositories: []
 
-homebrew_taps:
-  - { tap: caskroom/cask }
+homebrew_taps: []
+  # - { tap: caskroom/cask }
 
-homebrew_cask_packages:
-  - { name: dotnet-sdk }
-  - { name: visual-studio-code }
-  - { name: alfred }
-  - { name: slack }
+homebrew_cask_packages: []
+  # - { name: dotnet-sdk }
+  # - { name: visual-studio-code }
+  # - { name: alfred }
+  # - { name: slack }
 
 homebrew_packages:
   - { name: autoconf }
@@ -29,16 +29,18 @@ homebrew_packages:
   - { name: npm }
   - { name: openssl }
   - { name: pcre }
-  - { name: peco }
+  - { name: libjpeg }  
+  - { name: little-cms2 }  
+  # - { name: peco }
   - { name: pkg-config }
-  - { name: pyenv }
-  - { name: pyenv-virtualenv }
-  - { name: python3 }
+  # - { name: pyenv }
+  # - { name: pyenv-virtualenv }
+  # - { name: python3 }
   - { name: readline }
   - { name: tree }
   - { name: vault }
   - { name: watch }
-  - { name: wget }
+  # - { name: wget }
   - { name: xz }
   - { name: p7zip }
 
