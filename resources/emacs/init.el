@@ -39,90 +39,172 @@
 (require 'cl)      ;; common lisp
 (require 'server)  ;; emacsのserver-startを呼ぶために使う
 
+;;; TYPEFACE CONFIGURATIONS
+
+;; (defconst hiroakit/typeface-default-family "Myrica M"
+;;   "The default typeface.")
+;; (defconst hiroakit/typeface-default-fontsize "12"
+;;   "The default typeface size.")
+
+(defconst hiroakit/typeface-default-family "Migu 1M"
+  "The default typeface.")
+(defconst hiroakit/typeface-default-fontsize "12"
+  "The default typeface size.")
+
+(defun hiroakit/typeface (family height)
+  "Set default typeface using family and height"
+  (when (member family (font-family-list))
+    (message "hiroakit/typeface: %s founded." family)
+    (set-face-attribute 'default nil :family family :height height)
+    (set-face-attribute 'fixed-pitch nil :family family :height height)))
+
+;; (use-package emacs
+;;   :config
+;;   (defconst prot/variable-pitch-font "DejaVu Sans"
+;;     "The default variable-pitch typeface.")
+
+;;   (set-face-attribute 'variable-pitch nil :family prot/variable-pitch-font :height 1.0)
+;;   (set-face-attribute 'fixed-pitch nil :family prot/fixed-pitch-font :height 1.0))
+
+;; (set-face-attribute 'default nil :family "Menlo" :height 120)
+;; (set-fontset-font (frame-parameter nil 'font)
+;;                   'japanese-jisx0208
+;;                   (font-spec :family "Hiragino Kaku Gothic ProN"))
+;; (add-to-list 'face-font-rescale-alist
+;;              '(".*Hiragino Kaku Gothic ProN.*" . 1.2))
+
+;; Intractive functions
+(defun hiroakit/typeface-laptop ()
+  "Fonts for the small laptop screen. Pass desired argument to `prot/font-sizes' for use on my small laptop monitor."
+  (interactive)
+  (when window-system
+    (hiroakit/typeface hiroakit/typeface-default-family 105)))
+
+(defun hiroakit/typeface-screencast ()
+  "Fonts for screen casts and video demos.
+   Pass desired argument to `prot/font-sizes' for use during screencasting. 
+   The idea is to make it easier for viewers to see what I am doing."
+  (interactive)
+  (when window-system
+    (hiroakit/typeface hiroakit/typeface-default-family 160)))
+
+(defun hiroakit/typeface-presentation ()
+  "Fonts for presentations and video blogs.
+   Pass desired argument to `prot/font-sizes' for use during presentations.  
+   Also see `prot/org-presentation'."
+
+  (interactive)
+    (when window-system
+    (hiroakit/typeface hiroakit/typeface-default-family 180)))
+
+;; Key-bindings
+(global-set-key (kbd "C-<wheel-up>")
+                '(lambda()
+                   (interactive)
+                   (text-scale-increase 1)))
+(global-set-key (kbd "C-<wheel-down>")
+                '(lambda()
+                   (interactive)
+                   (text-scale-decrease 1)))
+(global-set-key (kbd "M-0")
+                '(lambda()
+                   (interactive)
+                   (text-scale-set 0)))
+
 ;;; フォント設定
 (defun hp-load-font-config ()
    "フォントに関する設定をする. プライベートな関数として扱うこと."
-  
-  (defvar hp-font-size 12 "フォントサイズの初期値を返します")
-  (defun my-ja-font-setter (spec)
-    (set-fontset-font nil 'japanese-jisx0208 spec)
-    (set-fontset-font nil 'katakana-jisx0201 spec)
-    (set-fontset-font nil 'japanese-jisx0212 spec)
-    (set-fontset-font nil '(#x0080 . #x024F) spec)
-    (set-fontset-font nil '(#x0370 . #x03FF) spec)
-    (set-fontset-font nil 'mule-unicode-0100-24ff spec))
-  
-  (defun my-ascii-font-setter (spec)
-    (set-fontset-font nil 'ascii spec))
 
-  (when (not window-system)
-    (when (equal emacs-major-version 26)
-      
-      ;; (let
-      ;;     ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
-      ;;     ;; 2) Inconsolata, Migu 2M     : font-size=14, 
-      ;;     ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
-      ;;     ((font-size hp-font-size) (ascii-font "MigMix 2M") (ja-font "MigMix 2M"))
-      ;;   (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
-      ;;   (my-ja-font-setter (font-spec :family ja-font :size font-size)))
-      
-      (set-default 'line-spacing 1) ;; Space between lines
-      (setq mac-allow-anti-aliasing t) ;; Anti aliasing with Quartz 2D
-      ))
+   (add-to-list 'default-frame-alist '(font . "Migu 1M 15"))
+   (hiroakit/typeface hiroakit/typeface-default-family 100)
+
+;;     (add-to-list 'default-frame-alist '(font . "Migu 1M 12")))
+;;     (add-to-list 'default-frame-alist '(font . (hiroakit/typeface))))
+
+     ;; (add-to-list 'default-frame-alist
+     ;;              '(font . (format "%s %s"
+     ;;                               (symbol-value 'hiroakit/default-typeface)
+     ;;                               (symbol-value 'hiroakit/default-typeface-size)))))
+  ;; (defvar hp-font-size 12 "フォントサイズの初期値を返します")
+  ;; (defun my-ja-font-setter (spec)
+  ;;   (set-fontset-font nil 'japanese-jisx0208 spec)
+  ;;   (set-fontset-font nil 'katakana-jisx0201 spec)
+  ;;   (set-fontset-font nil 'japanese-jisx0212 spec)
+  ;;   (set-fontset-font nil '(#x0080 . #x024F) spec)
+  ;;   (set-fontset-font nil '(#x0370 . #x03FF) spec)
+  ;;   (set-fontset-font nil 'mule-unicode-0100-24ff spec))
   
-  (cond
-   ;; CocoaEmacs
-   ((eq window-system 'ns)
-    (when (equal emacs-major-version 26)
+  ;; (defun my-ascii-font-setter (spec)
+  ;;   (set-fontset-font nil 'ascii spec))
+
+  ;; (when (not window-system)
+  ;;   (when (equal emacs-major-version 26)
       
-    ;; (when (or (= emacs-major-version 24) (= emacs-major-version 25))
-      (let
-          ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
-          ;; 2) Inconsolata, Migu 2M     : font-size=14, 
-          ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
-          ((font-size hp-font-size)
-           (ascii-font "MigMix 2M")
-           (ja-font "MigMix 2M"))
-        (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
-        (my-ja-font-setter (font-spec :family ja-font :size font-size)))
+  ;;     ;; (let
+  ;;     ;;     ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
+  ;;     ;;     ;; 2) Inconsolata, Migu 2M     : font-size=14, 
+  ;;     ;;     ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
+  ;;     ;;     ((font-size hp-font-size) (ascii-font "MigMix 2M") (ja-font "MigMix 2M"))
+  ;;     ;;   (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
+  ;;     ;;   (my-ja-font-setter (font-spec :family ja-font :size font-size)))
       
-      ;; Fix ratio provided by set-face-attribute for fonts display
-      (setq face-font-rescale-alist
-            '(("^-apple-hiragino.*" . 1.0) ; 1.2
-              (".*Migu.*" . 1.2)
-              (".*Inconsolata.*" 1.0)
-              (".*osaka-bold.*" . 1.0)     ; 1.2
-              (".*osaka-medium.*" . 1.0)   ; 1.0
-              (".*courier-bold-.*-mac-roman" . 1.0) ; 0.9
-              ("-cdac$" . 1.0)))           ; 1.3
-      ;; Space between lines
-      (set-default 'line-spacing 1)
-      ;; Anti aliasing with Quartz 2D
-      (setq mac-allow-anti-aliasing t)))
-   ((eq window-system 'w32)
-    ;; (let
-    ;;     (
-    ;;      (font-size 24)
-    ;;      (ascii-font "MigMix 1M")
-    ;;      (ja-font "MigMix 1M")
-    ;;     )
-    ;;   (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
-    ;;   (my-ja-font-setter (font-spec :family ja-font :size font-size)))
+  ;;     (set-default 'line-spacing 1) ;; Space between lines
+  ;;     (setq mac-allow-anti-aliasing t) ;; Anti aliasing with Quartz 2D
+  ;;     ))
+  
+  ;; (cond
+  ;;  ;; CocoaEmacs
+  ;;  ((eq window-system 'ns)
+  ;;   (when (equal emacs-major-version 26)
+      
+  ;;   ;; (when (or (= emacs-major-version 24) (= emacs-major-version 25))
+  ;;     (let
+  ;;         ;; 1) Monaco, Hiragino/Migu 2M : font-size=12, -apple-hiragino=1.2
+  ;;         ;; 2) Inconsolata, Migu 2M     : font-size=14, 
+  ;;         ;; 3) Inconsolata, Hiragino    : font-size=14, -apple-hiragino=1.0
+  ;;         ((font-size hp-font-size)
+  ;;          (ascii-font "Migu 1M")
+  ;;          (ja-font "Migu 1M"))
+  ;;       (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
+  ;;       (my-ja-font-setter (font-spec :family ja-font :size font-size)))
+      
+  ;;     ;; Fix ratio provided by set-face-attribute for fonts display
+  ;;     (setq face-font-rescale-alist
+  ;;           '(("^-apple-hiragino.*" . 1.0) ; 1.2
+  ;;             (".*Migu.*" . 1.2)
+  ;;             (".*Inconsolata.*" 1.0)
+  ;;             (".*osaka-bold.*" . 1.0)     ; 1.2
+  ;;             (".*osaka-medium.*" . 1.0)   ; 1.0
+  ;;             (".*courier-bold-.*-mac-roman" . 1.0) ; 0.9
+  ;;             ("-cdac$" . 1.0)))           ; 1.3
+  ;;     ;; Space between lines
+  ;;     (set-default 'line-spacing 1)
+  ;;     ;; Anti aliasing with Quartz 2D
+  ;;     (setq mac-allow-anti-aliasing t)))
+  ;;  ((eq window-system 'w32)
+  ;;   ;; (let
+  ;;   ;;     (
+  ;;   ;;      (font-size 24)
+  ;;   ;;      (ascii-font "MigMix 1M")
+  ;;   ;;      (ja-font "MigMix 1M")
+  ;;   ;;     )
+  ;;   ;;   (my-ascii-font-setter (font-spec :family ascii-font :size font-size))
+  ;;   ;;   (my-ja-font-setter (font-spec :family ja-font :size font-size)))
     
-    ;; default        : デフォルトフォント
-    ;; variable-pitch : プロポーショナルフォント
-    ;; fixed-pitch    : 等幅フォント
-    ;; tooltip        : ツールチップ用フォント
-  (set-face-attribute 'default nil :family "Migu 1M" :height 100)
-  (set-face-attribute 'variable-pitch nil :family "Migu 1M" :height 100)
-  (set-face-attribute 'fixed-pitch nil :family "Migu 1M" :height 100)
-  (set-face-attribute 'tooltip nil :family "Migu 1M" :height 90)
+  ;;   ;; default        : デフォルトフォント
+  ;;   ;; variable-pitch : プロポーショナルフォント
+  ;;   ;; fixed-pitch    : 等幅フォント
+  ;;   ;; tooltip        : ツールチップ用フォント
+  ;; (set-face-attribute 'default nil :family "Migu 1M" :height 100)
+  ;; (set-face-attribute 'variable-pitch nil :family "Migu 1M" :height 100)
+  ;; (set-face-attribute 'fixed-pitch nil :family "Migu 1M" :height 100)
+  ;; (set-face-attribute 'tooltip nil :family "Migu 1M" :height 90)
   
-  ;; Fix ratio provided by set-face-attribute for fonts display
-  (setq face-font-rescale-alist '((".*Migu.*" . 1.0)))
+  ;; ;; Fix ratio provided by set-face-attribute for fonts display
+  ;; (setq face-font-rescale-alist '((".*Migu.*" . 1.0)))
   
   ;; Space between lines
-  (set-default 'line-spacing 1))))                                       
+  (set-default 'line-spacing 1))                                       
 
 ;;; フェイス設定
 (defun hp-load-faces-config ()  
@@ -293,7 +375,7 @@
     (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
     (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
     (define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
-    (define-key global-map (kbd "M-x")     'helm-M-x)            ;; Emacsのコマンドを絞り込むためのキーバインディグ
+;;    (define-key global-map (kbd "M-x")     'helm-M-x)            ;; Emacsのコマンドを絞り込むためのキーバインディグ
     (define-key global-map (kbd "C-x C-f") 'helm-find-files)     ;; ファイル探す際に絞り込むためのキーバインディグ
     ;; (define-key global-map (kbd "C-x C-r") 'helm-recentf)     ;; 最近開いたファイルを絞り込むためのキーバインディグ
     (define-key global-map (kbd "M-y")     'helm-show-kill-ring) ;; キリングを絞り込むためのキーバインディング
@@ -430,6 +512,12 @@
   (global-auto-revert-mode 1) ;; ファイルを読み込み直す revert-buffer の自動実行を、すべてのメジャーモードにおいて許可する.
 
   (add-hook 'emacs-lisp-mode-hook 'hp-emacs-lisp-mode-hook) ;; emacs-lisp-modeの設定
+
+  ;; Get $PATH from SHELL
+  (when (require 'exec-path-from-shell)
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+
   )
 
 (defun hp-emacs-startup ()
@@ -484,6 +572,74 @@
     (package-refresh-contents)
     (dolist (pkg not-installed-packages)
         (package-install pkg))))
+
+
+;;; Install for leaf.el
+;; (eval-and-compile
+;;   (customize-set-variable
+;;    'package-archives '(("org" . "https://orgmode.org/elpa/")
+;;                        ;;("melpa" . "https://melpa.org/#/")
+;;                        ("gnu" . "https://elpa.gnu.org/packages/")))
+;;   (package-initialize)
+;;   (unless (package-installed-p 'leaf)
+;;     (package-refresh-contents)
+;;     (package-install 'leaf))
+
+;;   (leaf leaf-keywords
+;;     :ensure t
+;;     :init
+;;     ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+;;     (leaf hydra :ensure t)
+;;     (leaf el-get :ensure t)
+;;     (leaf blackout :ensure t)
+
+;;     :config
+;;     ;; initialize leaf-keywords.el
+;;     (leaf-keywords-init)))
+
+(leaf leaf-keywords
+  :ensure t
+  :init
+  ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+  ;; (leaf hydra :ensure t)
+  ;; (leaf el-get :ensure t)
+  ;; (leaf blackout :ensure t)
+  :config  
+  (leaf-keywords-init))
+(leaf leaf-tree :ensure t)
+(leaf leaf-convert :ensure t)
+;; (leaf transient-dwim
+;;   :ensure t
+;;   :bind (("M-=" . transient-dwim-dispatch)))
+
+(defun hiroakit-php-mode-setup ()
+  "hiroakit PHP-mode hook."
+  (subword-mode 1)
+  (setq show-trailing-whitespace t)
+
+  (setq-local page-delimiter "\\_<\\(class\\|function\\|namespace\\)\\_>.+$")
+
+  (require 'flycheck-phpstan)
+  (flycheck-mode t)
+  (add-to-list 'flycheck-disabled-checkers 'php-phpmd)
+  (add-to-list 'flycheck-disabled-checkers 'php-phpcs))
+
+(leaf php-mode
+  :hook
+  ((php-mode-hook . hiroakit-php-mode-setup))
+  :config
+  (php-manual-url 'ja)
+  (php-mode-coding-style 'psr2)
+  (php-project-auto-detect-etags-file . t)
+  (php-mode-template-compatibility nil)
+  (bind-key "[" (smartchr "[]" "array()" "[[]]") php-mode-map)
+  (bind-key "]" (smartchr "array " "]" "]]")     php-mode-map)
+  ;; (bind-key "C-}" 'cedit-barf php-mode-map)
+  ;; (bind-key "C-)" 'cedit-slurp php-mode-map)
+  (bind-key "C-c C-c" 'psysh-eval-region         php-mode-map)
+  (bind-key "<f6>" 'phpunit-current-project      php-mode-map)
+  (bind-key "C-c C--" 'php-current-class php-mode-map)
+  (bind-key "C-c C-=" 'php-current-namespace php-mode-map))
 
 (defun hp-expand-load-path (&rest paths)
   "各パッケージのパスをload-pathに展開する."
@@ -869,13 +1025,138 @@
   (setq interprogram-cut-function 'hp-paste-to-macOS)
   (setq interprogram-paste-function 'hp-copy-from-macOS))
 
+(when (require 'ivy nil t)
+
+  ;; M-o を ivy-hydra-read-action に割り当てる．
+  (when (require 'ivy-hydra nil t)
+    (setq ivy-read-action-function #'ivy-hydra-read-action))
+
+  ;; `ivy-switch-buffer' (C-x b) のリストに recent files と bookmark を含める．
+  (setq ivy-use-virtual-buffers t)
+
+  (setq enable-recursive-minibuffers t)
+
+  ;; ミニバッファでコマンド発行を認める
+  (when (setq enable-recursive-minibuffers t)
+    (minibuffer-depth-indicate-mode 1)) ;; 何回層入ったかプロンプトに表示．
+
+  ;; ESC連打でミニバッファを閉じる
+  (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
+
+  ;; プロンプトの表示が長い時に折り返す（選択候補も折り返される）
+  (setq ivy-truncate-lines nil)
+
+  ;; リスト先頭で `C-p' するとき，リストの最後に移動する
+  (setq ivy-wrap t)
+
+  ;; アクティベート
+  (ivy-mode 1))
+
+(when (require 'counsel nil t)
+
+  ;; キーバインドは一例です．好みに変えましょう．
+  ;;(global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-s") 'swiper-isearch)
+  ;;(global-set-key (kbd "C-e") 'counsel-imenu)  
+  ;;(global-set-key (kbd "M-x") 'counsel-M-x)
+  ;;(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  ;;(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+  (global-set-key (kbd "C-c k") 'counsel-rg)
+  ;; (global-set-key (kbd "C-M-z") 'counsel-fzf)
+  
+  ;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
+
+  (global-set-key (kbd "C-r") 'counsel-recentf)
+  ;; (global-set-key (kbd "C-x C-b") 'counsel-ibuffer)
+
+  ;; アクティベート
+  (counsel-mode 1))
+
+(when (require 'ivy-posframe nil t)
+  (setq ivy-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)
+          (internal-border-width . 2)
+          ;; (font . "DejaVu Sans Mono-10.75:hintstyle=hintfull")
+          ))
+  (setq ivy-posframe-border-width 1)
+  
+  (setq ivy-posframe-height-alist
+        '((swiper . 15)
+          (swiper-isearch . 15)
+          (t . 10)))
+  (setq ivy-posframe-display-functions-alist
+        '((complete-symbol . ivy-posframe-display-at-point)
+          (swiper . nil)
+          (swiper-isearch . nil)
+          (t . ivy-posframe-display-at-frame-center)))
+  (ivy-posframe-mode 1))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (helm-ag zoom-window yasnippet web-mode use-package undohist undo-tree swift-mode ruby-additional plantuml-mode osx-dictionary neotree markdown-mode js2-mode helm-swoop helm-gtags foreign-regexp flycheck dired-sidebar dired-recent company-irony cmake-mode))))
+   '(leaf-convert leaf-tree leaf leaf-keywords exec-path-from-shell counsel helm-ag zoom-window yasnippet web-mode use-package undohist undo-tree swift-mode ruby-additional plantuml-mode osx-dictionary neotree markdown-mode js2-mode helm-swoop helm-gtags foreign-regexp flycheck dired-sidebar dired-recent company-irony cmake-mode))
+ '(php-manual-url nil t)
+ '(php-mode-coding-style nil t)
+ '(php-mode-template-compatibility nil t)
+ '(php-project-auto-detect-etags-file t t))
 
 (message "Loaded init.el")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background nil :foreground "gray0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MigMix 2M"))))
+ '(bold ((t (:bold t))))
+ '(bold-italic ((t (:bold t :italic t))))
+ '(dired-directory ((t (:foreground "Blue1" :bold nil))))
+ '(dired-header ((t (:foreground nil :background nil :bold t))))
+ '(dired-mark ((t (:foreground "dark cyan" :bold t))))
+ '(dired-marked ((t (:inherit dired-mark))))
+ '(dired-symlink ((t (:foreground "Purple" :bold nil))))
+ '(helm-bookmark-directory ((t (:inherit helm-ff-directory))))
+ '(helm-bookmark-file ((t (:inherit helm-ff-file))))
+ '(helm-buffer-directory ((t (:inherit helm-ff-directory))))
+ '(helm-buffer-file ((t (:inherit helm-ff-file))))
+ '(helm-etags-file ((t (:inherit helm-ff-file))))
+ '(helm-ff-directory ((t (:inherit dired-directory))))
+ '(helm-ff-dotted-directory ((t (:inherit helm-ff-directory))))
+ '(helm-ff-dotted-symlink-directory ((t (:inherit helm-ff-symlink))))
+ '(helm-ff-executable ((t (:inherit helm-ff-file))))
+ '(helm-ff-file ((t (:inherit default))))
+ '(helm-ff-invalid-symlink ((t (:inherit error))))
+ '(helm-ff-symlink ((t (:inherit dired-symlink))))
+ '(helm-ff-truename ((t (:inherit helm-ff-symlink))))
+ '(helm-grep-file ((t (:inherit helm-ff-file))))
+ '(helm-selection ((t (:inherit highlight))))
+ '(helm-selection-line ((t (:inherit highlight))))
+ '(helm-source-header ((t (:foreground nil :background "#f1f1f1" :bold t))))
+ '(helm-visible-mark ((t (:inherit highlight))))
+ '(highlight ((t (:foreground "gray0" :background "#D6EAF8" :bold t))))
+ '(isearch ((t (:foreground nil :background "Yellow" :bold t))))
+ '(italic ((t (:italic t))))
+ '(lazy-highlight ((t (:foreground nil :background "light yellow" :bold nil))))
+ '(minibuffer-prompt ((t (:foreground "#0062A0" :bold t))))
+ '(mode-line ((t (:foreground "#ffffff" :background "#0062A0"))))
+ '(mode-line-inactive ((t (:foreground "#000000" :background "#f1f1f1"))))
+ '(region ((t (:background "#D6EAF8"))))
+ '(show-paren-match ((t (:background "Yellow"))))
+ '(underline ((t (:underline t)))))
