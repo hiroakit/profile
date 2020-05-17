@@ -256,7 +256,6 @@
   )
 
 (leaf org-babel
-  :ensure t
   :custom
   ((org-src-fontify-natively . t)
    (org-src-tab-acts-natively . t)
