@@ -32,9 +32,6 @@
           (expand-file-name
            (file-name-directory (or load-file-name byte-compile-current-file))))))
 
-;; 
-;; M-x leaf-tree-mode
-;;
 
 ;;------------------------------------
 ;; Install leaf.el & configure
@@ -61,8 +58,11 @@
 
 (leaf leaf
   :config
-  (leaf leaf-convert
-    :ensure t)
+  (leaf leaf-convert :ensure t)
+
+  ;; 
+  ;; M-x leaf-tree-mode
+  ;;
   (leaf leaf-tree
     :ensure t
     :custom ((imenu-list-size . 30)
@@ -72,36 +72,47 @@
 ;; Base configuration
 ;;-------------------------
 
-;; やり方わからず迷子
-(global-set-key (kbd "C-<wheel-up>")
-                '(lambda()
-                   (interactive)
-                   (text-scale-increase 1)))
-(global-set-key (kbd "C-<wheel-down>")
-                '(lambda()
-                   (interactive)
-                   (text-scale-decrease 1)))
-(global-set-key (kbd "M-0")
-                '(lambda()
-                   (interactive)
-                   (text-scale-set 0)))
+(leaf doom-themes
+  :doc "See https://github.com/hlissner/emacs-doom-themes"
+  :ensure t
+  :custom
+  (doom-themes-enable-italic . nil)
+  (doom-themes-enable-bold . nil)
+  :config
+  (load-theme 'doom-one-light t)
+  (doom-themes-org-config))
 
 ;; Startup Emacs
 (leaf startup
   :config
-  (set-face-background 'region "LightSkyBlue")
-  (set-face-foreground 'region "Black")
-  (set-face-background 'vertical-border "DarkGray")
-  (set-face-foreground 'vertical-border (face-background 'vertical-border))
-  ;;(setq default-directory "~/")
-  ;;(setq command-line-default-directory "~/")
+  ;; (set-face-background 'region "LightSkyBlue")
+  ;; (set-face-foreground 'region "Black")
+  ;; (set-face-background 'vertical-border "DarkGray")
+  ;; (set-face-foreground 'vertical-border (face-background 'vertical-border))
+  ;; (setq default-directory "~/")
+  ;; (setq command-line-default-directory "~/")
   (setq eol-mnemonic-dos "(CRLF)")
   (setq eol-mnemonic-mac "(CR)")
   (setq eol-mnemonic-unix "(LF)")
+  :preface
+  (defun hiroakit/text-scale-up ()
+    (interactive)
+	(text-scale-increase 1))
+  (defun hiroakit/text-scale-down ()
+    (interactive)
+	(text-scale-decrease 1))
+  (defun hiroakit/text-scale-reset ()
+    (interactive)
+	(text-scale-set 0))
   :bind
-  (("C-j" . goto-line)
+  (("C-<wheel-up>" . hiroakit/text-scale-up)
+   ("C-<wheel-down>" . hiroakit/text-scale-down)
+   ("M-0" . hiroakit/text-scale-reset)
+   ("C-j" . goto-line)
    ("C-c t" . toggle-truncate-lines)
    ("C-c r" . rename-file))
+  :config
+  ;; (set-frame-parameter nil 'alpha 80)
   :custom
   ((inhibit-startup-screen            . t)
    (inhibit-startup-message           . t)
@@ -109,7 +120,7 @@
    (initial-scratch-message           . nil)))
 
 (leaf cus-edit
-  :doc "tools for customizing Emacs and Lisp packages"
+  :doc "Customizing Emacs Lisp packages"
   :tag "builtin" "faces" "help"
   :custom
   `((tool-bar-mode . nil)
@@ -127,20 +138,20 @@
     (truncate-partial-width-windows . t)
     (custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-;; Highlighting the corresponding brackets
 (leaf paren
+  :doc "Highlighting the corresponding brackets"
   :custom
   ((show-paren-style  . 'mixed))
   :hook
   (emacs-startup-hook . show-paren-mode))
 
-;; Highlighting current line
 (leaf hl-line
+  :doc "Highlighting current line"
   :hook
   (emacs-startup-hook . global-hl-line-mode))
 
-;; Undo / Redo
 (leaf undo-tree
+  :doc "Undo / Redo"
   :ensure t
   :init
   (global-undo-tree-mode)
@@ -158,7 +169,21 @@
   :init
   (global-flycheck-mode t))
 
+(leaf neotree
+  :doc "Filer"
+  :ensure t
+  :bind
+  (("C-q" . neotree-toggle)
+   (:neotree-mode-map
+	("RET" . neotree-enter)))
+  :custom
+  ((neo-smart-open . t)
+   (neo-create-file-auto-open . t))
+  ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
+  )
+
 (leaf helm
+  :doc "Filter information"
   :ensure t
   :init
   (require 'helm-config)
@@ -173,6 +198,7 @@
   :bind
   (("M-x" . helm-M-x)
    ("C-x C-f" . helm-find-files)
+   ("C-x C-x" . helm-buffers-list)
    ("C-x C-r" . helm-recentf))
   :config
   (leaf helm-swoop
@@ -209,9 +235,9 @@
 (leaf org-mode
   :mode
   ("\\.org\\'")
-;;  :config
-;;  ((setq org-directory "~/Documents/org")
-;;   (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")))
+  ;;  :config
+  ;;  ((setq org-directory "~/Documents/org")
+  ;;   (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")))
   :custom
   `((org-startup-folded . t)
    (org-startup-truncated . t)
@@ -279,9 +305,14 @@
   (editorconfig-mode t))
 
 (leaf c++-mode
-   :bind
-   ((:c++-mode-map
-     ("C-c C-o" . ff-find-other-file))))
+  :mode
+  ("\\.h\\'"
+   "\\.cpp\\'")
+  :init
+  (electric-pair-mode 1)
+  :bind
+  ((:c++-mode-map
+    ("C-c C-o" . ff-find-other-file))))
 
 ;; (leaf makefile-mode)
 ;; (leaf shell-script-mode)
@@ -313,7 +344,6 @@
     (web-mode-script-offset . 4)
     (web-mode-php-offset . 4)))
 
-
 (leaf php-mode
   :ensure t)
 
@@ -335,15 +365,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode)))
 
-(leaf lsp-mode
-  :hook
-  ((python-mode c++-mode) . lsp)
-  :commands
-  lsp)
-
-(leaf lsp-ui
-  :commands lsp-ui-mode)
-
 (leaf company
   :ensure t
   :init
@@ -351,18 +372,83 @@
   :bind
   (("<C-tab>" . company-complete)
    (:company-active-map
+	:package company
     ("<tab>" . company-complete-selection)
     ("C-n" . company-select-next)
     ("C-p" . company-select-previous))
    (:company-search-map
+	:package company
     ("C-n" . company-select-next)
     ("C-p" . company-select-previous)))
   :config
   ;;(company-idle-delay . 0.5)
 )
 
+;;------------------------------------
+;; LSP - Language Server Protocol
+;;------------------------------------
+
+(leaf lsp-mode
+  :ensure t
+  :commands lsp
+  :hook
+  (c++-mode-hook . lsp)
+  :config
+  :custom
+  ((lsp-print-io . t)
+   (lsp-prefer-flymake . nil)
+   (lsp-response-timeout . 5)
+   (lsp-clients-clangd-executable . "/usr/local/opt/llvm/bin/clangd")))
+
+(leaf lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :hook
+  ((lsp-mode . lsp-ui-mode))
+  :bind
+  (:lsp-ui-mode-map
+   ("C-c C-r" . lsp-ui-peek-find-references)
+   ("C-c C-j" . lsp-ui-peek-find-definitions)
+   ("C-c i"   . lsp-ui-peek-find-implementation)
+   ("C-c m"   . lsp-ui-imenu)
+   ("C-c s"   . lsp-ui-sideline-mode)
+   ("C-c d"   . ladicle/toggle-lsp-ui-doc))
+  :custom
+  ((lsp-ui-doc-enable . t)
+   (lsp-ui-doc-header . t)
+   (lsp-ui-doc-position . 'top) ;; top, bottom, or at-point
+   (lsp-ui-doc-max-width . 150)
+   (lsp-ui-doc-max-height . 30)
+   (lsp-ui-doc-use-childframe . t)
+   (lsp-ui-doc-use-webkit . t)
+   (lsp-ui-sideline-enable . nil)
+   (lsp-ui-sideline-ignore-duplicate . t)
+   (lsp-ui-sideline-show-symbol . t)
+   (lsp-ui-sideline-show-hover . t)
+   (lsp-ui-sideline-show-diagnostics . nil)
+   (lsp-ui-sideline-show-code-actions . nil)
+   (lsp-ui-imenu-enable . t)
+   (lsp-ui-imenu-kind-position . 'top) ;; top, bottom, or at-point
+   (lsp-ui-imenu-window-width . 60)
+   ;; (lsp-ui-imenu--custom-mode-line-format . )
+   (lsp-ui-peek-enable . t)
+   (lsp-ui-peek-peek-height . 20)
+   (lsp-ui-peek-list-width . 50)
+   (lsp-ui-peek-fontify . 'on-demand) ;; never, on-demand, or always
+   ))
+
 (leaf company-lsp
-  :commands company-lsp)
+  :ensure t
+  :commands company-lsp
+  :after
+  (lsp-mode lsp-ui company)
+  :custom
+  ((company-lsp-async . t)
+   (company-lsp-cache-candidates . nil)
+   ;; (company-lsp-enable-recompletion . t)
+   ;; (company-lsp-enable-snippet . t)
+   )
+  )
 
 (provide 'init)
 
