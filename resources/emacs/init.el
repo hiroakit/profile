@@ -107,6 +107,8 @@
   :bind
   (("C-<wheel-up>" . hiroakit/text-scale-up)
    ("C-<wheel-down>" . hiroakit/text-scale-down)
+   ("<C-mouse-4>" . hiroakit/text-scale-up)
+   ("<C-mouse-5>" . hiroakit/text-scale-down)
    ("M-0" . hiroakit/text-scale-reset)
    ("C-j" . goto-line)
    ("C-c t" . toggle-truncate-lines)
