@@ -14,6 +14,8 @@ hp-org-mode-local-config.el
 hp-org-mode-local-config.elc
 .org-id-locations
 .chpwd-recent-dirs
+init.elc
+custom.el
 elpa/
 ~$*
 *~
