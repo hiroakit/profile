@@ -1,4 +1,4 @@
-;;; init.el --- My init.el  -*- lexical-binding: t; -*-
+;;; init.el --- Initialize Emacs -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2020 Hiroaki ENDOH
 ;;
@@ -26,16 +26,15 @@
 ;;
 ;; this enables this running method
 ;;   emacs -q -l ~/.debug.emacs.d/{{pkg}}/init.el
+
+;;------------------------------------
+;; Install leaf.el & configure
+;;------------------------------------
 (eval-and-compile
   (when (or load-file-name byte-compile-current-file)
     (setq user-emacs-directory
           (expand-file-name
            (file-name-directory (or load-file-name byte-compile-current-file))))))
-
-
-;;------------------------------------
-;; Install leaf.el & configure
-;;------------------------------------
 
 (eval-and-compile
   (customize-set-variable
@@ -82,18 +81,28 @@
   (load-theme 'doom-one-light t)
   (doom-themes-org-config))
 
+(defun hiroakit/typeface (family size)
+  "Set default typeface using `FAMILY' and `SIZE'."
+  (when (member family (font-family-list))
+    (message "hiroakit/typeface: %s founded." family)
+	(let* ((fontspec (font-spec :family family :size size))
+		   (fontconfig (format "%s-%d" family size))
+		   
+		   ;; Create fontset based on ASCII. Should use fontconfig. e.g. "fontfamily-fontsize"
+		   (fontset (create-fontset-from-ascii-font fontconfig nil family)))
+
+	  (set-fontset-font fontset 'unicode fontspec nil 'append)
+	  (set-frame-font fontset))))
+
+;; (defun hiroakit/osx-keychain-find-generic-password (service account)
+;;   "Get password from OSX Keychain.
+;; `SERVICE' is keychain item name.
+;; `ACCOUNT' is user name."
+;;   (let ((cmd (format "security find-generic-password -s %s -a %s -w" service account)))
+;; 	(shell-command-to-string cmd)))
+
 ;; Startup Emacs
 (leaf startup
-  :config
-  ;; (set-face-background 'region "LightSkyBlue")
-  ;; (set-face-foreground 'region "Black")
-  ;; (set-face-background 'vertical-border "DarkGray")
-  ;; (set-face-foreground 'vertical-border (face-background 'vertical-border))
-  ;; (setq default-directory "~/")
-  ;; (setq command-line-default-directory "~/")
-  (setq eol-mnemonic-dos "(CRLF)")
-  (setq eol-mnemonic-mac "(CR)")
-  (setq eol-mnemonic-unix "(LF)")
   :preface
   (defun hiroakit/text-scale-up ()
     (interactive)
@@ -104,6 +113,15 @@
   (defun hiroakit/text-scale-reset ()
     (interactive)
 	(text-scale-set 0))
+  :hook
+  (emacs-startup-hook . (lambda ()
+						  (message "Run emacs-startup-hook")
+						  ;; Gen Shin Gothic Monospace
+						  ;; Myrica M
+						  ;; MotoyaLCedar
+						  ;; HackGen Console
+						  ;; Sarasa Mono J
+						  (hiroakit/typeface "Sarasa Mono J" 14)))
   :bind
   (("C-<wheel-up>" . hiroakit/text-scale-up)
    ("C-<wheel-down>" . hiroakit/text-scale-down)
@@ -113,13 +131,17 @@
    ("C-j" . goto-line)
    ("C-c t" . toggle-truncate-lines)
    ("C-c r" . rename-file))
-  :config
-  ;; (set-frame-parameter nil 'alpha 80)
   :custom
-  ((inhibit-startup-screen            . t)
-   (inhibit-startup-message           . t)
+  ((inhibit-startup-screen . t)
+   (inhibit-startup-message . t)
    (inhibit-startup-echo-area-message . t)
-   (initial-scratch-message           . nil)))
+   (initial-scratch-message . nil)
+   (cua-mode . t)
+   (cua-enable-cua-keys . nil))
+  :config
+  (setq eol-mnemonic-dos "(CRLF)")
+  (setq eol-mnemonic-mac "(CR)")
+  (setq eol-mnemonic-unix "(LF)"))
 
 (leaf cus-edit
   :doc "Customizing Emacs Lisp packages"
@@ -147,8 +169,30 @@
   :hook
   (emacs-startup-hook . show-paren-mode))
 
+(leaf expand-region
+  :ensure t
+  :bind
+  (("C-S-f" . er/expand-region)
+   ("C-S-d" . er/contract-region)))
+
+(leaf multiple-cursors
+  :doc "Conflict with helm M-x. See https://github.com/emacs-helm/helm/issues/960"
+  :disabled t
+  :bind
+  (("C-S-c C-S-c" . mc/edit-lines)
+   ("C-S->" . mc/mark-next-like-this)
+   ("C-S-<" . mc/mark-previous-like-this)
+   ("C-c C-<" . mc/mark-all-like-this)))
+
+(leaf iedit
+  :ensure t
+  :bind
+  ((:iedit-mode-map
+	("C-g" . iedit-quit))))
+
 (leaf hl-line
   :doc "Highlighting current line"
+  :disabled t
   :hook
   (emacs-startup-hook . global-hl-line-mode))
 
@@ -180,9 +224,8 @@
 	("RET" . neotree-enter)))
   :custom
   ((neo-smart-open . t)
-   (neo-create-file-auto-open . t))
-  ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
-  )
+   ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
+   (neo-create-file-auto-open . t)))
 
 (leaf helm
   :doc "Filter information"
@@ -214,21 +257,28 @@
     (("C-S-s" . helm-swoop)
      ("C-c f" . hydra-helm-swoop/body)
      (:helm-swoop-map
-      ("C-s" . helm-multi-swoop-all-from-helm-swoop)))))
-
-(leaf helm-projectile
-  :ensure t
-  :bind
-  (("C-c p f" . helm-projectile-find-file)
-   ("C-c p e" . helm-projectile-recentf)
-   ("C-c p g" . helm-projectile-grep)
-   ("C-c p p" . helm-projectile-switch-project))
+      ("C-s" . helm-multi-swoop-all-from-helm-swoop))))
+  (leaf helm-esa
+	:disabled t
+	:ensure t
+    :custom
+	(helm-esa-team-name . "")
+	(helm-esa-access-token . "")
+	:init
+	(helm-esa-initialize))
+  (leaf helm-projectile
+	:ensure t
+	:bind
+	(("C-c p f" . helm-projectile-find-file)
+	 ("C-c p e" . helm-projectile-recentf)
+	 ("C-c p g" . helm-projectile-grep)
+	 ("C-c p p" . helm-projectile-switch-project))
   ;; :init
   ;; (leaf helm-ag)
   ;; :config
   ;; (projectile-global-mode t)
   ;; (helm-projectile-on))
-)
+	))
 
 ;;-------------------------
 ;; org series
@@ -240,6 +290,12 @@
   ;;  :config
   ;;  ((setq org-directory "~/Documents/org")
   ;;   (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")))
+  :bind
+  (:org-mode-map
+   ;; In ASCII, C-i and <TAB> are the same character.
+   ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
+   ;;("C-c C-x C-i" . org-clock-in)
+   )
   :custom
   `((org-startup-folded . t)
    (org-startup-truncated . t)
@@ -298,6 +354,13 @@
   (google-translate-default-target-language . "ja"))
 
 ;;-------------------------
+;; RSS
+;;-------------------------
+
+;; (leaf elfeed
+;;   :ensure t)
+
+;;-------------------------
 ;; Launguages Support
 ;;-------------------------
 
@@ -331,8 +394,7 @@
    "\\.jsx\\'"
    "\\.vue\\'")
   :custom
-  `(
-    (web-mode-markup-indent-offset . 4)
+  `((web-mode-markup-indent-offset . 4)
     (web-mode-code-indent-offset . 4)
     (web-mode-css-indent-offset . 4)
     (js-indent-level . 4)
@@ -345,6 +407,14 @@
     (web-mode-css-offset . 4)
     (web-mode-script-offset . 4)
     (web-mode-php-offset . 4)))
+
+;; js-mode in Emacs 27 includes full support for syntax highlighting and indenting of JSX syntax.
+;; See also: https://github.com/mooz/js2-mode
+(leaf js2-mode
+  :ensure t
+  :custom
+  (js2-basic-offset . 2)
+  (js-switch-indent-offset . 2))
 
 (leaf php-mode
   :ensure t)
@@ -385,6 +455,21 @@
   :config
   ;;(company-idle-delay . 0.5)
 )
+
+;;------------------------------------
+;; Javascript development environment
+;;------------------------------------
+(leaf npm
+  :ensure t
+  :init
+  (require 'npm))
+
+(leaf indium
+  :doc "User Manual: https://indium.readthedocs.io/en/latest/index.html"
+  :ensure t
+  :config
+  ;; (executable-find "indium")
+  (add-to-list 'exec-path "/usr/local/bin/indium"))
 
 ;;------------------------------------
 ;; LSP - Language Server Protocol
@@ -446,11 +531,9 @@
   (lsp-mode lsp-ui company)
   :custom
   ((company-lsp-async . t)
-   (company-lsp-cache-candidates . nil)
    ;; (company-lsp-enable-recompletion . t)
    ;; (company-lsp-enable-snippet . t)
-   )
-  )
+   (company-lsp-cache-candidates . nil)))
 
 (provide 'init)
 
