@@ -227,6 +227,10 @@
    ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
    (neo-create-file-auto-open . t)))
 
+;;-------------------------
+;; helm
+;;-------------------------
+
 (leaf helm
   :doc "Filter information"
   :ensure t
