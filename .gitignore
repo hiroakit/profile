@@ -6,6 +6,7 @@ resources/emacs/url/cookies
 resources/emacs/url/cache
 resources/emacs/bookmarks
 resources/emacs/recentf
+resources/emacs/.cache
 resources/emacs/.lsp-session-v1
 resources/emacs/dired-history
 ac-comphist.dat
@@ -14,6 +15,8 @@ hp-org-mode-local-config.el
 hp-org-mode-local-config.elc
 .org-id-locations
 .chpwd-recent-dirs
+init.elc
+custom.el
 elpa/
 ~$*
 *~
