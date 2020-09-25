@@ -435,7 +435,7 @@
   `((web-mode-markup-indent-offset . 4)
     (web-mode-code-indent-offset . 4)
     (web-mode-css-indent-offset . 4)
-    (js-indent-level . 4)
+    (js-indent-level . 2)
     (web-mode-enable-auto-pairing . t)
     (web-mode-enable-auto-expanding . t)
     (web-mode-enable-css-colorization . t)
@@ -445,6 +445,8 @@
     (web-mode-css-offset . 4)
     (web-mode-script-offset . 4)
     (web-mode-php-offset . 4)))
+
+(leaf js-mode)
 
 ;; js-mode in Emacs 27 includes full support for syntax highlighting and indenting of JSX syntax.
 ;; See also: https://github.com/mooz/js2-mode
