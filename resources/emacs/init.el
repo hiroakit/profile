@@ -78,7 +78,7 @@
   (doom-themes-enable-italic . nil)
   (doom-themes-enable-bold . nil)
   :config
-  (load-theme 'doom-one-light t)
+  (load-theme 'doom-one t)
   (doom-themes-org-config))
 
 (defun hiroakit/typeface (family size)
