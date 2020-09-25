@@ -19,10 +19,12 @@ homebrew_packages:
   - { name: ctags }
   - { name: curl }
   - { name: fpp }
+  - { name: fzf }
   - { name: glib }
   - { name: gnu-sed }
   - { name: go }
   - { name: gpg }
+  - { name: hugo }  
   - { name: jo }
   - { name: jq }
   - { name: mas }
@@ -31,16 +33,16 @@ homebrew_packages:
   - { name: pcre }
   - { name: libjpeg }  
   - { name: little-cms2 }  
-  # - { name: peco }
+  - { name: peco }
   - { name: pkg-config }
   # - { name: pyenv }
   # - { name: pyenv-virtualenv }
   # - { name: python3 }
   - { name: readline }
+  - { name: ripgrep }  
   - { name: tree }
   - { name: vault }
   - { name: watch }
-  # - { name: wget }
   - { name: xz }
   - { name: p7zip }
 
