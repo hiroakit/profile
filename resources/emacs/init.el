@@ -535,6 +535,38 @@
    ;; (company-lsp-enable-snippet . t)
    (company-lsp-cache-candidates . nil)))
 
+;;------------------------------------
+;; JUNK CODE
+;;------------------------------------
+
+(defun he-emacs-init-open ()
+  "Open init.el file."
+  (interactive)
+  (message "Open init.el.")
+  (find-file "~/.emacs.d/init.el"))
+
+(defun he-emacs-init-reload ()
+  "Reload init.el file."
+  (interactive)
+  (message "Try to reload init.el.")
+  (load-file "~/.emacs.d/init.el"))
+
+(defun he-emacs-init-compile ()
+  "Byte compile init.el file."
+  (interactive)
+  (message "Try to byte-compile init.el.")
+  (byte-compile-file "~/.emacs.d/init.el"))
+
+(defun he-scratch-buffer ()
+  "Switch *scratch* buffer."
+  (interactive)
+  (switch-to-buffer "*scratch*"))
+
+(defun he-org-capture-open ()
+  "Open capture.org file."
+  (interactive)
+  (find-file "~/Documents/org/capture.org"))
+
 (provide 'init)
 
 ;;; init.el ends here
