@@ -52,7 +52,7 @@ case "${OSTYPE}" in
     # macOS
     darwin*)
 	# Emacsが起動しており、M-x server-startを実行済みであると想定している
-	export EDITOR="/usr/local/bin/emacs -q -nw"
+	export EDITOR="/Applications/Emacs-takaxp/Emacs.app/Contents/MacOS/Emacs"
 
 	# XcodeのDerivedDataディレクトリ
 	export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
@@ -63,8 +63,14 @@ case "${OSTYPE}" in
 	# 様々なバージョンのFBXのSDKが格納されるディレクトリ
 	export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
 
+	# node.js v12 for Azure Function Runtime
+	export PATH="/usr/local/opt/node@12/bin:$PATH"
+	
     # Projectsディレクトリ
     export PROJ="${HOME}/Documents/Projects"
+    export BLOG="${HOME}/Documents/Projects/Personal/Blog"
+    export TIPS="${HOME}/Documents/Projects/Personal/tips"
+    export EDEV="${HOME}/Documents/Projects/Personal/emacs-on-apple"
 esac
 
 #---------------------------------

@@ -23,9 +23,10 @@ case "${OSTYPE}" in
         # G option maybe has macOS only.
         alias ls="ls -G"
         alias la="ls -a"
-        alias ll="ls -la"
+        alias ll="ls -laop"
+        alias git
         alias lg="lazygit"
-        alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+        alias emacs="/Applications/Emacs/Emacs.app/Contents/MacOS/Emacs -nw"
         ;;
     linux*)
         alias ls="ls --color=auto --time-style=long-iso -FH"
