@@ -383,14 +383,7 @@
    (org-src-tab-acts-natively . t)
    (org-src-preserve-indentation . t)
    (org-edit-src-content-indentation . 0)))
-      
     
-(leaf google-translate
-  :ensure t
-  :custom
-  (google-translate-default-source-language . "en")
-  (google-translate-default-target-language . "ja"))
-
 ;;-------------------------
 ;; RSS
 ;;-------------------------
@@ -600,6 +593,16 @@
    ;; (company-lsp-enable-recompletion . t)
    ;; (company-lsp-enable-snippet . t)
    (company-lsp-cache-candidates . nil)))
+
+;;------------------------------------
+;; Laungage translation
+;;------------------------------------
+
+(leaf google-translate
+  :ensure t
+  :custom
+  (google-translate-default-source-language . "en")
+  (google-translate-default-target-language . "ja"))
 
 ;;------------------------------------
 ;; JUNK CODE
