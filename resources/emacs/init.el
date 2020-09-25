@@ -247,7 +247,7 @@
    ("C-x C-r" . helm-recentf))
   :config
   (leaf helm-swoop
-    :load-path `,(locate-user-emacs-file "site-lisp/helm-swoop")
+    :ensure t
     :custom (helm-swoop-pre-input-function
              . (lambda ()
                  (if mark-active
