@@ -417,6 +417,16 @@
   ((:c++-mode-map
     ("C-c C-o" . ff-find-other-file))))
 
+;;-------------------------
+;; C# & .NET
+;;-------------------------
+
+(leaf csharp-mode
+  :mode
+  ("\\.cs\\'")
+  :init
+  (electric-pair-mode 1))
+
 ;; (leaf makefile-mode)
 ;; (leaf shell-script-mode)
 
@@ -520,6 +530,7 @@
   :commands lsp
   :hook
   (c++-mode-hook . lsp)
+  (csharp-mode-hook . lsp-deferred)
   :config
   :custom
   ((lsp-print-io . t)
