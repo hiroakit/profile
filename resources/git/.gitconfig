@@ -4,4 +4,5 @@
 	signingkey = 9BB5D655F913811E
 
 [alias]
-	l = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(reset)%s'
+	l = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(reset)%s'#[gpg]
+#	program = gpg2
