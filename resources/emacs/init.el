@@ -287,16 +287,16 @@
 (leaf org-mode
   :mode
   ("\\.org\\'")
-  ;;  :config
-  ;;  ((setq org-directory "~/Documents/org")
-  ;;   (setq org-default-notes-file (concat (file-name-as-directory org-directory) "inbox.org")))
   :bind
+  ("C-c c" . org-capture)
   (:org-mode-map
    ;; In ASCII, C-i and <TAB> are the same character.
    ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
-   ;;("C-c C-x C-i" . org-clock-in)
-   )
+   ("C-c C-x C-i" . org-clock-in))
   :custom
+  (org-directory . "~/Documents/org")
+  ;; `(org-default-notes-file . ,(concat (file-name-as-directory org-directory) (file-name-nondirectory "capture.org")))
+  `(org-default-notes-file . ,(concat (file-name-as-directory "~/Documents/org") (file-name-nondirectory "capture.org")))
   `((org-startup-folded . t)
    (org-startup-truncated . t)
    (org-return-follows-link . t)
@@ -317,27 +317,65 @@
                       ("TALKING" . ?t)
                       ("Scheduling" . ?s)
                       ("Writting" . ?w)
-                      ("Payment")))
-   ))
+                      ("Payment")))))
 
-(leaf org-agenda
-  :bind
-  (("C-c a" . org-agenda))
-  :custom
-  (org-agenda-span . 'day)
-  (org-agenda-format-date . "%Y/%m/%d (%a)")
-  (org-agenda-start-on-weekday . 1)
-  (org-agenda-custom-commands .
-                              '(("c" "Get agenda & TODO list."
-                                ((agenda "" ((org-agenda-ndays 1)
-                                             (org-agenda-entry-types '(:timestamp :sexp))))
-                                 (todo "TODO" ((org-agenda-prefix-format " %i %-22:c")))
-                                 (todo "WAITING" ((org-agenda-prefix-format " %i %-22:c"))))
-                                ("W" "Waiting for a response task list"
-                                 ((todo "WAITING"))))))
-  :init
-  ;;((add-to-list 'org-agenda-files "inbox.org")))
-  )
+  (leaf org-agenda
+	:bind
+	(("C-c a" . org-agenda))
+	:custom
+	(org-agenda-span . 'day)
+	(org-agenda-format-date . "%Y/%m/%d (%a)")
+	(org-agenda-start-on-weekday . 1)
+	(org-agenda-custom-commands .
+								'(("c" "Get agenda & TODO list."
+                                   ((agenda "" ((org-agenda-ndays 1)
+												(org-agenda-entry-types '(:timestamp :sexp))))
+									(todo "TODO" ((org-agenda-prefix-format " %i %-22:c")))
+									(todo "WAITING" ((org-agenda-prefix-format " %i %-22:c"))))
+                                   ("W" "Waiting for a response task list"
+									((todo "WAITING"))))))
+	:init
+	;;((add-to-list 'org-agenda-files "inbox.org")))
+	)
+
+(leaf org-capture
+  :require
+  org-capture
+  :defvar
+  org-capture-templates
+  :config
+  (add-to-list 'org-capture-templates
+			   '("a" "Add interrupted task"
+				 entry (file+headline "~/Documents/org/work/daily.org" "Inbox")
+				 "** TODO %? \n SCHEDULED: %^t \n"
+				 :clock-in t
+				 :clock-resume t))
+  (add-to-list 'org-capture-templates
+			   '("i" "Add task"
+				 entry (file+headline "~/Documents/org/inbox.org" "Inbox")
+				 "** TODO %? \n SCHEDULED: %^t \n"
+				 :clock-in t
+				 :clock-resume t))
+  (add-to-list 'org-capture-templates
+			   '("l" "Create new meeting log"
+				 entry (file+headline "~/Documents/org/work/daily.org" "Meeting")
+ 				 "** TODO ^{title} %^g\n  %?\n  %a \n SCHEDULED: %^t \n"))
+  (add-to-list 'org-capture-templates
+			   '("c" "Add cinema in list"
+				 entry (file+headline "~/Documents/org/capture.org" "Memo/Cinema")
+				 "** ^{title} %^g\n"))
+  (add-to-list 'org-capture-templates
+			   '("b" "Add book in list"
+				 entry (file+headline "~/Documents/org/capture.org" "Memo/Books")
+				 "** ^{title} %^g\n"))
+  (add-to-list 'org-capture-templates
+			   '("e" "Add item that Emacs customization improvements into the list"
+				 entry (file+headline "~/Documents/org/capture.org" "Memo/Emacs")
+				 "** ^{title} %^g\n"))
+  (add-to-list 'org-capture-templates
+			   '("p" "Add tips in list"
+				 entry (file+headline "~/Documents/org/capture.org" "Memo/Tips")
+				 "** ^{title} %^g\n")))
 
 (leaf org-babel
   :custom
