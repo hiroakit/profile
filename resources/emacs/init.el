@@ -407,6 +407,17 @@
   :init
   (editorconfig-mode t))
 
+;;-------------------------
+;; Lisp
+;;-------------------------
+
+(leaf elisp-mode
+  :bind ((emacs-lisp-mode-map
+		  ("C-M-b" . eval-buffer)
+		  ("C-M-r" . eval-region)))
+  :custom  `((indent-tabs-mode . t)
+			 (tab-width . 4)))
+
 (leaf c++-mode
   :mode
   ("\\.h\\'"
