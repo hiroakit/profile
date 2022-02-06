@@ -1,8 +1,22 @@
 [user]
 	name = Hiroaki ENDOH
 	email = hiroakiendoh@gmail.com
-	signingkey = 9BB5D655F913811E
+	signingkey = CDB1FA34
 
 [alias]
-	l = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(reset)%s'#[gpg]
-#	program = gpg2
+	# l = log --date=short --pretty='format:%C(yellow)%h %C(green)%cd %C(reset)%s'
+
+[core]
+	#editor = /Applications/Emacs.app/Contents/MacOS/Emacs -nw
+	excludesfile = ~/.gitignore_global
+	pager = delta --theme='GitHub' #--plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+
+[interactive]
+	diffFilter = delta --color-only
+
+[gpg]
+	# program = gpg2
+
+[commit]
+	gpgsign = true
+	# template = ~/.stCommitMsg
