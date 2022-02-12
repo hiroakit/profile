@@ -9,10 +9,10 @@
 [core]
 	#editor = /Applications/Emacs.app/Contents/MacOS/Emacs -nw
 	excludesfile = ~/.gitignore_global
-	pager = delta --theme='GitHub' #--plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+	# pager = delta --theme='GitHub' #--plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
 
 [interactive]
-	diffFilter = delta --color-only
+	# diffFilter = delta --color-only
 
 [gpg]
 	# program = gpg2
