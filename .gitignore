@@ -23,9 +23,9 @@ elpa/
 \#*\#
 
 # zsh
-zsh/zaw/
+.zsh_sessions
 .zcompdump
-resources/zsh/.zsh_history
+.zsh_history
 
 # Mac
 *.DS_Store
