@@ -10,13 +10,14 @@ using static Chell.Exports;
 
 shell = "/bin/sh -c";
 
-await Font.Install();
+// await Font.Install();
 
 var homeDir = Environment.GetEnvironmentVariable("HOME");
-var buildDir = Path.Combine(homeDir, "build");
+var buildDir = Path.Combine(homeDir, "dev");
 var binDir = Path.Combine(buildDir, "bin");
+var srcDir = Path.Combine(buildDir, "src");
 
-Chell.Exports.Env.Vars["PATH"] = Chell.Exports.Env.Vars["PATH"] + $":{binDir}";
+Chell.Exports.Env.Vars["PATH"] = $"{binDir}:{Chell.Exports.Env.Vars["PATH"]}";
 
 var autoconf = "autoconf-2.71";
 var autoconfPkg = $"{autoconf}.tar.gz";
@@ -36,62 +37,62 @@ var texinfo = "texinfo-6.8";
 var texinfoPkg = $"{texinfo}.tar.gz";
 var texinfoUrl = $"https://ftp.jaist.ac.jp/pub/GNU/texinfo/{texinfoPkg}";
 
-
-await $"mkdir -p {buildDir}";
-await $"cd {buildDir}";
-await "mkdir -p src";
-await "cd src";
-
-// Autoconf
-await $"curl -OL {autoconfUrl}";
-await $"tar xzf {autoconfPkg}";
-using (Cd($"{autoconf}"))
+if(!Directory.Exists(srcDir))
 {
-    await $"./configure --prefix={buildDir}";
-    await "make";
-    await "make install";
+  await $"mkdir -p {srcDir}";
 }
-
-// Automake
-await $"curl -OL {automakeUrl}";
-await $"tar xzf {automakePkg}";
-using (Cd($"{automake}"))
+using(Cd($"{srcDir}"))
 {
-    await $"./configure --prefix={buildDir}";
-    await "make";
-    await "make install";
-}
+  // Autoconf
+  await $"curl -OL {autoconfUrl}";
+  await $"tar xzf {autoconfPkg}";
+  using (Cd($"{autoconf}"))
+  {
+      await $"./configure --prefix={buildDir}";
+      await "make";
+      await "make install";
+  }
 
-// Libtool
-await $"curl -OL {libtoolUrl}";
-await $"tar xzf {libtoolPkg}";
-using (Cd($"{libtool}"))
-{
-    await $"./configure --prefix={buildDir}";
-    await "make";
-    await "make install";
-}
+  // Automake
+  await $"curl -OL {automakeUrl}";
+  await $"tar xzf {automakePkg}";
+  using (Cd($"{automake}"))
+  {
+      await $"./configure --prefix={buildDir}";
+      await "make";
+      await "make install";
+  }
 
-// stow
-await $"curl -OL {stowUrl}";
-await $"tar xzf {stowPkg}";
-using (Cd($"{stow}"))
-{
-    await $"./configure --prefix={buildDir}";
-    await "make";
-    await "make install";
-}
+  // Libtool
+  await $"curl -OL {libtoolUrl}";
+  await $"tar xzf {libtoolPkg}";
+  using (Cd($"{libtool}"))
+  {
+      await $"./configure --prefix={buildDir}";
+      await "make";
+      await "make install";
+  }
 
-// texinfo
-await $"curl -OL {texinfoUrl}";
-await $"tar xzf {texinfoPkg}";
-using (Cd($"{texinfo}"))
-{
-    await $"./configure --prefix={buildDir}";
-    await "make";
-    await "make install";
-}
+  // stow
+  await $"curl -OL {stowUrl}";
+  await $"tar xzf {stowPkg}";
+  using (Cd($"{stow}"))
+  {
+      await $"./configure --prefix={buildDir}";
+      await "make";
+      await "make install";
+  }
 
+  // texinfo
+  await $"curl -OL {texinfoUrl}";
+  await $"tar xzf {texinfoPkg}";
+  using (Cd($"{texinfo}"))
+  {
+      await $"./configure --prefix={buildDir}";
+      await "make";
+      await "make install";
+  }
+}
 // using (Cd($"{~/path/to/your/profile/resources}"))
 // {
 //     await "stow -v zsh -t ~/";
