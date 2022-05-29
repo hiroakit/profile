@@ -63,7 +63,7 @@ using(Cd($"{srcDir}"))
     }
   }
 
-  TryWhich("gdb", out cmdPath);	
+  TryWhich("gdb", out cmdPath); 
   if (cmdPath.Length < 1)
   {
   }
@@ -190,7 +190,7 @@ using(Cd($"{srcDir}"))
   }
 
   // gnutls
-  // export ~/dev/bin/pkg-config
+  // Maybe required: export ~/dev/bin/pkg-config
   var libgnutls = new Package();
   libgnutls.Name = "gnutls-3.6.15";
   libgnutls.FileName = "gnutls-3.6.15.tar.xz";
@@ -214,7 +214,85 @@ using(Cd($"{srcDir}"))
       await "make";
       await "make install";
     }
-  }  
+  }
+
+  // Emacs
+  var emacs = new Package();
+  emacs.Name = "emacs-28.1";
+  emacs.FileName = "emacs-28.1.tar.xz";
+  emacs.Url = "https://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-28.1.tar.xz";
+
+  Echo("Emacs: Start to build. Using {emacs.Url}");
+  if(!File.Exists($"{srcDir}/{emacs.Name}/nextstep/Emacs.app/Contents/MacOS/Emacs"))
+  {
+    if(!File.Exists(emacs.FileName))
+    {
+       await $"curl -OL {emacs.Url}";
+    }
+    await $"tar xzf {emacs.FileName}";
+    using(Cd($"{emacs.Name}"))
+    {
+      await $"./configure --prefix={buildDir} CC=clang --with-ns --with-modules --without-x --without-selinux --without-makeinfo --without-mail-unlink --without-mailhost --without-pop --without-mailutils --without-jpeg --without-lcms2";
+      await "make";
+      await "make install";
+    }
+  }
+
+  using(Cd($"{emacs.Name}/nextstep/Emacs.app/Contents"))
+  {
+	  Echo("Emacs: adding portability");
+	  
+	  // Clean up
+	  if(Directory.Exists("Frameworks"))
+	  {
+		  await $"rm -rf ./Frameworks";
+	  }
+
+	  // Copy dylib in {libDir} to Frameworks dir
+	  await $"mkdir -p Frameworks";
+	  await $"cp {libDir}/libgnutls.30.dylib Frameworks";
+	  await $"cp {libDir}/libnettle.8.dylib Frameworks";
+	  await $"cp {libDir}/libhogweed.6.dylib Frameworks";
+	  await $"cp {libDir}/libgmp.10.dylib Frameworks";
+
+	  // Replace linker paths
+	  using(Cd($"MacOS"))
+	  {
+		  Echo("Emacs: Replace linker paths");
+		  var hogehoge = await $"otool -l ./Emacs | grep @executable_path/../Frameworks";
+		  Echo($"Emacs: {hogehoge}");
+		  if (!hogehoge.Contains("@executable_path/../Frameworks"))
+		  {
+			  // Add rpath (LC_RPATH)
+			  Echo("Emacs: Add @rpath");		  
+			  await $"install_name_tool -add_rpath @executable_path/../Frameworks Emacs";
+		  }
+
+		  // Rename shared library id name
+		  Echo("Emacs: Rename shared library id name");		  
+		  await $"install_name_tool -id @rpath/libgnutls.30.dylib ../Frameworks/libgnutls.30.dylib";
+		  await $"install_name_tool -id @rpath/libgmp.10.dylib ../Frameworks/libgmp.10.dylib";
+		  await $"install_name_tool -id @rpath/libhogweed.6.dylib ../Frameworks/libhogweed.6.dylib";
+		  await $"install_name_tool -id @rpath/libnettle.8.dylib ../Frameworks/libnettle.8.dylib";
+
+		  // Replace path to @rpath based
+		  Echo("Emacs: Replace path to @rpath based");		  
+		  await $"install_name_tool -change ~/dev/lib/libnettle.8.dylib @rpath/libnettle.8.dylib ../Frameworks/libgnutls.30.dylib";
+		  await $"install_name_tool -change ~/dev/lib/libgmp.10.dylib @rpath/libgmp.10.dylib ../Frameworks/libgnutls.30.dylib";
+		  await $"install_name_tool -change ~/dev/lib/libhogweed.6.dylib @rpath/libhogweed.6.dylib ../Frameworks/libgnutls.30.dylib";
+		  await Run($"install_name_tool -change ~/dev/lib/libgnutls.30.dylib @rpath/libgnutls.30.dylib Emacs").NoThrow();      		  
+	  }
+  }
+
+  var securityResponse = await $"security find-certificate -c EmacsSelfSignedCertificate";
+  if (securityResponse.Contains("EmacsSelfSignedCertificate"))
+  {
+	  using(Cd($"{emacs.Name}/nextstep"))
+	  {
+		  await $"codesign --remove-signature Emacs.app";
+		  await $"codesign --deep -s EmacsSelfSignedCertificate ./Emacs.app";
+	  }           
+  }
 }
 
 // using (Cd($"{~/path/to/your/profile/resources}"))
