@@ -47,7 +47,7 @@ public static class Font
             await "ls";
 	    using(Cd(Path.GetFileNameWithoutExtension(fileName)))
             {
-                await "cp migmix-2m-bold.ttf ~/Library/Fonts/migmix-2m-reqular.ttf";
+                await "cp migmix-2m-regular.ttf ~/Library/Fonts/migmix-2m-regular.ttf";
                 await "cp migmix-2m-bold.ttf ~/Library/Fonts/migmix-2m-bold.ttf";
             }
         }
