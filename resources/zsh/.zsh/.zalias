@@ -1,8 +1,7 @@
 # .zalias
+#
+# Command Alias config file that called by .zshrc
 # This file is original. NOT definition by zsh
-#
-# Command Alias
-#
 
 alias -g G='| grep'
 alias -g H='| head'
@@ -15,20 +14,20 @@ alias cp='nocorrect cp'
 alias mkdir='nocorrect mkdir'
 alias h='history'
 alias ha='history-all'
-alias su="su -l"
 
 case "${OSTYPE}" in
     darwin*)
-        # macOS has BSD ls which isn't time-style option on defalut.
+        # macOS has "BSD ls" which isn't time-style option on defalut.
         # G option maybe has macOS only.
         alias ls="ls -G"
         alias la="ls -a"
-        alias ll="ls -laop"
-        alias git
+        alias ll="ls -laTopgh"
+
         alias lg="lazygit"
-        alias emacs="/Applications/Emacs/Emacs.app/Contents/MacOS/Emacs -nw"
+        alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
         ;;
     linux*)
+        alias su="su -l"
         alias ls="ls --color=auto --time-style=long-iso -FH"
         alias la="ls -a"
         alias ll="ls -la"
@@ -45,5 +44,5 @@ case "${OSTYPE}" in
             MINGW*)
                 alias h-makepkg-mingw="MINGW_INSTALLS=mingw64 makepkg-mingw -sLf"
             esac
-        ;;    
+        ;;
 esac
