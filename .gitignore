@@ -29,6 +29,7 @@ resources/zsh/.zsh/.zsh_sessions
 resources/zsh/.zsh/.zcompdump
 resources/zsh/.zsh/.chpwd-recent-dirs
 resources/zsh/.zcompcache
+resources/zsh/.zsh/functions/completion/_ninja
 
 # Python
 .python-environments
