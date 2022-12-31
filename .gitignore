@@ -3,21 +3,21 @@
 # Emacs
 resources/emacs/.emacs.d/.cache
 resources/emacs/.emacs.d/.lsp-session-v1
+resources/emacs/.emacs.d/auto-save-list
 resources/emacs/.emacs.d/bookmarks
+resources/emacs/.emacs.d/custom.el
 resources/emacs/.emacs.d/dired-history
+resources/emacs/.emacs.d/el-get
+resources/emacs/.emacs.d/elpa
+resources/emacs/.emacs.d/eshell
+resources/emacs/.emacs.d/lsp-cache
 resources/emacs/.emacs.d/recentf
+resources/emacs/.emacs.d/request
 resources/emacs/.emacs.d/transient/
 resources/emacs/.emacs.d/undohist
 resources/emacs/.emacs.d/url
-ac-comphist.dat
-auto-save-list
 hp-org-mode-local-config.el
-hp-org-mode-local-config.elc
-.org-id-locations
-.chpwd-recent-dirs
 *.elc
-custom.el
-elpa/
 ~$*
 *~
 \#*\#
@@ -27,6 +27,7 @@ elpa/
 .zsh_sessions
 .zcompdump
 .zsh_history
+resources/zsh/.zsh/.chpwd-recent-dirs
 
 # Mac
 *.DS_Store
