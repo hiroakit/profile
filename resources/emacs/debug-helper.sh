@@ -1,0 +1,6 @@
+emacs_path="/Applications/Emacs.app/Contents/MacOS/Emacs"
+alias emacs_cli="$emacs_path -nw"
+alias emacs_cli_debug_init="$emacs_path -nw --debug-init"
+alias emacs_gui="$emacs_path"
+alias emacs_gui_none_init="$emacs_path -Q"
+alias emacs_gui_debug_init="$emacs_path --debug-init"
