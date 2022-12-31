@@ -142,27 +142,27 @@ zstyle ':completion:*' recent-dirs-insert both
 #-------------------------------------------
 case "${OSTYPE}" in
     darwin*)
-	# Emacsが起動しており、M-x server-startを実行済みであると想定している
-	export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+        # Emacsが起動しており、M-x server-startを実行済みであると想定している
+        export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 
-	# XcodeのDerivedDataディレクトリ
-	export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
+        # XcodeのDerivedDataディレクトリ
+        export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
 
-	# iOSシミュレーターのデータがあるディレクトリ
-	export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
+        # iOSシミュレーターのデータがあるディレクトリ
+        export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
 
-	# 様々なバージョンのFBXのSDKが格納されるディレクトリ
-	export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
+        # 様々なバージョンのFBXのSDKが格納されるディレクトリ
+        export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
 
-	# node.js v12 for Azure Function Runtime
-	export PATH="/usr/local/opt/node@12/bin:$PATH"
+        # node.js v12 for Azure Function Runtime
+        export PATH="/usr/local/opt/node@12/bin:$PATH"
 
-    # Projectsディレクトリ
-    export PROJ="${HOME}/Documents/Projects"
-    export MYPJ="${PROJ}/Personal"
-    export BLOG="${MYPJ}/Blog"
-    export TIPS="${MYPJ}/tips"
-    export EDEV="${MYPJ}/emacs-on-apple"
+        # Projectsディレクトリ
+        export PROJ="${HOME}/Documents/Projects"
+        export MYPJ="${PROJ}/Personal"
+        export BLOG="${MYPJ}/Blog"
+        export TIPS="${MYPJ}/tips"
+        export EDEV="${MYPJ}/emacs-on-apple"
 esac
 
 #-------------------------------------------
