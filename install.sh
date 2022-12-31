@@ -2,7 +2,7 @@
 
 echo "Check dotnet";
 if !(type dotnet >/dev/null 2>&1); then
-  # Check /etc/paths.d/dotnet
+  # Check /etc/paths.d/dotnet for zsh
   if [ -f /etc/paths.d/dotnet ]; then
     if [ -x /usr/libexec/path_helper ]; then
       eval `/usr/libexec/path_helper -s`
