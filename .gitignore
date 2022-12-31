@@ -1,26 +1,27 @@
 .python-environments
 
 # Emacs
-resources/emacs/undohist
-resources/emacs/url/cookies
-resources/emacs/url/cache
-resources/emacs/bookmarks
-resources/emacs/recentf
-resources/emacs/.cache
-resources/emacs/.lsp-session-v1
-resources/emacs/dired-history
+resources/emacs/.emacs.d/.cache
+resources/emacs/.emacs.d/.lsp-session-v1
+resources/emacs/.emacs.d/bookmarks
+resources/emacs/.emacs.d/dired-history
+resources/emacs/.emacs.d/recentf
+resources/emacs/.emacs.d/transient/
+resources/emacs/.emacs.d/undohist
+resources/emacs/.emacs.d/url
 ac-comphist.dat
 auto-save-list
 hp-org-mode-local-config.el
 hp-org-mode-local-config.elc
 .org-id-locations
 .chpwd-recent-dirs
-init.elc
+*.elc
 custom.el
 elpa/
 ~$*
 *~
 \#*\#
+.\#*
 
 # zsh
 .zsh_sessions
