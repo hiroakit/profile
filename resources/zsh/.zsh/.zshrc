@@ -22,9 +22,6 @@
 
 # zstyle ':completion:*' list-colors "${LS_COLORS}"
 
-# PROMPT="%B%F{green}%n@%m%b%f %~ %# " 
-
-
 #-------------------------------------------
 # Common
 #-------------------------------------------
@@ -58,10 +55,10 @@ case ${UID} in
     # %n : ユーザ名
     # %m : 短いホスト名
 
-    PROMPT="%{${fg_bold[red]}%}%n%%%{${reset_color}%} "
+    PROMPT="%{${fg[cyan]}%}%n %# %{${reset_color}%}"
     PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
     SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-    RPROMPT="%{${fg_bold[black]}%}[%~ %T]%{${reset_color}%}"
+    RPROMPT="%{${fg_bold[white]}%}[%~ %T]%{${reset_color}%}"
     [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
         PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
     ;;
