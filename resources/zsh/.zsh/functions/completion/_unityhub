@@ -1,0 +1,100 @@
+#compdef unityhub
+
+_commands=(
+	'editor:Show list the releases and installed editors'
+	'help:Show information about commands'
+	'install-path:Show the path where the Unity editors will be installed'
+	'install:Install a new editor either from the releases list or archive'
+	'install-modules:Download and install a module (e.g. build support) to an installed editor'
+)
+
+describe_unityhub_commands() {
+  _describe 'command' _commands
+}
+
+_unityhub_modules() {
+	local -a modules=(
+		'android[Android Build Support]'
+		'ios[iOS Build Support]'
+		'appletv[tvOS Build Support]'
+		'linux-mono[Linux Build Support]'
+		'samsung[SamsungTV Build Support]'
+	)
+	_values -w 'module' $modules
+}
+
+_unityhub_editors() {
+	local -a unity_editors=()
+	unity_editors=(`/Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless editors | awk '{ if (NF == 1) { print $1 } }'`)
+#	if _cache_invalid UNITY_EDITORS && ! _retrieve_cache UNITY_EDITORS; then
+#
+#		_store_cache UNITY_EDITORS $unity_editors
+#	fi
+	_values "Unity Editors" $unity_editors
+}
+
+_unityhub() {
+#	_arguments \
+#		"-aopt: :(arg1 arg2)" \
+#		"-bopt-: :(arg1 arg2)" \
+#		"-copt+: :(arg1 arg2)" \
+#		"-dopt+[boppity description]: :(arg1 arg2)" \
+#		"*fopt: :(arg1 arg2)" \
+#	    {-h,--help}'[show help]'
+    # _arguments -s -C \
+	# 		   {-h,--help}'[show help]' \
+	# 		   -val='[hoge hoge]' \
+	# 		   *'[module b]' \
+	# 		   --module=-'[module]'
+# 		'1: :describe_unityhub_commands' \
+#        '(-m --module)'{-m,--module}'[users]:*:users:_unityhub_modules'
+#        {1,'*'}:apps:describe_unityhub_commands \
+ 	_arguments \
+ 		'1: :describe_unityhub_commands' \
+ 		'*:: :->command_state'
+
+	case $state in
+		command_state)
+			case $words[1] in
+				help)
+					_default
+					;;
+				editors)
+					_default
+					;;
+				install-path)
+					_arguments \
+						'(-s --set)'{-s,--set}'[set the install path to the given path]' \
+						'(-g --get)'{-g,--get}'[returns the install path]'	  
+					;;
+				install)
+ 			   		_arguments \
+ 			   			'(-v --version)'{-v,--version}'[editor version to be installed (e.g. 2019.1.11f1)]:groups:->install_version_args' \
+ 						'(-c --changeset)'{-c,--changeset}'[changeset of the editor if it is not in the release list (e.g. 9b001d489a54)]' \
+						'(-m --module)'{-m,--module}'[the module id]:*:modules:_unityhub_modules'
+ 			  		;;
+				install-modules)
+			   		_arguments \
+			   			'(-v --version)'{-v,--version}'[version of the editor to add the module]' \
+						'(-cm --childModules)'{-cm,--childModules}'[automatically installs all child modules of selected modules]' \
+						'(-m --module)'{-m,--module}'[the module id]:*:modules:_unityhub_modules'					
+			   		;;
+				*)
+					_default
+					;;
+			esac
+			;;
+	esac
+
+	case cond in
+		pattern )
+			stuff
+			;;		
+	esac
+
+    case $state in
+		install_version_args)
+			_unityhub_editors
+			;;
+	esac
+}

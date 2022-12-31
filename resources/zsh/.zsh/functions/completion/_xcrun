@@ -1,0 +1,58 @@
+#compdef xcrun
+
+_xcsdks() {
+  local -a sdks
+  sdks=$(xcodebuild -showsdks 2>/dev/null | grep -o "\-sdk.*" | sed -E 's/.* ([a-z]+).*/\1/' | uniq)
+  echo $sdks
+}
+
+_xc_show_sdk_build_version=(
+	"1:Sub command:(show,list)"
+)
+
+_xcrun() {
+    _arguments \
+		'(- *)''--version[Show version]' \
+        '(- *)'{-h,--help}'[Show help message]' \
+        '(-v --verbose)'{-v,--verbose}'[Using verbose logging]' \
+        '(-f --find)'{-f,--find}'[Find tool path]' \
+        '(-k --kill-cache)'{-k,--kill-cache}'[Remove cache]' \
+        '(-n --no-cache)'{-n,--no-cache}'[Not use Lookup cache]' \
+        '(-l --log)'{-l,--log}'[log]' \
+        '--sdk[sdk]:SDKs:->sdks' \
+        '--toolchain[toolchain]:Toolchains:->toolchains' \
+        '--show-sdk-path[Show current SDK path]' \
+        '--show-sdk-platform-path[Show current SDK platform path]' \
+        '--show-sdk-build-version[Show current SDK build version]:hoge:->showsdk' \
+        '--show-sdk-platform-version[Show currnet SDK platform version]' \
+        '--show-sdk-version[Show current SDK version]'
+
+    case "$state" in
+        executables)
+		  executables=($(ls $(dirname $(xcrun -f swift))))
+		  if [[ $executables != "" ]]; then
+			_values "Executables" $executables
+		  fi
+		  ;;
+		showsdk)
+			_values "hoge" $_xc_show_sdk_build_version
+			;;
+	    sdks)
+            _values = $(_xcsdks)
+		   # if ([[ ${+installed_sdks_platforms} -eq 0 ]] || _cache_invalid SDK_PLATFORMS) && ! _retrieve_cache SDK_PLATFORMS; then
+		   #  installed_sdks_platforms=($(_xcsdks))
+		   #   _store_cache SDK_PLATFORMS installed_sdks_platforms
+		   # fi
+		   # 	
+		   # if [[ $installed_sdks_platforms != "" ]]; then
+		   # 	 _values "SDK to use" $installed_sdks_platforms
+		   # fi
+		    ;;
+		toolchains)
+		  toolchains=(/Applications/Xcode*.app/Contents/Developer/Toolchains/*.xctoolchain)
+		  if [[ $toolchains != "" ]]; then
+			_values "Toolchain" $toolchains
+		  fi
+		  ;;
+    esac
+}
