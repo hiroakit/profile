@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: for loop array 
+# key: forarray
+# --
+for ${1:item} in ${2:\$\{items[@]\}}; do
+    $0
+done

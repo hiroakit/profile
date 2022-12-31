@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: document.getElementsByClassName 
+# key: dclass
+# --
+const items = document.getElementsByClassName(${1:class});
+for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    if (item instanceof HTMLElement) {
+    
+    }
+}$0

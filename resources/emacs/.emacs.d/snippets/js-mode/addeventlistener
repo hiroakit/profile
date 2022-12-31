@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: addeventlistener
+# key: ael
+# --
+addEventListener(${1:"mouseup"}, (event) => {
+  $0								 
+})

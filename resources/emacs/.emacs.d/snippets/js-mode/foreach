@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: forEach
+# key: fe
+# --
+
+${1:array}.forEach(${2:element} => {
+  $0
+})

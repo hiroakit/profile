@@ -1,0 +1,13 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: mutation observer
+# key: mb
+# --
+const ${1:observer} = new MutationObserver(${2:records} => {
+	  $0
+})
+
+var body = document.querySelector(${3:"body"})
+observer.observe(body, {
+  childList: true,
+  subtree: true
+})

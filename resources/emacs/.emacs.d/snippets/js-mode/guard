@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: guard
+# key: guard
+# --
+if (${1:condition}) {
+  return
+}$0

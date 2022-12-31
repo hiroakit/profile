@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: export-interface
+# key: ei
+# --
+export interface ${1:name} {
+  $0
+};
