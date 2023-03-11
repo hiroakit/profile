@@ -47,15 +47,15 @@ abcdefghijklmnopqrstuvwxyz
 #+begin_src c
   // Do something
   for (int i = 0; i < 10; i++) {
-      printf("%d\n", i);
+    printf("%d\n", i);
 
-      // 率直に意味のあるコードではありません
-      for (int j = 0; j <= 10; j++) {
-        if (j >= 5) {
-          break;
-        }
+    // 率直に意味のあるコードではありません
+    for (int j = 0; j <= 10; j++) {
+      if (j >= 5) {
+        break;
       }
     }
+  }
 #+end_src
 
 #+begin_src c
