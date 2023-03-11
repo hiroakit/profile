@@ -30,11 +30,6 @@
 (defconst user-default-font-name "Cica"
   "The font you want to use as the standard it in emacs")
 
-(global-set-key (kbd "C-c C-i")
-                #'(lambda ()
-       (interactive)
-       (find-file "~/.emacs.d/init.el")))
-
 (global-set-key (kbd "C-c C-t")
                 #'(lambda ()
                     (interactive)
@@ -802,11 +797,14 @@
 ;; JUNK CODE
 ;;------------------------------------
 
-;; (defun he-emacs-init-open ()
-;;   "Open init.el file."
-;;   (interactive)
-;;   (message "Open init.el.")
-;;   (find-file "~/.emacs.d/init.el"))
+(defun he-emacs-init-open ()
+  "Open init.el file."
+  (interactive)
+  (message "Open init.el.")
+  (find-file "~/.emacs.d/init.el"))
+
+(global-set-key (kbd "C-c C-i") 'he-emacs-init-open)
+
 
 ;; (defun he-emacs-init-reload ()
 ;;   "Reload init.el file."
