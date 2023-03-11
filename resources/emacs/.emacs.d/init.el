@@ -79,6 +79,21 @@
 (setq vc-follow-symlinks t)
 
 ;;-------------------------
+;; 警告音
+;;-------------------------
+
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Beeping.html
+;; https://www.emacswiki.org/emacs/AlarmBell
+(when (equal system-type 'windows-nt)
+  ;; 何故かWindows 11でのビープ音は気になってしまったので鳴らないようにした
+  (setq ring-bell-function 'ignore)
+
+  ;; サウンドファイルを指定できるらしい
+  ;; (setq ring-bell-function (lambda ()
+  ;;                            (play-sound-file "/path/to/sound.wav")))
+  )
+
+;;-------------------------
 ;; バッファ
 ;;-------------------------
 
