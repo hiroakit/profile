@@ -160,6 +160,7 @@ case "${OSTYPE}" in
         export BLOG="${MYPJ}/Blog"
         export TIPS="${MYPJ}/tips"
         export EDEV="${MYPJ}/emacs-on-apple"
+        export MYP="${MYPJ}/profile"
 esac
 
 #-------------------------------------------
