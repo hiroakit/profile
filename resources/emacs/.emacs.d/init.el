@@ -84,6 +84,18 @@
 (setq vc-follow-symlinks t)
 
 ;;-------------------------
+;; バッファ
+;;-------------------------
+
+;; このバッファは消えると不便に思えたから消せないようにする
+(with-current-buffer "*scratch*"
+  (emacs-lock-mode 'kill))
+
+;; このバッファは消えると不便に思えたから消せないようにする
+(with-current-buffer "*Messages*"
+  (emacs-lock-mode 'kill))
+
+;;-------------------------
 ;; フォント
 ;;-------------------------
 
