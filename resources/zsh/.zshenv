@@ -4,6 +4,8 @@ export LANG=ja_JP.UTF-8
 
 #------------------
 # Path config
+#
+# See also /etc/paths.d/
 #------------------ 
 
 #   typeset
