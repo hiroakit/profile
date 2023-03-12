@@ -62,6 +62,7 @@ abcdefghijklmnopqrstuvwxyz
 List<int> numbers = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int count = numbers.Where(n => n < 4 || n > 8).Count();
 #+end_src
+
 * org-table
 [[https://orgmode.org/manual/Tables.html][org-modeのテーブル]]で表示崩れがないかチェックするためのサンプル
 
