@@ -30,7 +30,6 @@
 (defconst user-default-font-name "Cica"
   "The font you want to use as the standard it in emacs")
 
-
 ;;------------------------------------
 ;; Install leaf.el & configure
 ;;------------------------------------
@@ -46,6 +45,11 @@
    'package-archives '(("melpa" . "http://melpa.org/packages/")
                        ("gnu"   . "http://elpa.gnu.org/packages/")))
   (package-initialize)
+
+  (unless (package-installed-p 'exec-path-from-shell)
+    (package-refresh-contents)
+    (package-install 'exec-path-from-shell))
+
   (unless (package-installed-p 'leaf)
     (package-refresh-contents)
     (package-install 'leaf))
@@ -73,6 +77,46 @@
 
 (set-language-environment "Japanese")
 (setq vc-follow-symlinks t)
+
+;;-------------------------
+;; フレームサイズ調整
+;;
+;; https://m13o.net/202006052311
+;;-------------------------
+
+(defun adjust-pos-and-size-of-current-frame-to-center ()
+  (interactive)
+  (when (display-graphic-p)
+    (let* ((workarea (mapcar (lambda (attr)
+                               (cdddr (assoc 'workarea attr)))
+                             (display-monitor-attributes-list)))
+           (width (floor (* (seq-min (mapcar #'car workarea)) 0.6)))
+           (height (floor (* (seq-min (mapcar #'cadr workarea)) 0.8))))
+      (let* ((current-workarea (frame-monitor-workarea))
+             (current-frame (selected-frame))
+             (x 0)
+             (y 0))
+        (when (>= (nth 0 current-workarea) 0)
+          (setq x (- (+ (nth 0 current-workarea) (/ (nth 2 current-workarea) 2)) (/ width 2))))
+        (when (>= (nth 1 current-workarea) 0)
+          (setq y (+ (/ (- (nth 3 current-workarea) height) 2) (nth 1 current-workarea))))
+        (set-frame-position current-frame x y)
+        (set-frame-size current-frame width height t)))))
+
+;;-------------------------
+;; 環境変数
+;;
+;; https://www.emacswiki.org/emacs/ExecPath
+;; https://github.com/purcell/exec-path-from-shell
+;;-------------------------
+
+;; (dolist (x (split-string
+;;             (shell-command-to-string "eval $(/usr/libexec/path_helper -s) && printf $PATH")
+;;             path-separator))
+;;   (print x))
+
+(when (equal window-system 'ns)
+  (exec-path-from-shell-initialize))
 
 ;;-------------------------
 ;; 警告音
@@ -103,6 +147,9 @@
 
 ;;-------------------------
 ;; フォント
+;;
+;; M-: (font-xlfd-name (font-at (point)))
+;; M-x describe-char
 ;;-------------------------
 
 (when (member user-default-font-name (font-family-list))
@@ -119,6 +166,10 @@
   ;; 記号まわりで設定が必要になる...らしい
   ;; macOSでGUI付きEmacsを操作している際は特段困っていないためコメントアウトした
   ;; (setq use-default-font-for-symbols nil)
+
+  ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+  ;; 当たらないケースはload-themeをearly-init.elで実行したとき
+  ;; org-modeの設定のところでset-face-attributeをして解消している
   )
 
 ;;-------------------------
@@ -126,6 +177,10 @@
 ;;-------------------------
 
 ;; See early-init.el
+;; (load-theme 'modus-vivendi-deuteranopia t)
+
+(when (not (equal window-system nil))
+  (load-theme 'modus-vivendi-tinted t))
 
 ;;-------------------------
 ;; 文字コード
@@ -156,7 +211,7 @@
 
 (leaf doom-modeline
   :ensure t
-  :hook (after-init-hook . doom-modeline-mode)  
+  :hook (after-init-hook . doom-modeline-mode)
   :custom `((doom-modeline-icon . nil)
             (doom-modeline-major-mode-icon . nil)
             (doom-modeline-major-mode-color-icon . nil)))
@@ -169,10 +224,10 @@
 (leaf consult
   :ensure t
   :bind (("C-x C-x" . consult-buffer)
-	       ("C-x r b" . consult-bookmark)
-	       ("M-s f " . consult-find)
-	       ("C-x C-g" . consult-grep)
-	       ("C-x C-r" . consult-recent-file)))
+           ("C-x r b" . consult-bookmark)
+           ("M-s f " . consult-find)
+           ("C-x C-g" . consult-grep)
+           ("C-x C-r" . consult-recent-file)))
 
 (leaf orderless
   :ensure t
@@ -182,15 +237,33 @@
   :hook (after-init-hook . recentf-mode))
 
 ;;-------------------------
+;; UNDO/REDO
+;;-------------------------
+
+(leaf undo-tree
+  :doc "Undo / Redo"
+  :ensure t
+  :init
+  (global-undo-tree-mode)
+  :bind
+  (("C-z" . undo)
+   ("C-S-z" . redo)
+   (:undo-tree-visualizer-mode-map
+    :package undo-tree
+    ("C-g" . undo-tree-visualizer-quit)
+    ;; ("ESC" . undo-tree-visualizer-quit) ;; How to bind to ESC?
+    ("RET" . undo-tree-visualizer-quit))))
+
+;;-------------------------
 ;; Lisp
 ;;-------------------------
 
 (leaf elisp-mode
   :bind ((emacs-lisp-mode-map
-	      ("C-M-b" . eval-buffer)
-	      ("C-M-r" . eval-region)))
+          ("C-M-b" . eval-buffer)
+          ("C-M-r" . eval-region)))
   :custom `((indent-tabs-mode . nil)
-		    (tab-width . 4)))
+            (tab-width . 4)))
 
 ;; (add-hook 'emacs-lisp-mode-hook
 ;;           (lambda ()
@@ -210,151 +283,28 @@
 ;;             (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'reindent-then-newline-and-indent)))
 
 ;;-------------------------
-;; Base configuration
+;; C++
 ;;-------------------------
 
-;; (setq default-frame-alist
-;;     '(
-;;       (width . 120)
-;;       (height . 40)
-;;       (top . 0)
-;;       (left . 0)
-;;       (font . "-*-MigMix 2M-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1")))
+(leaf c++-mode
+  :mode ("\\.h\\'"
+         "\\.cpp\\'")
+  :hook (c++-mode-hook . (lambda ()
+                           (setq indent-tabs-mode nil)
+                           (setq show-trailing-whitespace t)
+                           (electric-pair-mode 1)))
+  :bind ((:c++-mode-map
+          ("C-c C-o" . ff-find-other-file))))
 
-;; (defun hiroakit/typeface (family size)
-;;   "Set default typeface using `FAMILY' and `SIZE'."
-;;   (when (member family (font-family-list))
-;;     (message "hiroakit/typeface: %s founded." family)
-;; 	;; (set-face-attribute 'default nil :family "MigMix 2M" :height 110)
-;; 	;; フォントサイズを指定すると、text-scale-mode で大きさを変更できなくなる（文字サイズが固定になる）
-;; 	(set-fontset-font t 'japanese-jisx0208 (font-spec :family family :size nil))
-;; 	(set-fontset-font t 'japanese-jisx0212 (font-spec :family family :size nil))
-;; 	;; (let* ((fontspec (font-spec :family family :size size))
-;; 	;; 	   (fontconfig (format "%s-%d" family size))
-		   
-;; 	;; 	   ;; Create fontset based on ASCII. Should use fontconfig. e.g. "fontfamily-fontsize"
-;; 	;; 	   (fontset (create-fontset-from-ascii-font fontconfig nil family)))
+;;-------------------------
+;; C# & .NET
+;;-------------------------
 
-;; 	;;   (set-fontset-font fontset 'unicode fontspec nil 'append)
-;; 	;;   (set-frame-font fontset))
-;; 	))
- 
-;; (defun hiroakit/osx-keychain-find-generic-password (service account)
-;;   "Get password from OSX Keychain.
-;; `SERVICE' is keychain item name.
-;; `ACCOUNT' is user name."
-;;   (let ((cmd (format "security find-generic-password -s %s -a %s -w" service account)))
-;; 	(shell-command-to-string cmd)))
-
-;; Startup Emacs
-;; (leaf startup
-;;   :preface
-;;   (defun hiroakit/text-scale-up ()
-;;     (interactive)
-;; 	(text-scale-increase 1))
-;;   (defun hiroakit/text-scale-down ()
-;;     (interactive)
-;; 	(text-scale-decrease 1))
-;;   (defun hiroakit/text-scale-reset ()
-;;     (interactive)
-;; 	(text-scale-set 0))
-;;   :hook
-;;   (emacs-startup-hook . (lambda ()
-;; 						  (message "Run emacs-startup-hook")
-;; 						  ;; Gen Shin Gothic Monospace
-;; 						  ;; Myrica M
-;; 						  ;; MotoyaLCedar
-;; 						  ;; HackGen Console
-;; 						  ;; Sarasa Mono J
-;; ;;						  (hiroakit/typeface "Sarasa Mono J" 14)))
-;; 						  (hiroakit/typeface "MigMix 2M" 14)))
-;;   :bind
-;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
-;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
-;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
-;;    ("<C-mouse-5>" . hiroakit/text-scale-down)
-;;    ("M-0" . hiroakit/text-scale-reset)
-;;    ("C-j" . goto-line)
-;;    ("C-c t" . toggle-truncate-lines)
-;;    ("C-c r" . rename-file))
-;;   :custom
-;;   ((inhibit-startup-screen . t)
-;;    (inhibit-startup-message . t)
-;;    (inhibit-startup-echo-area-message . t)
-;;    (initial-scratch-message . nil)
-;;    (cua-mode . t)
-;;    (cua-enable-cua-keys . nil))
-;;   :config
-;;   (setq eol-mnemonic-dos "(CRLF)")
-;;   (setq eol-mnemonic-mac "(CR)")
-;;   (setq eol-mnemonic-unix "(LF)"))
-
-;; (leaf cus-edit
-;;   :doc "Customizing Emacs Lisp packages"
-;;   :tag "builtin" "faces" "help"
-;;   :custom
-;;   `((tool-bar-mode . nil)
-;;     (scroll-bar-mode . nil)
-;;     (menu-bar-mode . nil)
-;;     (blink-cursor-mode . nil)
-;;     (column-number-mode . nil)
-;;     (ns-transparent-titlebar . t)
-;;     (vertical-scroll-bars . nil)
-;;     (internal-border-width . 0)
-;;     (ring-bell-function . 'ignore)
-;;     (tab-width . 4)
-;;     (indent-tabs-mode . nil)
-;;     (truncate-lines . t)
-;;     (truncate-partial-width-windows . t)
-;;     (custom-file . ,(locate-user-emacs-file "custom.el"))))
-
-;; (leaf paren
-;;   :doc "Highlighting the corresponding brackets"
-;;   :custom
-;;   ((show-paren-style  . 'mixed))
-;;   :hook
-;;   (emacs-startup-hook . show-paren-mode))
-
-;; (leaf expand-region
-;;   :ensure t
-;;   :bind
-;;   (("C-S-f" . er/expand-region)
-;;    ("C-S-d" . er/contract-region)))
-
-;; (leaf multiple-cursors
-;;   :doc "Conflict with helm M-x. See https://github.com/emacs-helm/helm/issues/960"
-;;   :disabled t
-;;   :bind
-;;   (("C-S-c C-S-c" . mc/edit-lines)
-;;    ("C-S->" . mc/mark-next-like-this)
-;;    ("C-S-<" . mc/mark-previous-like-this)
-;;    ("C-c C-<" . mc/mark-all-like-this)))
-
-;; (leaf iedit
-;;   :ensure t
-;;   :bind
-;;   ((:iedit-mode-map
-;; 	("C-g" . iedit-quit))))
-
-;; (leaf hl-line
-;;   :doc "Highlighting current line"
-;;   :disabled t
-;;   :hook
-;;   (emacs-startup-hook . global-hl-line-mode))
-
-(leaf undo-tree
-  :doc "Undo / Redo"
-  :ensure t
+(leaf csharp-mode
+  :mode
+  ("\\.cs\\'")
   :init
-  (global-undo-tree-mode)
-  :bind
-  (("C-z" . undo)
-   ("C-S-z" . redo)
-   (:undo-tree-visualizer-mode-map
-    :package undo-tree
-    ("C-g" . undo-tree-visualizer-quit)
-    ;; ("ESC" . undo-tree-visualizer-quit) ;; How to bind to ESC?
-    ("RET" . undo-tree-visualizer-quit))))
+  (electric-pair-mode 1))
 
 ;; (leaf flycheck
 ;;   :ensure t
@@ -367,7 +317,7 @@
 ;;   :bind
 ;;   (("C-q" . neotree-toggle)
 ;;    (:neotree-mode-map
-;; 	("RET" . neotree-enter)))
+;;  ("RET" . neotree-enter)))
 ;;   :custom
 ;;   ((neo-smart-open . t)
 ;;    ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
@@ -380,34 +330,14 @@
          (append my/delayed-priority-low-configurations ',body)))
 
 ;;-------------------------
-;; popwin
-;;-------------------------
-
-;; (with-delayed-execution
-;;   (message "Install popwin...")
-;;   (add-to-list 'load-path (locate-user-emacs-file "el-get/popwin"))
-;;   (autoload-if-found '(popwin-mode) "popwin" nil t)
-;;   (popwin-mode 1))
-
-;;-------------------------
-;; Dired
-;;-------------------------
-
-;; (with-eval-after-load 'dired
-;;   ;; config
-;;   (setq dired-auto-revert-buffer nil)
-;;   (setq dired-dwim-target t)
-;;   (setq dired-hide-details-hide-symlink-targets nil)
-;;   (setq dired-listing-switches "-alh")
-;;   (setq dired-recursive-copies 'always)
-;;   (setq dired-use-ls-dired nil)
-
-;;   ;; hook
-;;   (add-hook 'dired-mode-hook #'(lambda () (display-line-numbers-mode -1))))
-
-;;-------------------------
 ;; org series
 ;;-------------------------
+
+(leaf org-mode
+  :mode ("\\.org\\'")
+  :hook (org-mode-hook . (lambda ()
+                           ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+                           (set-face-attribute 'org-table nil :family user-default-font-name))))
 
 ;; (leaf org-mode
 ;;   :mode
@@ -445,24 +375,24 @@
 ;;                       ("Payment")))))
 
 ;;   (leaf org-agenda
-;; 	:bind
-;; 	(("C-c a" . org-agenda))
-;; 	:custom
-;; 	(org-agenda-files . '("~/Library/Mobile Documents/com~apple~CloudDocs/org/notebook/private.org"))
-;; 	(org-agenda-span . 'day)
-;; 	(org-agenda-format-date . "%Y/%m/%d (%a)")
-;; 	(org-agenda-start-on-weekday . 1)
-;; 	(org-agenda-custom-commands .
-;; 								'(("c" "Get agenda & TODO list."
+;;  :bind
+;;  (("C-c a" . org-agenda))
+;;  :custom
+;;  (org-agenda-files . '("~/Library/Mobile Documents/com~apple~CloudDocs/org/notebook/private.org"))
+;;  (org-agenda-span . 'day)
+;;  (org-agenda-format-date . "%Y/%m/%d (%a)")
+;;  (org-agenda-start-on-weekday . 1)
+;;  (org-agenda-custom-commands .
+;;                              '(("c" "Get agenda & TODO list."
 ;;                                    ((agenda "" ((org-agenda-ndays 1)
-;; 												(org-agenda-entry-types '(:timestamp :sexp))))
-;; 									(todo "TODO" ((org-agenda-prefix-format " %i %-22:c")))
-;; 									(todo "WAITING" ((org-agenda-prefix-format " %i %-22:c"))))
+;;                                              (org-agenda-entry-types '(:timestamp :sexp))))
+;;                                  (todo "TODO" ((org-agenda-prefix-format " %i %-22:c")))
+;;                                  (todo "WAITING" ((org-agenda-prefix-format " %i %-22:c"))))
 ;;                                    ("W" "Waiting for a response task list"
-;; 									((todo "WAITING"))))))
-;; 	:init
-;; 	;;((add-to-list 'org-agenda-files "inbox.org")))
-;; 	)
+;;                                  ((todo "WAITING"))))))
+;;  :init
+;;  ;;((add-to-list 'org-agenda-files "inbox.org")))
+;;  )
 
 ;; (leaf org-capture
 ;;   :require
@@ -474,36 +404,36 @@
 ;;                `("a" "Add interrupted task"
 ;;                  entry (file+headline
 ;;                         ,(concat (concat (file-name-as-directory org-directory) (file-name-as-directory "work"))
-;; 								 (file-name-nondirectory "daily.org")) "Inbox")
+;;                               (file-name-nondirectory "daily.org")) "Inbox")
 ;;                  "** TODO %? \n SCHEDULED: %^t \n"
 ;;                  :clock-in t
 ;;                  :clock-resume t))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("i" "Add task"
-;; 				 entry (file+headline "~/Documents/org/inbox.org" "Inbox")
-;; 				 "** TODO %? \n SCHEDULED: %^t \n"
-;; 				 :clock-in t
-;; 				 :clock-resume t))
+;;             '("i" "Add task"
+;;               entry (file+headline "~/Documents/org/inbox.org" "Inbox")
+;;               "** TODO %? \n SCHEDULED: %^t \n"
+;;               :clock-in t
+;;               :clock-resume t))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("l" "Create new meeting log"
-;; 				 entry (file+headline "~/Documents/org/work/daily.org" "Meeting")
-;;  				 "** TODO ^{title} %^g\n  %?\n  %a \n SCHEDULED: %^t \n"))
+;;             '("l" "Create new meeting log"
+;;               entry (file+headline "~/Documents/org/work/daily.org" "Meeting")
+;;                   "** TODO ^{title} %^g\n  %?\n  %a \n SCHEDULED: %^t \n"))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("c" "Add cinema in list"
-;; 				 entry (file+headline "~/Documents/org/capture.org" "Memo/Cinema")
-;; 				 "** ^{title} %^g\n"))
+;;             '("c" "Add cinema in list"
+;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Cinema")
+;;               "** ^{title} %^g\n"))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("b" "Add book in list"
-;; 				 entry (file+headline "~/Documents/org/capture.org" "Memo/Books")
-;; 				 "** ^{title} %^g\n"))
+;;             '("b" "Add book in list"
+;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Books")
+;;               "** ^{title} %^g\n"))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("e" "Add item that Emacs customization improvements into the list"
-;; 				 entry (file+headline "~/Documents/org/capture.org" "Memo/Emacs")
-;; 				 "** ^{title} %^g\n"))
+;;             '("e" "Add item that Emacs customization improvements into the list"
+;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Emacs")
+;;               "** ^{title} %^g\n"))
 ;;   (add-to-list 'org-capture-templates
-;; 			   '("p" "Add tips in list"
-;; 				 entry (file+headline "~/Documents/org/capture.org" "Memo/Tips")
-;; 				 "** ^{title} %^g\n")))
+;;             '("p" "Add tips in list"
+;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Tips")
+;;               "** ^{title} %^g\n")))
 
 ;; (leaf org-babel
 ;;   :custom
@@ -520,40 +450,40 @@
 ;;   :custom
 ;;   (org-publish-project-alist
 ;;    . `(("org-notes"
-;; 		:base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com"))
-;; 		:base-extension "org"
-;; 		;;:exclude "emacs.org"
-;; 		:publishing-directory "~/public_html/"
-;; 		:recursive t
-;; 		:publishing-function org-html-publish-to-html
-;; 		:headline-levels 4 ; Just the default for this project.
-;; 		:auto-preamble t)
-;; 	   ("diary"
-;; 		:base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "notebook/diary"))
-;; 		:base-extension "org"
-;; 		:publishing-directory "~/public_html/"
-;; 		:makeindex "index.org"
-;; 		:recursive t
-;; 		:publishing-function org-html-publish-to-html
-;; 		:headline-levels 4 ; Just the default for this project.
-;; 		:auto-preamble t)
-;; 	   ("software-engineering"
-;; 		:base-directory ,"~/Documents/Projects/Personal/tips/unix/emacs"
-;; 		:base-extension "org"
-;; 		:publishing-directory "~/public_html/"
-;; 		:recursive t
-;; 		:publishing-function org-html-publish-to-html
-;; 		:headline-levels 4 ; Just the default for this project.
-;; 		:auto-preamble t)
-;; 	   ("org-static"
-;; 		:base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com/statics"))
-;; 		:base-extension "css\\|js\\|png\\|jpg\\|gif\\"
-;; 		:publishing-directory "~/public_html/"
-;; 		:recursive t
-;; 		:publishing-function org-publish-attachment
-;; 		)
-;; 	   ("org" :components ("org-notes" "org-static"))
-;; 	   )))
+;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com"))
+;;      :base-extension "org"
+;;      ;;:exclude "emacs.org"
+;;      :publishing-directory "~/public_html/"
+;;      :recursive t
+;;      :publishing-function org-html-publish-to-html
+;;      :headline-levels 4 ; Just the default for this project.
+;;      :auto-preamble t)
+;;     ("diary"
+;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "notebook/diary"))
+;;      :base-extension "org"
+;;      :publishing-directory "~/public_html/"
+;;      :makeindex "index.org"
+;;      :recursive t
+;;      :publishing-function org-html-publish-to-html
+;;      :headline-levels 4 ; Just the default for this project.
+;;      :auto-preamble t)
+;;     ("software-engineering"
+;;      :base-directory ,"~/Documents/Projects/Personal/tips/unix/emacs"
+;;      :base-extension "org"
+;;      :publishing-directory "~/public_html/"
+;;      :recursive t
+;;      :publishing-function org-html-publish-to-html
+;;      :headline-levels 4 ; Just the default for this project.
+;;      :auto-preamble t)
+;;     ("org-static"
+;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com/statics"))
+;;      :base-extension "css\\|js\\|png\\|jpg\\|gif\\"
+;;      :publishing-directory "~/public_html/"
+;;      :recursive t
+;;      :publishing-function org-publish-attachment
+;;      )
+;;     ("org" :components ("org-notes" "org-static"))
+;;     )))
 
 ;; (leaf org-static-blog
 ;;   :ensure t
@@ -567,7 +497,7 @@
 ;;    (org-static-blog-enable-tags . t)
 ;;    (org-export-with-toc . nil)
 ;;    (org-export-with-section-numbers . nil)))
-  
+
 
 ;;-------------------------
 ;; RSS
@@ -598,7 +528,7 @@
 ;; (with-delayed-execution
 ;;   (autoload-if-found '(emacs-lisp-mode) "elisp-mode" nil t)
 ;;   (add-to-list 'auto-mode-alist '("\\.el$" . emacs-lisp-mode))
-  
+
 ;;   ;; keybind
 ;;   ;;(with-eval-after-load 'emacs-lisp-mode
 ;;     (define-key emacs-lisp-mode-map (kbd "C-c C-r") #'eval-buffer)
@@ -608,34 +538,10 @@
 
 ;; (leaf elisp-mode
 ;;       :bind ((emacs-lisp-mode-map
-;; 	      ("C-M-b" . eval-buffer)
-;; 	      ("C-M-r" . eval-region)))
+;;        ("C-M-b" . eval-buffer)
+;;        ("C-M-r" . eval-region)))
 ;;       :custom  `((indent-tabs-mode . t)
-;; 		 (tab-width . 4)))
-
-;;-------------------------
-;; C++
-;;-------------------------
-
-(leaf c++-mode
-  :mode ("\\.h\\'"
-         "\\.cpp\\'")
-  :hook (c++-mode-hook . (lambda ()
-                           (setq indent-tabs-mode nil)
-                           (setq show-trailing-whitespace t)
-                           (electric-pair-mode 1)))
-  :bind ((:c++-mode-map
-          ("C-c C-o" . ff-find-other-file))))
-
-;;-------------------------
-;; C# & .NET
-;;-------------------------
-
-(leaf csharp-mode
-  :mode
-  ("\\.cs\\'")
-  :init
-  (electric-pair-mode 1))
+;;       (tab-width . 4)))
 
 ;;-------------------------
 ;; Other
@@ -708,12 +614,12 @@
 ;;   :bind
 ;;   (("<C-tab>" . company-complete)
 ;;    (:company-active-map
-;; 	:package company
+;;  :package company
 ;;     ("<tab>" . company-complete-selection)
 ;;     ("C-n" . company-select-next)
 ;;     ("C-p" . company-select-previous))
 ;;    (:company-search-map
-;; 	:package company
+;;  :package company
 ;;     ("C-n" . company-select-next)
 ;;     ("C-p" . company-select-previous)))
 ;;   :config
@@ -746,16 +652,16 @@
   :bind
   (("<C-tab>" . company-complete)
    (:company-active-map
-	:package company
+    :package company
     ("<tab>" . company-complete-selection)
     ("C-n" . company-select-next)
     ("C-p" . company-select-previous))
    (:company-search-map
-	:package company
+    :package company
     ("C-n" . company-select-next)
     ("C-p" . company-select-previous)))
   :config
-  (setq company-minimum-prefix-length 2)  
+  (setq company-minimum-prefix-length 2)
   (setq company-idle-delay 0.2)
 )
 
@@ -848,13 +754,13 @@
     `(progn ,@body)))
 
 (global-set-key (kbd "C-c C-i") 'he-emacs-init-open)
+;; (global-set-key (kbd "C-c SPC") 'whitespace-cleanup)
 
 ;; Emacsの起動時間を計測したい時に使う
 (global-set-key (kbd "C-c C-t")
                 #'(lambda ()
                     (interactive)
                     (message (emacs-init-time))))
-
 
 ;; (defun he-emacs-init-reload ()
 ;;   "Reload init.el file."
@@ -883,14 +789,187 @@
 ;;   (interactive)
 ;;   (org-publish "org-notes" t))
 
+;; (setq default-frame-alist
+;;     '(
+;;       (width . 120)
+;;       (height . 40)
+;;       (top . 0)
+;;       (left . 0)
+;;       (font . "-*-MigMix 2M-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1")))
+
+;; (defun hiroakit/typeface (family size)
+;;   "Set default typeface using `FAMILY' and `SIZE'."
+;;   (when (member family (font-family-list))
+;;     (message "hiroakit/typeface: %s founded." family)
+;;  ;; (set-face-attribute 'default nil :family "MigMix 2M" :height 110)
+;;  ;; フォントサイズを指定すると、text-scale-mode で大きさを変更できなくなる（文字サイズが固定になる）
+;;  (set-fontset-font t 'japanese-jisx0208 (font-spec :family family :size nil))
+;;  (set-fontset-font t 'japanese-jisx0212 (font-spec :family family :size nil))
+;;  ;; (let* ((fontspec (font-spec :family family :size size))
+;;  ;;     (fontconfig (format "%s-%d" family size))
+
+;;  ;;     ;; Create fontset based on ASCII. Should use fontconfig. e.g. "fontfamily-fontsize"
+;;  ;;     (fontset (create-fontset-from-ascii-font fontconfig nil family)))
+
+;;  ;;   (set-fontset-font fontset 'unicode fontspec nil 'append)
+;;  ;;   (set-frame-font fontset))
+;;  ))
+
+;; (defun hiroakit/osx-keychain-find-generic-password (service account)
+;;   "Get password from OSX Keychain.
+;; `SERVICE' is keychain item name.
+;; `ACCOUNT' is user name."
+;;   (let ((cmd (format "security find-generic-password -s %s -a %s -w" service account)))
+;;  (shell-command-to-string cmd)))
+
+;; Startup Emacs
+;; (leaf startup
+;;   :preface
+;;   (defun hiroakit/text-scale-up ()
+;;     (interactive)
+;;  (text-scale-increase 1))
+;;   (defun hiroakit/text-scale-down ()
+;;     (interactive)
+;;  (text-scale-decrease 1))
+;;   (defun hiroakit/text-scale-reset ()
+;;     (interactive)
+;;  (text-scale-set 0))
+;;   :hook
+;;   (emacs-startup-hook . (lambda ()
+;;                        (message "Run emacs-startup-hook")
+;;                        ;; Gen Shin Gothic Monospace
+;;                        ;; Myrica M
+;;                        ;; MotoyaLCedar
+;;                        ;; HackGen Console
+;;                        ;; Sarasa Mono J
+;; ;;						  (hiroakit/typeface "Sarasa Mono J" 14)))
+;;                        (hiroakit/typeface "MigMix 2M" 14)))
+;;   :bind
+;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
+;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
+;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
+;;    ("<C-mouse-5>" . hiroakit/text-scale-down)
+;;    ("M-0" . hiroakit/text-scale-reset)
+;;    ("C-j" . goto-line)
+;;    ("C-c t" . toggle-truncate-lines)
+;;    ("C-c r" . rename-file))
+;;   :custom
+;;   ((inhibit-startup-screen . t)
+;;    (inhibit-startup-message . t)
+;;    (inhibit-startup-echo-area-message . t)
+;;    (initial-scratch-message . nil)
+;;    (cua-mode . t)
+;;    (cua-enable-cua-keys . nil))
+;;   :config
+;;   (setq eol-mnemonic-dos "(CRLF)")
+;;   (setq eol-mnemonic-mac "(CR)")
+;;   (setq eol-mnemonic-unix "(LF)"))
+
+;; (leaf cus-edit
+;;   :doc "Customizing Emacs Lisp packages"
+;;   :tag "builtin" "faces" "help"
+;;   :custom
+;;   `((tool-bar-mode . nil)
+;;     (scroll-bar-mode . nil)
+;;     (menu-bar-mode . nil)
+;;     (blink-cursor-mode . nil)
+;;     (column-number-mode . nil)
+;;     (ns-transparent-titlebar . t)
+;;     (vertical-scroll-bars . nil)
+;;     (internal-border-width . 0)
+;;     (ring-bell-function . 'ignore)
+;;     (tab-width . 4)
+;;     (indent-tabs-mode . nil)
+;;     (truncate-lines . t)
+;;     (truncate-partial-width-windows . t)
+;;     (custom-file . ,(locate-user-emacs-file "custom.el"))))
+
+;; (leaf paren
+;;   :doc "Highlighting the corresponding brackets"
+;;   :custom
+;;   ((show-paren-style  . 'mixed))
+;;   :hook
+;;   (emacs-startup-hook . show-paren-mode))
+
+;; (leaf expand-region
+;;   :ensure t
+;;   :bind
+;;   (("C-S-f" . er/expand-region)
+;;    ("C-S-d" . er/contract-region)))
+
+;; (leaf multiple-cursors
+;;   :doc "Conflict with helm M-x. See https://github.com/emacs-helm/helm/issues/960"
+;;   :disabled t
+;;   :bind
+;;   (("C-S-c C-S-c" . mc/edit-lines)
+;;    ("C-S->" . mc/mark-next-like-this)
+;;    ("C-S-<" . mc/mark-previous-like-this)
+;;    ("C-c C-<" . mc/mark-all-like-this)))
+
+;; (leaf iedit
+;;   :ensure t
+;;   :bind
+;;   ((:iedit-mode-map
+;;  ("C-g" . iedit-quit))))
+
+;; (leaf hl-line
+;;   :doc "Highlighting current line"
+;;   :disabled t
+;;   :hook
+;;   (emacs-startup-hook . global-hl-line-mode))
+
+;;-------------------------
+;; popwin
+;;-------------------------
+
+;; (with-delayed-execution
+;;   (message "Install popwin...")
+;;   (add-to-list 'load-path (locate-user-emacs-file "el-get/popwin"))
+;;   (autoload-if-found '(popwin-mode) "popwin" nil t)
+;;   (popwin-mode 1))
+
+;;-------------------------
+;; Dired
+;;-------------------------
+
+;; (with-eval-after-load 'dired
+;;   ;; config
+;;   (setq dired-auto-revert-buffer nil)
+;;   (setq dired-dwim-target t)
+;;   (setq dired-hide-details-hide-symlink-targets nil)
+;;   (setq dired-listing-switches "-alh")
+;;   (setq dired-recursive-copies 'always)
+;;   (setq dired-use-ls-dired nil)
+
+;;   ;; hook
+;;   (add-hook 'dired-mode-hook #'(lambda () (display-line-numbers-mode -1))))
+
+(adjust-pos-and-size-of-current-frame-to-center)
+
 ;; (provide 'init)
+
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(custom-safe-themes
+;;    '("02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "dde643b0efb339c0de5645a2bc2e8b4176976d5298065b8e6ca45bc4ddf188b7" default))
+;;  '(package-selected-packages
+;;    '(modus-themes orderless consult vertico doom-modeline leaf-tree leaf-convert blackout el-get hydra leaf-keywords)))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(orderless consult vertico doom-modeline leaf-tree leaf-convert blackout el-get hydra leaf-keywords)))
+ '(custom-safe-themes
+   '("250007c5ae19bcbaa80e1bf8184720efb6262adafa9746868e6b9ecd9d5fbf84" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "dde643b0efb339c0de5645a2bc2e8b4176976d5298065b8e6ca45bc4ddf188b7" "bfc0b9c3de0382e452a878a1fb4726e1302bf9da20e69d6ec1cd1d5d82f61e3d" default)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

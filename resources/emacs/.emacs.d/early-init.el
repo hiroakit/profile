@@ -8,5 +8,7 @@
 
 ;; modus-themes
 ;; https://protesilaos.com/emacs/modus-themes
+;;
 ;; modus-vivendi ... dark
-(load-theme 'modus-vivendi t)
+;;
+;; (load-theme 'modus-vivendi t)
