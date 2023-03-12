@@ -143,7 +143,7 @@
 ;; C-x SPCで矩形選択可能だがcua-modeはテキストの加筆できるなど機能が豊富
 ;; https://www.emacswiki.org/emacs/CuaMode
 ;;
-;; cua-modeの矩形選択をM-RET開始する
+;; cua-modeの矩形選択(cua-rectangle-mark-mode)をM-RETで開始する
 ;; これはターミナルでEmacsを動かした場合にC-RETだとReturnのCR (ASCII 13)と解釈され改行されるためで
 ;; M-RETを割り当て、GUI版EmacsとターミナルのEmacsでのキーバインドを統一した
 ;; https://www.fromkk.com/posts/c-m-ret-and-return-key-in-emacs/
