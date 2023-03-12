@@ -316,17 +316,15 @@
 ;;   :init
 ;;   (global-flycheck-mode t))
 
-;; (leaf neotree
-;;   :doc "Filer"
-;;   :ensure t
-;;   :bind
-;;   (("C-q" . neotree-toggle)
-;;    (:neotree-mode-map
-;;  ("RET" . neotree-enter)))
-;;   :custom
-;;   ((neo-smart-open . t)
-;;    ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
-;;    (neo-create-file-auto-open . t)))
+(leaf neotree
+  :doc "Filer"
+  :ensure t
+  :bind (("C-c n" . neotree-toggle)
+         (:neotree-mode-map
+          ("RET" . neotree-enter)))
+  :custom  ((neo-smart-open . t)
+            ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
+            (neo-create-file-auto-open . t)))
 
 (defvar my/delayed-priority-low-configurations '())
 (defmacro with-delayed-execution (&rest body)
