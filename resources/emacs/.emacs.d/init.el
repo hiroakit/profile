@@ -138,6 +138,19 @@
 (set-default 'buffer-file-coding-system 'utf-8)
 
 ;;-------------------------
+;; 矩形選択
+;;-------------------------
+
+;; Emacs 24.4以降ではC-x SPCで矩形選択可
+;; https://www.emacswiki.org/emacs/RectangleMark
+;;
+;; C-x SPCで矩形選択可能だがcua-modeならテキストの加筆などが可能
+;; https://www.emacswiki.org/emacs/CuaMode
+;; C-RETでcua-modeの矩形選択を開始する
+(cua-mode t)
+(cua-selection-mode t)
+
+;;-------------------------
 ;; Navigation
 ;;-------------------------
 
