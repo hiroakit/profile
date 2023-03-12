@@ -1,7 +1,6 @@
 export TERM='xterm-256color'
 export ZDOTDIR=$HOME/.zsh
 export LANG=ja_JP.UTF-8
-# export EDITOR="/usr/local/bin/emacs -q -nw"
 
 #------------------
 # Path config
@@ -22,15 +21,21 @@ export LANG=ja_JP.UTF-8
 #        .: 通常のファイルのみ残す
 typeset -xU path cdpath fpath manpath
 
-## XQuartz
-export PATH=$PATH:/opt/X11/bin
+# XQuartz
+if [ -d "/opt/X11/bin" ]; then
+    export PATH=$PATH:/opt/X11/bin
+fi
 
-## MySQL
-export PATH=/usr/local/mysql/bin:$PATH
+# MySQL
+if [ -d "/usr/local/mysql/bin" ]; then
+    export PATH=/usr/local/mysql/bin:$PATH
+fi
 
-## Go
-export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$PATH
+# Go
+if [ -d "$HOME/go/bin" ]; then
+    export GOPATH=$HOME/go
+    export PATH=$GOPATH/bin:$PATH
+fi
 
 ## Flutter
 export PATH=$HOME/src/flutter/bin:$PATH
@@ -42,20 +47,20 @@ export PATH=$HOME/src/flutter/bin:$PATH
 # export PATH=$PATH:$MAVEN3_HOME/bin
 
 ## Android
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$ANDROID_HOME/platform-tools:$PATH"
-export PATH="$ANDROID_HOME/tools:$PATH"
+# export ANDROID_HOME="$HOME/Library/Android/sdk"
+# export PATH="$ANDROID_HOME/platform-tools:$PATH"
+# export PATH="$ANDROID_HOME/tools:$PATH"
 
 ## Gtags - Global
 export GTAGSCONF=/usr/local/share/gtags/gtags.conf
 export GTAGSLABEL=exuberant-ctags
 
 ## Pixar RenderMan
-export RMANTREE=/Applications/Pixar/RenderManProServer-19.0
-export PATH=$PATH:$RMANTREE/bin
+# export RMANTREE=/Applications/Pixar/RenderManProServer-19.0
+# export PATH=$PATH:$RMANTREE/bin
 
 ## Maya
-export MAYA_UI_LANGUAGE="en_US"
+# export MAYA_UI_LANGUAGE="en_US"
 
 ## .NET (dotnet)
 export PATH=$PATH:$HOME/.dotnet/tools
