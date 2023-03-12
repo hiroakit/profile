@@ -126,6 +126,12 @@
   )
 
 ;;-------------------------
+;; テーマ
+;;-------------------------
+
+;; See early-init.el
+
+;;-------------------------
 ;; 文字コード
 ;;-------------------------
 
@@ -193,16 +199,6 @@
 ;;-------------------------
 ;; Base configuration
 ;;-------------------------
-
-;; (leaf doom-themes
-;;   :doc "See https://github.com/hlissner/emacs-doom-themes"
-;;   :ensure t
-;;   :custom
-;;   (doom-themes-enable-italic . nil)
-;;   (doom-themes-enable-bold . nil)
-;;   :config
-;;   (load-theme 'doom-one t)
-;;   (doom-themes-org-config))
 
 ;; (setq default-frame-alist
 ;;     '(
