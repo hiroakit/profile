@@ -827,6 +827,11 @@
   (message "Open init.el.")
   (find-file "~/.emacs.d/init.el"))
 
+(defmacro when-terminal-in-darwin (&rest body)
+  "Running Emacs on terminal of macOS?"
+  (when (and (equal system-type 'darwin) (equal window-system nil))
+    `(progn ,@body)))
+
 (global-set-key (kbd "C-c C-i") 'he-emacs-init-open)
 
 ;; Emacsの起動時間を計測したい時に使う
