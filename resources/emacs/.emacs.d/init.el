@@ -764,19 +764,20 @@
 ;; LSP - Language Server Protocol
 ;;------------------------------------
 
-;; (leaf lsp-mode
-;;   :ensure t
-;;   :commands lsp
-;;   :hook
-;;   (c++-mode-hook . lsp)
-;;   (csharp-mode-hook . lsp-deferred)
-;;   (swift-mode-hook . lsp)
-;;   :config
-;;   :custom
-;;   ((lsp-print-io . t)
-;;    (lsp-prefer-flymake . nil)
-;;    (lsp-prefer-capf . t)
-;;    (lsp-response-timeout . 5)
+(leaf lsp-mode
+  :ensure t
+  :commands lsp
+  :hook
+  (c++-mode-hook . lsp)
+  (csharp-mode-hook . lsp-deferred)
+  (swift-mode-hook . lsp)
+  :config
+  :custom
+  ((lsp-print-io . t)
+   (lsp-prefer-flymake . nil)
+   (lsp-prefer-capf . t)
+   (lsp-response-timeout . 5)
+   (lsp-clients-clangd-executable . "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clangd")))
 ;;    (lsp-clients-clangd-executable . "/usr/local/opt/llvm/bin/clangd")))
 
 ;; (leaf lsp-ui
