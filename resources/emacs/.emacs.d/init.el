@@ -736,6 +736,31 @@
 ;;   (add-to-list 'exec-path "/usr/local/bin/indium"))
 
 ;;------------------------------------
+;; Company - Completion Framework
+;;------------------------------------
+
+(leaf company
+  :ensure t
+  :init
+  (global-company-mode 1)
+  :bind
+  (("<C-tab>" . company-complete)
+   (:company-active-map
+	:package company
+    ("<tab>" . company-complete-selection)
+    ("C-n" . company-select-next)
+    ("C-p" . company-select-previous))
+   (:company-search-map
+	:package company
+    ("C-n" . company-select-next)
+    ("C-p" . company-select-previous)))
+  :config
+  (setq company-minimum-prefix-length 2)  
+  (setq company-idle-delay 0.2)
+)
+
+
+;;------------------------------------
 ;; LSP - Language Server Protocol
 ;;------------------------------------
 
@@ -795,17 +820,6 @@
 ;;   :ensure t
 ;;   :after lsp-mode
 ;;   :config (setq lsp-sourcekit-executableble "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
-
-;; (leaf company-lsp
-;;   :ensure t
-;;   :commands company-lsp
-;;   :after
-;;   (lsp-mode lsp-ui company)
-;;   :custom
-;;   ((company-lsp-async . t)
-;;    ;; (company-lsp-enable-recompletion . t)
-;;    ;; (company-lsp-enable-snippet . t)
-;;    (company-lsp-cache-candidates . nil)))
 
 ;;------------------------------------
 ;; Laungage translation
