@@ -450,60 +450,6 @@
 ;; (leaf ox
 ;;   :after org)
 
-;; (leaf ox-publish
-;;   :after ox
-;;   :custom
-;;   (org-publish-project-alist
-;;    . `(("org-notes"
-;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com"))
-;;      :base-extension "org"
-;;      ;;:exclude "emacs.org"
-;;      :publishing-directory "~/public_html/"
-;;      :recursive t
-;;      :publishing-function org-html-publish-to-html
-;;      :headline-levels 4 ; Just the default for this project.
-;;      :auto-preamble t)
-;;     ("diary"
-;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "notebook/diary"))
-;;      :base-extension "org"
-;;      :publishing-directory "~/public_html/"
-;;      :makeindex "index.org"
-;;      :recursive t
-;;      :publishing-function org-html-publish-to-html
-;;      :headline-levels 4 ; Just the default for this project.
-;;      :auto-preamble t)
-;;     ("software-engineering"
-;;      :base-directory ,"~/Documents/Projects/Personal/tips/unix/emacs"
-;;      :base-extension "org"
-;;      :publishing-directory "~/public_html/"
-;;      :recursive t
-;;      :publishing-function org-html-publish-to-html
-;;      :headline-levels 4 ; Just the default for this project.
-;;      :auto-preamble t)
-;;     ("org-static"
-;;      :base-directory ,(concat (file-name-as-directory org-directory) (file-name-as-directory "hiroakit.com/statics"))
-;;      :base-extension "css\\|js\\|png\\|jpg\\|gif\\"
-;;      :publishing-directory "~/public_html/"
-;;      :recursive t
-;;      :publishing-function org-publish-attachment
-;;      )
-;;     ("org" :components ("org-notes" "org-static"))
-;;     )))
-
-;; (leaf org-static-blog
-;;   :ensure t
-;;   :after org
-;;   :custom
-;;   ((org-static-blog-publish-title . "hiroakit.com")
-;;    (org-static-blog-publish-url . "https://www.hiroakit.com/")
-;;    (org-static-blog-publish-directory . "~/public_html/blog/")
-;;    (org-static-blog-posts-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org/notebook/diary/")
-;;    (org-static-blog-drafts-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org/notebook/diary/")
-;;    (org-static-blog-enable-tags . t)
-;;    (org-export-with-toc . nil)
-;;    (org-export-with-section-numbers . nil)))
-
-
 ;;-------------------------
 ;; RSS
 ;;-------------------------
