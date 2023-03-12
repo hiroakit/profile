@@ -342,19 +342,19 @@
 ;;   :hook
 ;;   (emacs-startup-hook . global-hl-line-mode))
 
-;; (leaf undo-tree
-;;   :doc "Undo / Redo"
-;;   :ensure t
-;;   :init
-;;   (global-undo-tree-mode)
-;;   :bind
-;;   (("C-z" . undo)
-;;    ("C-S-z" . redo)
-;;    (:undo-tree-visualizer-mode-map
-;;     :package undo-tree
-;;     ("C-g" . undo-tree-visualizer-quit)
-;;     ;; ("ESC" . undo-tree-visualizer-quit) ;; How to bind to ESC?
-;;     ("RET" . undo-tree-visualizer-quit))))
+(leaf undo-tree
+  :doc "Undo / Redo"
+  :ensure t
+  :init
+  (global-undo-tree-mode)
+  :bind
+  (("C-z" . undo)
+   ("C-S-z" . redo)
+   (:undo-tree-visualizer-mode-map
+    :package undo-tree
+    ("C-g" . undo-tree-visualizer-quit)
+    ;; ("ESC" . undo-tree-visualizer-quit) ;; How to bind to ESC?
+    ("RET" . undo-tree-visualizer-quit))))
 
 ;; (leaf flycheck
 ;;   :ensure t
