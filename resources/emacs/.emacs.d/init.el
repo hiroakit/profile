@@ -296,6 +296,11 @@
   :bind ((:c++-mode-map
           ("C-c C-o" . ff-find-other-file))))
 
+(leaf cmake-mode
+  :ensure t
+  :mode ("CMakeLists\\.txt\\'"
+         "\\.cmake\\'"))
+
 ;;-------------------------
 ;; C# & .NET
 ;;-------------------------
