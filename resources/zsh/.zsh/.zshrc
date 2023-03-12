@@ -151,9 +151,6 @@ case "${OSTYPE}" in
         # 様々なバージョンのFBXのSDKが格納されるディレクトリ
         export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
 
-        # node.js v12 for Azure Function Runtime
-        export PATH="/usr/local/opt/node@12/bin:$PATH"
-
         # Projectsディレクトリ
         export PROJ="${HOME}/Documents/Projects"
         export MYPJ="${PROJ}/Personal"
@@ -161,6 +158,12 @@ case "${OSTYPE}" in
         export TIPS="${MYPJ}/tips"
         export EDEV="${MYPJ}/emacs-on-apple"
         export MYP="${MYPJ}/profile"
+
+        ## Visual Studio Code
+        export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+        # node.js v12 for Azure Function Runtime
+        # export PATH="/usr/local/opt/node@12/bin:$PATH"
 esac
 
 #-------------------------------------------
