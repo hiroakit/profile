@@ -30,10 +30,6 @@
 (defconst user-default-font-name "Cica"
   "The font you want to use as the standard it in emacs")
 
-(global-set-key (kbd "C-c C-t")
-                #'(lambda ()
-                    (interactive)
-                    (message (emacs-init-time))))
 
 ;;------------------------------------
 ;; Install leaf.el & configure
@@ -828,6 +824,12 @@
   (find-file "~/.emacs.d/init.el"))
 
 (global-set-key (kbd "C-c C-i") 'he-emacs-init-open)
+
+;; Emacsの起動時間を計測したい時に使う
+(global-set-key (kbd "C-c C-t")
+                #'(lambda ()
+                    (interactive)
+                    (message (emacs-init-time))))
 
 
 ;; (defun he-emacs-init-reload ()
