@@ -767,25 +767,6 @@
 ;;   (setq eol-mnemonic-mac "(CR)")
 ;;   (setq eol-mnemonic-unix "(LF)"))
 
-;; (leaf cus-edit
-;;   :doc "Customizing Emacs Lisp packages"
-;;   :tag "builtin" "faces" "help"
-;;   :custom
-;;   `((tool-bar-mode . nil)
-;;     (scroll-bar-mode . nil)
-;;     (menu-bar-mode . nil)
-;;     (blink-cursor-mode . nil)
-;;     (column-number-mode . nil)
-;;     (ns-transparent-titlebar . t)
-;;     (vertical-scroll-bars . nil)
-;;     (internal-border-width . 0)
-;;     (ring-bell-function . 'ignore)
-;;     (tab-width . 4)
-;;     (indent-tabs-mode . nil)
-;;     (truncate-lines . t)
-;;     (truncate-partial-width-windows . t)
-;;     (custom-file . ,(locate-user-emacs-file "custom.el"))))
-
 ;; (leaf paren
 ;;   :doc "Highlighting the corresponding brackets"
 ;;   :custom
@@ -807,18 +788,6 @@
 ;;    ("C-S->" . mc/mark-next-like-this)
 ;;    ("C-S-<" . mc/mark-previous-like-this)
 ;;    ("C-c C-<" . mc/mark-all-like-this)))
-
-;; (leaf iedit
-;;   :ensure t
-;;   :bind
-;;   ((:iedit-mode-map
-;;  ("C-g" . iedit-quit))))
-
-;; (leaf hl-line
-;;   :doc "Highlighting current line"
-;;   :disabled t
-;;   :hook
-;;   (emacs-startup-hook . global-hl-line-mode))
 
 ;;-------------------------
 ;; popwin
