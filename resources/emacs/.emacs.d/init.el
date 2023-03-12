@@ -466,38 +466,11 @@
 ;; (leaf swift-mode :ensure t)
 
 ;;-------------------------
-;; Lisp old
-;;-------------------------
-
-;; (with-delayed-execution
-;;   (autoload-if-found '(emacs-lisp-mode) "elisp-mode" nil t)
-;;   (add-to-list 'auto-mode-alist '("\\.el$" . emacs-lisp-mode))
-
-;;   ;; keybind
-;;   ;;(with-eval-after-load 'emacs-lisp-mode
-;;     (define-key emacs-lisp-mode-map (kbd "C-c C-r") #'eval-buffer)
-;;     (define-key emacs-lisp-mode-map (kbd "C-c C-d") #'eval-region)
-;;     )
-;;   ;;)
-
-;; (leaf elisp-mode
-;;       :bind ((emacs-lisp-mode-map
-;;        ("C-M-b" . eval-buffer)
-;;        ("C-M-r" . eval-region)))
-;;       :custom  `((indent-tabs-mode . t)
-;;       (tab-width . 4)))
-
-;;-------------------------
 ;; Other
 ;;-------------------------
 
 ;; (leaf makefile-mode)
 ;; (leaf shell-script-mode)
-
-;; (leaf cmake-mode
-;;   :ensure t
-;;   :mode ("CMakeLists\\.txt\\'"
-;;          "\\.cmake\\'"))
 
 ;; (leaf web-mode
 ;;   :ensure t
@@ -550,25 +523,6 @@
 ;;   :ensure t
 ;;   :config
 ;;   (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode)))
-
-;; (leaf company
-;;   :ensure t
-;;   :init
-;;   (global-company-mode 1)
-;;   :bind
-;;   (("<C-tab>" . company-complete)
-;;    (:company-active-map
-;;  :package company
-;;     ("<tab>" . company-complete-selection)
-;;     ("C-n" . company-select-next)
-;;     ("C-p" . company-select-previous))
-;;    (:company-search-map
-;;  :package company
-;;     ("C-n" . company-select-next)
-;;     ("C-p" . company-select-previous)))
-;;   :config
-;;   ;;(company-idle-delay . 0.5)
-;; )
 
 ;;------------------------------------
 ;; Javascript development environment
