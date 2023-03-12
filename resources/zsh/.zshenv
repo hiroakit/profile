@@ -56,3 +56,15 @@ export PATH=$PATH:$RMANTREE/bin
 
 ## Maya
 export MAYA_UI_LANGUAGE="en_US"
+
+## .NET (dotnet)
+export PATH=$PATH:$HOME/.dotnet/tools
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# $HOME/dev ... my resouces
+export PATH="$HOME/dev/bin:$PATH"
+
