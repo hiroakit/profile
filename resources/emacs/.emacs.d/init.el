@@ -153,23 +153,40 @@
 ;;-------------------------
 
 (when (member user-default-font-name (font-family-list))
-  ;; フォントはset-face-attribute, set-fontset-font, set-face-foregroundあたりで設定する
+  ;; フォント設定と関数:
+  ;;   set-frame-font
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Font.html
+  ;;
+  ;;   set-fontset-font
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Fontsets.html#index-set_002dfontset_002dfont
+  ;;
+  ;;   set-face-attribute
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Attribute-Functions.html#index-set_002dface_002dattribute
+  ;;
+  ;;   set-face-foreground
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Attribute-Functions.html#index-set_002dface_002dforeground
+  ;;
+  ;; 注意:
+  ;;   org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+  ;;   手元の環境ではload-themeをearly-init.elで実行したときにその事象に遭遇した
+  ;;   暫定対応でorg-mode-hookでフェイスorg-tableに対してset-face-attributeで再度フォントを指定している
+
+  ;; シンプルに済ませたい場合はset-frame-fontのみでよい
+  (set-frame-font (font-spec :family user-default-font-name :size 18))
 
   ;; set-face-attributeでdefaultに対してフォントを指定することが重要
   ;; ほかのことを調べたいので理由は追っていない
-  (set-face-attribute 'default nil :family user-default-font-name)
+  ;; :heightでフォントサイズを変更できる
+  ;; (set-face-attribute 'default nil :family user-default-font-name :height 240)
 
   ;; japanese-jisx0208はCharacter setsの１つ
   ;; M-x describe-launguage-environmentでjapaneseと入力するとCharacter setsを確認できる
-  (set-fontset-font t 'japanese-jisx0208 (font-spec :family user-default-font-name))
+  ;; font-specでsizeを指定しても反映されなかった
+  ;; (set-fontset-font t 'japanese-jisx0208 (font-spec :family user-default-font-name))
 
   ;; 記号まわりで設定が必要になる...らしい
   ;; macOSでGUI付きEmacsを操作している際は特段困っていないためコメントアウトした
   ;; (setq use-default-font-for-symbols nil)
-
-  ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
-  ;; 当たらないケースはload-themeをearly-init.elで実行したとき
-  ;; org-modeの設定のところでset-face-attributeをして解消している
   )
 
 ;;-------------------------
@@ -238,21 +255,40 @@
 
 ;;-------------------------
 ;; UNDO/REDO
+;;
+;; https://www.emacswiki.org/emacs/UndoTree
 ;;-------------------------
 
 (leaf undo-tree
-  :doc "Undo / Redo"
   :ensure t
-  :init
-  (global-undo-tree-mode)
-  :bind
-  (("C-z" . undo)
-   ("C-S-z" . redo)
-   (:undo-tree-visualizer-mode-map
-    :package undo-tree
-    ("C-g" . undo-tree-visualizer-quit)
-    ;; ("ESC" . undo-tree-visualizer-quit) ;; How to bind to ESC?
-    ("RET" . undo-tree-visualizer-quit))))
+  :init (global-undo-tree-mode)
+  :config (setq undo-tree-auto-save-history nil)
+  :bind (("C-z" . undo)
+         ("C-S-z" . redo)
+         (:undo-tree-visualizer-mode-map
+          :package undo-tree
+          ("<escape>" . undo-tree-visualizer-quit)
+          ("RET" . undo-tree-visualizer-quit))))
+
+;;-------------------------
+;; NEOTREE
+;;-------------------------
+
+(leaf neotree
+  :doc "Filer"
+  :ensure t
+  :bind (("C-c n" . neotree-toggle)
+         (:neotree-mode-map
+          ("RET" . neotree-enter)))
+  :custom  ((neo-smart-open . t)
+            ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
+            (neo-create-file-auto-open . t)))
+
+(defvar my/delayed-priority-low-configurations '())
+(defmacro with-delayed-execution (&rest body)
+  (declare (indent 0))
+  `(setq my/delayed-priority-low-configurations
+         (append my/delayed-priority-low-configurations ',body)))
 
 ;;-------------------------
 ;; Lisp
@@ -316,21 +352,20 @@
 ;;   :init
 ;;   (global-flycheck-mode t))
 
-(leaf neotree
-  :doc "Filer"
-  :ensure t
-  :bind (("C-c n" . neotree-toggle)
-         (:neotree-mode-map
-          ("RET" . neotree-enter)))
-  :custom  ((neo-smart-open . t)
-            ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
-            (neo-create-file-auto-open . t)))
+;;------------------------------------
+;; Swift
+;;------------------------------------
 
-(defvar my/delayed-priority-low-configurations '())
-(defmacro with-delayed-execution (&rest body)
-  (declare (indent 0))
-  `(setq my/delayed-priority-low-configurations
-         (append my/delayed-priority-low-configurations ',body)))
+;; (leaf swift-mode :ensure t)
+
+;;-------------------------
+;; Launguages Support
+;;-------------------------
+
+;; (leaf editorconfig
+;;   :ensure t
+;;   :init
+;;   (editorconfig-mode t))
 
 ;;-------------------------
 ;; org series
@@ -340,7 +375,10 @@
   :mode ("\\.org\\'")
   :hook (org-mode-hook . (lambda ()
                            ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
-                           (set-face-attribute 'org-table nil :family user-default-font-name))))
+                           (set-face-attribute 'org-table nil :family user-default-font-name)
+
+                           ;; org-modeでは補完機能を使わず文章を書きたい
+                           (company-mode nil))))
 
 ;; (leaf org-mode
 ;;   :mode
@@ -448,20 +486,113 @@
 ;; (leaf ox
 ;;   :after org)
 
-;;-------------------------
-;; Launguages Support
-;;-------------------------
+;;------------------------------------
+;; Company - Completion Framework
+;;------------------------------------
 
-;; (leaf editorconfig
+(leaf company
+  :ensure t
+  :init
+  (global-company-mode 1)
+  :bind
+  (("<C-tab>" . company-complete)
+   (:company-active-map
+    :package company
+    ("<tab>" . company-complete-selection)
+    ("C-n" . company-select-next)
+    ("C-p" . company-select-previous))
+   (:company-search-map
+    :package company
+    ("C-n" . company-select-next)
+    ("C-p" . company-select-previous)))
+  :config
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.2)
+)
+
+;;------------------------------------
+;; LSP - Language Server Protocol
+;;------------------------------------
+
+;; (leaf lsp-mode
 ;;   :ensure t
-;;   :init
-;;   (editorconfig-mode t))
+;;   :commands lsp
+;;   :hook
+;;   (c++-mode-hook . lsp)
+;; ;;  (csharp-mode-hook . lsp-deferred)
+;; ;;  (swift-mode-hook . lsp)
+;;   :config
+;;   :custom
+;;   ((lsp-print-io . t)
+;;    (lsp-prefer-flymake . nil)
+;;    (lsp-prefer-capf . t)
+;;    (lsp-response-timeout . 5)
+;;    (lsp-clients-clangd-executable . "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clangd")))
+;; ;;    (lsp-clients-clangd-executable . "/usr/local/opt/llvm/bin/clangd")))
+
+(leaf eglot
+  :ensure t
+  :require t
+  :config
+;;  (add-to-list 'eglot-server-programs '(python-mode "pylsp"))
+  (add-hook 'c++-mode-hook 'eglot-ensure))
+
+;;(leaf python-mode
+;;  :ensure t
+;;  :hook
+;;  (python-mode . eglot-ensure))
+
+;; (leaf lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode
+;;   :hook
+;;   ((lsp-mode . lsp-ui-mode))
+;;   :bind
+;;   (:lsp-ui-mode-map
+;;    ("C-c C-r" . lsp-ui-peek-find-references)
+;;    ("C-c C-j" . lsp-ui-peek-find-definitions)
+;;    ("C-c i"   . lsp-ui-peek-find-implementation)
+;;    ("C-c m"   . lsp-ui-imenu)
+;;    ("C-c s"   . lsp-ui-sideline-mode)
+;;    ("C-c d"   . ladicle/toggle-lsp-ui-doc))
+;;   :custom
+;;   ((lsp-ui-doc-enable . t)
+;;    (lsp-ui-doc-header . t)
+;;    (lsp-ui-doc-position . 'top) ;; top, bottom, or at-point
+;;    (lsp-ui-doc-max-width . 150)
+;;    (lsp-ui-doc-max-height . 30)
+;;    (lsp-ui-doc-use-childframe . t)
+;;    (lsp-ui-doc-use-webkit . t)
+;;    (lsp-ui-sideline-enable . nil)
+;;    (lsp-ui-sideline-ignore-duplicate . t)
+;;    (lsp-ui-sideline-show-symbol . t)
+;;    (lsp-ui-sideline-show-hover . t)
+;;    (lsp-ui-sideline-show-diagnostics . nil)
+;;    (lsp-ui-sideline-show-code-actions . nil)
+;;    (lsp-ui-imenu-enable . t)
+;;    (lsp-ui-imenu-kind-position . 'top) ;; top, bottom, or at-point
+;;    (lsp-ui-imenu-window-width . 60)
+;;    ;; (lsp-ui-imenu--custom-mode-line-format . )
+;;    (lsp-ui-peek-enable . t)
+;;    (lsp-ui-peek-peek-height . 20)
+;;    (lsp-ui-peek-list-width . 50)
+;;    (lsp-ui-peek-fontify . 'on-demand) ;; never, on-demand, or always
+;;    ))
+
+;; (leaf lsp-sourcekit
+;;   :ensure t
+;;   :after lsp-mode
+;;   :config (setq lsp-sourcekit-executableble "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
 
 ;;------------------------------------
-;; Swift
+;; Laungage translation
 ;;------------------------------------
 
-;; (leaf swift-mode :ensure t)
+;; (leaf google-translate
+;;   :ensure t
+;;   :custom
+;;   (google-translate-default-source-language . "en")
+;;   (google-translate-default-target-language . "ja"))
 
 ;;-------------------------
 ;; Other
@@ -538,109 +669,6 @@
 ;;   (add-to-list 'exec-path "/usr/local/bin/indium"))
 
 ;;------------------------------------
-;; Company - Completion Framework
-;;------------------------------------
-
-(leaf company
-  :ensure t
-  :init
-  (global-company-mode 1)
-  :bind
-  (("<C-tab>" . company-complete)
-   (:company-active-map
-    :package company
-    ("<tab>" . company-complete-selection)
-    ("C-n" . company-select-next)
-    ("C-p" . company-select-previous))
-   (:company-search-map
-    :package company
-    ("C-n" . company-select-next)
-    ("C-p" . company-select-previous)))
-  :config
-  (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.2)
-)
-
-
-;;------------------------------------
-;; LSP - Language Server Protocol
-;;------------------------------------
-
-;; (leaf lsp-mode
-;;   :ensure t
-;;   :commands lsp
-;;   :hook
-;;   (c++-mode-hook . lsp)
-;; ;;  (csharp-mode-hook . lsp-deferred)
-;; ;;  (swift-mode-hook . lsp)
-;;   :config
-;;   :custom
-;;   ((lsp-print-io . t)
-;;    (lsp-prefer-flymake . nil)
-;;    (lsp-prefer-capf . t)
-;;    (lsp-response-timeout . 5)
-;;    (lsp-clients-clangd-executable . "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clangd")))
-;; ;;    (lsp-clients-clangd-executable . "/usr/local/opt/llvm/bin/clangd")))
-
-(leaf eglot
-  :ensure t
-  :require t
-  :config
-  (add-hook 'c++-mode-hook 'eglot-ensure))
-
-;; (leaf lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode
-;;   :hook
-;;   ((lsp-mode . lsp-ui-mode))
-;;   :bind
-;;   (:lsp-ui-mode-map
-;;    ("C-c C-r" . lsp-ui-peek-find-references)
-;;    ("C-c C-j" . lsp-ui-peek-find-definitions)
-;;    ("C-c i"   . lsp-ui-peek-find-implementation)
-;;    ("C-c m"   . lsp-ui-imenu)
-;;    ("C-c s"   . lsp-ui-sideline-mode)
-;;    ("C-c d"   . ladicle/toggle-lsp-ui-doc))
-;;   :custom
-;;   ((lsp-ui-doc-enable . t)
-;;    (lsp-ui-doc-header . t)
-;;    (lsp-ui-doc-position . 'top) ;; top, bottom, or at-point
-;;    (lsp-ui-doc-max-width . 150)
-;;    (lsp-ui-doc-max-height . 30)
-;;    (lsp-ui-doc-use-childframe . t)
-;;    (lsp-ui-doc-use-webkit . t)
-;;    (lsp-ui-sideline-enable . nil)
-;;    (lsp-ui-sideline-ignore-duplicate . t)
-;;    (lsp-ui-sideline-show-symbol . t)
-;;    (lsp-ui-sideline-show-hover . t)
-;;    (lsp-ui-sideline-show-diagnostics . nil)
-;;    (lsp-ui-sideline-show-code-actions . nil)
-;;    (lsp-ui-imenu-enable . t)
-;;    (lsp-ui-imenu-kind-position . 'top) ;; top, bottom, or at-point
-;;    (lsp-ui-imenu-window-width . 60)
-;;    ;; (lsp-ui-imenu--custom-mode-line-format . )
-;;    (lsp-ui-peek-enable . t)
-;;    (lsp-ui-peek-peek-height . 20)
-;;    (lsp-ui-peek-list-width . 50)
-;;    (lsp-ui-peek-fontify . 'on-demand) ;; never, on-demand, or always
-;;    ))
-
-;; (leaf lsp-sourcekit
-;;   :ensure t
-;;   :after lsp-mode
-;;   :config (setq lsp-sourcekit-executableble "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
-
-;;------------------------------------
-;; Laungage translation
-;;------------------------------------
-
-;; (leaf google-translate
-;;   :ensure t
-;;   :custom
-;;   (google-translate-default-source-language . "en")
-;;   (google-translate-default-target-language . "ja"))
-
-;;------------------------------------
 ;; JUNK CODE
 ;;------------------------------------
 
@@ -655,6 +683,7 @@
   (when (and (equal system-type 'darwin) (equal window-system nil))
     `(progn ,@body)))
 
+;; org-ctrl-c-tabと被ることがその後に判明
 (global-set-key (kbd "C-c C-i") 'he-emacs-init-open)
 ;; (global-set-key (kbd "C-c SPC") 'whitespace-cleanup)
 
@@ -663,6 +692,8 @@
                 #'(lambda ()
                     (interactive)
                     (message (emacs-init-time))))
+
+(adjust-pos-and-size-of-current-frame-to-center)
 
 ;; (defun he-emacs-init-reload ()
 ;;   "Reload init.el file."
@@ -815,8 +846,6 @@
 ;;   ;; hook
 ;;   (add-hook 'dired-mode-hook #'(lambda () (display-line-numbers-mode -1))))
 
-(adjust-pos-and-size-of-current-frame-to-center)
-
 ;; (provide 'init)
 
 ;; (custom-set-variables
@@ -840,7 +869,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("250007c5ae19bcbaa80e1bf8184720efb6262adafa9746868e6b9ecd9d5fbf84" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "dde643b0efb339c0de5645a2bc2e8b4176976d5298065b8e6ca45bc4ddf188b7" "bfc0b9c3de0382e452a878a1fb4726e1302bf9da20e69d6ec1cd1d5d82f61e3d" default)))
+   '("250007c5ae19bcbaa80e1bf8184720efb6262adafa9746868e6b9ecd9d5fbf84" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "dde643b0efb339c0de5645a2bc2e8b4176976d5298065b8e6ca45bc4ddf188b7" "bfc0b9c3de0382e452a878a1fb4726e1302bf9da20e69d6ec1cd1d5d82f61e3d" default))
+ '(package-selected-packages
+   '(consult-eglot eglot company neotree undo-tree orderless consult vertico doom-modeline leaf-tree leaf-convert blackout el-get hydra leaf-keywords)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
