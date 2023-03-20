@@ -43,7 +43,8 @@
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("melpa" . "http://melpa.org/packages/")
-                       ("gnu"   . "http://elpa.gnu.org/packages/")))
+                       ("gnu"   . "http://elpa.gnu.org/packages/")
+                       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
 
   (unless (package-installed-p 'exec-path-from-shell)
@@ -342,8 +343,8 @@
 ;;-------------------------
 
 (leaf csharp-mode
-  :mode
-  ("\\.cs\\'")
+  :ensure t
+  :mode ("\\.cs[x]?\\'" . csharp-mode)
   :init
   (electric-pair-mode 1))
 
@@ -371,14 +372,38 @@
 ;; org series
 ;;-------------------------
 
-(leaf org-mode
+(leaf org
+  :ensure t
   :mode ("\\.org\\'")
-  :hook (org-mode-hook . (lambda ()
-                           ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
-                           (set-face-attribute 'org-table nil :family user-default-font-name)
+  :hook
+  (org-mode-hook . (lambda ()
+                     ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+                     (set-face-attribute 'org-table nil :family user-default-font-name)
 
-                           ;; org-modeでは補完機能を使わず文章を書きたい
-                           (company-mode nil))))
+                     ;; org-modeでは補完機能を使わず文章を書きたい
+                     (company-mode nil)
+
+                     (visual-line-mode)
+
+                     ;; (flyspell-mode)
+                     )))
+
+;; org-contribにob-csharp.elがある
+(leaf org-contrib
+  :ensure t)
+
+(leaf org-babel
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (csharp . t)
+     (python . t)))
+  :custom
+  ((org-src-fontify-natively . t)
+   (org-src-tab-acts-natively . t)
+   (org-src-preserve-indentation . t)
+   (org-edit-src-content-indentation . 0)))
 
 ;; (leaf org-mode
 ;;   :mode
@@ -475,13 +500,6 @@
 ;;             '("p" "Add tips in list"
 ;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Tips")
 ;;               "** ^{title} %^g\n")))
-
-;; (leaf org-babel
-;;   :custom
-;;   ((org-src-fontify-natively . t)
-;;    (org-src-tab-acts-natively . t)
-;;    (org-src-preserve-indentation . t)
-;;    (org-edit-src-content-indentation . 0)))
 
 ;; (leaf ox
 ;;   :after org)
