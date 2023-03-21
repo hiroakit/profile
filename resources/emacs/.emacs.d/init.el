@@ -267,6 +267,14 @@
   :hook (after-init-hook . recentf-mode))
 
 ;;-------------------------
+;; ブックマーク
+;; bookmark.el
+;;-------------------------
+
+(leaf bookmark
+  :config (setq bookmark-save-flag 1))
+
+;;-------------------------
 ;; UNDO/REDO
 ;;
 ;; https://www.emacswiki.org/emacs/UndoTree
