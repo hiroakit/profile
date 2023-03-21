@@ -426,14 +426,19 @@
   (org-mode-hook . (lambda ()
                      ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
                      (set-face-attribute 'org-table nil :family user-default-font-name)
-
+                     
                      ;; org-modeでは補完機能を使わず文章を書きたい
                      (company-mode nil)
 
                      (visual-line-mode)
 
                      ;; (flyspell-mode)
-                     )))
+                     ))
+  :custom
+  ((org-src-fontify-natively . t)
+   (org-src-tab-acts-natively . t)
+   (org-src-preserve-indentation . t)
+   (org-edit-src-content-indentation . 0)))
 
 ;; org-contribにob-csharp.elがある
 (leaf org-contrib
@@ -445,12 +450,7 @@
    'org-babel-load-languages
    '((emacs-lisp . t)
      (csharp . t)
-     (python . t)))
-  :custom
-  ((org-src-fontify-natively . t)
-   (org-src-tab-acts-natively . t)
-   (org-src-preserve-indentation . t)
-   (org-edit-src-content-indentation . 0)))
+     (python . t))))
 
 ;; (leaf org-mode
 ;;   :mode
