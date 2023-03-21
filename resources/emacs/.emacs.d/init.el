@@ -31,6 +31,18 @@
   "The font you want to use as the standard it in emacs")
 
 ;;------------------------------------
+;; キープリフィックス
+;;
+;; https://www.emacswiki.org/emacs/PrefixKey
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Commands.html
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Prefix-Keys.html#index-define_002dprefix_002dcommand
+;;------------------------------------
+
+;; M-z zap-to-charは手元の環境では使わないのでプリフィックスコマンドに変える
+(define-prefix-command 'my-prefix-command)
+(global-set-key (kbd "M-z") 'my-prefix-command)
+
+;;------------------------------------
 ;; Install leaf.el & configure
 ;;------------------------------------
 
@@ -397,6 +409,11 @@
 (leaf org
   :ensure t
   :mode ("\\.org\\'")
+  :bind
+  ((:org-mode-map ("M-z x" . org-cut-special)
+                  ("M-z c" . org-copy-special)
+                  ("M-z v" . org-paste-special)))
+  
   :hook
   (org-mode-hook . (lambda ()
                      ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
