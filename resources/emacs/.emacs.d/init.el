@@ -244,7 +244,7 @@
   :bind (("C-x C-x" . consult-buffer)
            ("C-x r b" . consult-bookmark)
            ("M-s f " . consult-find)
-           ("C-x C-g" . consult-grep)
+           ;; ("C-x C-g" . consult-grep)
            ("C-x C-r" . consult-recent-file)))
 
 (leaf orderless
@@ -290,6 +290,28 @@
   (declare (indent 0))
   `(setq my/delayed-priority-low-configurations
          (append my/delayed-priority-low-configurations ',body)))
+
+;;-----------------------------------------------------
+;; GREP
+;;
+;; deadgrep.el経由でripgrepを使う
+;; ripgrepは ~/.ignore を参照して除外ファイルを認識する
+;; ~/.ignoreに.git/を記載しておくと検索結果が見やすい (.gitディレクトリの中も検索したい場合は外すこと)
+;;------------------------------------------------------
+
+(leaf deadgrep
+  :ensure t
+  :bind ("C-x C-g" . deadgrep))  
+
+;; deadgrepがripgrepに与える実行時引数を変える
+(defun deadgrep--include-args (rg-args)
+  ;; 隠しファイルも検索対象に含める
+  (push "--hidden" rg-args)
+
+  ;; シンボリックリンクは追跡する
+  (push "--follow" rg-args))
+
+(advice-add 'deadgrep--arguments :filter-return #'deadgrep--include-args)
 
 ;;-------------------------
 ;; Lisp
