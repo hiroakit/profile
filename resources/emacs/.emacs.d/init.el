@@ -27,8 +27,23 @@
 ;; this enables this running method
 ;;   emacs -q -l path/to/your/.emacs.d/init.el
 
-(defconst user-default-font-name "Cica"
-  "The font you want to use as the standard it in emacs")
+;;------------------------------------
+;; 設定の変数
+;;------------------------------------
+
+(defgroup user-default-appearance nil
+  "Customizations for the theme loader."
+  :group nil)
+
+(defcustom user-default-font-name "Cica"
+  "The font you want to use as the standard it in emacs frame"
+  :type 'string
+  :group 'user-default-appearance)
+
+(defcustom user-default-font-size 18
+  "The default font size to be used in the frame."
+  :type 'integer
+  :group 'user-default-appearance)
 
 ;;------------------------------------
 ;; キープリフィックス
@@ -185,7 +200,7 @@
   ;;   暫定対応でorg-mode-hookでフェイスorg-tableに対してset-face-attributeで再度フォントを指定している
 
   ;; シンプルに済ませたい場合はset-frame-fontのみでよい
-  (set-frame-font (font-spec :family user-default-font-name :size 18))
+  (set-frame-font (font-spec :family user-default-font-name :size user-default-font-size))
 
   ;; set-face-attributeでdefaultに対してフォントを指定することが重要
   ;; ほかのことを調べたいので理由は追っていない
