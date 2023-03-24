@@ -35,6 +35,11 @@
   "Customizations for the theme loader."
   :group nil)
 
+(defcustom user-default-custom-theme 'modus-vivendi-tinted
+  "The theme to be checked for availability and loaded."
+  :type 'symbol
+  :group 'user-default-appearance)
+
 (defcustom user-default-font-name "Cica"
   "The font you want to use as the standard it in emacs frame"
   :type 'string
@@ -221,11 +226,12 @@
 ;; テーマ
 ;;-------------------------
 
-;; See early-init.el
-;; (load-theme 'modus-vivendi-deuteranopia t)
-
-(when (not (equal window-system nil))
-  (load-theme 'modus-vivendi-tinted t))
+(if (member user-default-custom-theme (custom-available-themes))
+    (load-theme user-default-custom-theme t)
+  ;; 細かく追えていないがEmacs v28.2 (Windows) において
+  ;; modus-vivendi-deuteranopia を読もうとするとエラーになったので
+  ;; 暫定対応として以下のコードを追加した
+  (load-theme 'modus-vivendi t))
 
 ;;-------------------------
 ;; 文字コード
