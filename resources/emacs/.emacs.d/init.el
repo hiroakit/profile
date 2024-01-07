@@ -465,41 +465,15 @@
                      ;; (flyspell-mode)
                      ))
   :custom
-  ((org-src-fontify-natively . t)
+  ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
+   (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
+   (org-src-fontify-natively . t)
    (org-src-tab-acts-natively . t)
    (org-src-preserve-indentation . t)
-   (org-edit-src-content-indentation . 0)))
-
-;; org-contribにob-csharp.elがある
-(leaf org-contrib
-  :ensure t)
-
-(leaf org-babel
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (shell . t)
-     (csharp . t)
-     (ruby . t)     
-     (python . t))))
-
-;; (leaf org-mode
-;;   :mode
-;;   ("\\.org\\'")
-;;   :bind
-;;   ("C-c c" . org-capture)
-;;   (:org-mode-map
-;;    ;; In ASCII, C-i and <TAB> are the same character.
-;;    ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Function-Keys.html
-;;    ("C-c C-x C-i" . org-clock-in))
-;;   :custom
-;;   (org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
-;;   `(org-default-notes-file . ,(concat (file-name-as-directory org-directory) (file-name-nondirectory "capture.org")))
-;;   ;;`(org-default-notes-file . ,(concat (file-name-as-directory "~/Documents/org") (file-name-nondirectory "capture.org")))
-;;   `((org-startup-folded . t)
-;;    (org-startup-truncated . t)
-;;    (org-return-follows-link . t)
+   (org-edit-src-content-indentation . 0)
+;;   (org-startup-folded . t)
+;;   (org-startup-truncated . t)
+;;   (org-return-follows-link . t)   
 ;;    (org-todo-keywords . '((sequence "TODO(t)" "|" "DONE(d!)") (sequence "WAITING(w@/!)" "|") (sequence "|" "CANCELED(c@/!)")))
 ;;    (org-tag-alist . '(("@HOME" . ?h)
 ;;                       ("@OFFICE" . ?o)
@@ -517,16 +491,26 @@
 ;;                       ("TALKING" . ?t)
 ;;                       ("Scheduling" . ?s)
 ;;                       ("Writting" . ?w)
-;;                       ("Payment")))))
+;;                       ("Payment")))))   
+   ))
 
-;;   (leaf org-agenda
-;;  :bind
-;;  (("C-c a" . org-agenda))
-;;  :custom
-;;  (org-agenda-files . '("~/Library/Mobile Documents/com~apple~CloudDocs/org/notebook/private.org"))
-;;  (org-agenda-span . 'day)
-;;  (org-agenda-format-date . "%Y/%m/%d (%a)")
-;;  (org-agenda-start-on-weekday . 1)
+(leaf org-capture
+   :require org-capture
+   :config
+   (add-to-list 'org-capture-templates `("a" "Add task" entry
+                                         (file+headline ,org-default-notes-file "INBOX") "** TODO %?\n")))
+
+(leaf org-agenda
+  :bind
+  (("C-c a" . org-agenda))
+
+  :custom
+  (org-agenda-files . `,(mapcar (lambda (x)
+                                  (concat (file-name-as-directory org-directory) x))
+                                '("main.org" "private.org")))
+  (org-agenda-span . 'day)
+  (org-agenda-format-date . "%Y/%m/%d (%a)")
+  (org-agenda-start-on-weekday . 1)
 ;;  (org-agenda-custom-commands .
 ;;                              '(("c" "Get agenda & TODO list."
 ;;                                    ((agenda "" ((org-agenda-ndays 1)
@@ -534,51 +518,22 @@
 ;;                                  (todo "TODO" ((org-agenda-prefix-format " %i %-22:c")))
 ;;                                  (todo "WAITING" ((org-agenda-prefix-format " %i %-22:c"))))
 ;;                                    ("W" "Waiting for a response task list"
-;;                                  ((todo "WAITING"))))))
-;;  :init
-;;  ;;((add-to-list 'org-agenda-files "inbox.org")))
-;;  )
+;;                                  ((todo "WAITING"))))))  
+  )
 
-;; (leaf org-capture
-;;   :require
-;;   org-capture
-;;   :defvar
-;;   org-capture-templates
-;;   :config
-;;   (add-to-list 'org-capture-templates
-;;                `("a" "Add interrupted task"
-;;                  entry (file+headline
-;;                         ,(concat (concat (file-name-as-directory org-directory) (file-name-as-directory "work"))
-;;                               (file-name-nondirectory "daily.org")) "Inbox")
-;;                  "** TODO %? \n SCHEDULED: %^t \n"
-;;                  :clock-in t
-;;                  :clock-resume t))
-;;   (add-to-list 'org-capture-templates
-;;             '("i" "Add task"
-;;               entry (file+headline "~/Documents/org/inbox.org" "Inbox")
-;;               "** TODO %? \n SCHEDULED: %^t \n"
-;;               :clock-in t
-;;               :clock-resume t))
-;;   (add-to-list 'org-capture-templates
-;;             '("l" "Create new meeting log"
-;;               entry (file+headline "~/Documents/org/work/daily.org" "Meeting")
-;;                   "** TODO ^{title} %^g\n  %?\n  %a \n SCHEDULED: %^t \n"))
-;;   (add-to-list 'org-capture-templates
-;;             '("c" "Add cinema in list"
-;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Cinema")
-;;               "** ^{title} %^g\n"))
-;;   (add-to-list 'org-capture-templates
-;;             '("b" "Add book in list"
-;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Books")
-;;               "** ^{title} %^g\n"))
-;;   (add-to-list 'org-capture-templates
-;;             '("e" "Add item that Emacs customization improvements into the list"
-;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Emacs")
-;;               "** ^{title} %^g\n"))
-;;   (add-to-list 'org-capture-templates
-;;             '("p" "Add tips in list"
-;;               entry (file+headline "~/Documents/org/capture.org" "Memo/Tips")
-;;               "** ^{title} %^g\n")))
+;; org-contribにob-csharp.elがある
+(leaf org-contrib
+  :ensure t)
+
+(leaf org-babel
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)
+     (csharp . t)
+     (ruby . t)     
+     (python . t))))
 
 ;; (leaf ox
 ;;   :after org)
