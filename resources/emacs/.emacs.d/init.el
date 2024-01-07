@@ -473,7 +473,9 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (shell . t)
      (csharp . t)
+     (ruby . t)     
      (python . t))))
 
 ;; (leaf org-mode
