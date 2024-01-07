@@ -441,7 +441,10 @@
   :bind
   ((:org-mode-map ("M-z x" . org-cut-special)
                   ("M-z c" . org-copy-special)
-                  ("M-z v" . org-paste-special)))
+                  ("M-z v" . org-paste-special)
+                  ("C-c <up>" . org-backward-heading-same-level)
+                  ("C-c <down>" . org-forward-heading-same-level)                  
+                  ("C-x n t" . org-toggle-narrow-to-subtree)))
   
   :hook
   (org-mode-hook . (lambda ()
