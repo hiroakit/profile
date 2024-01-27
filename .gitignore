@@ -35,4 +35,5 @@ resources/zsh/.zsh/functions/completion/_ninja
 .python-environments
 
 # macOS
+*.pkg
 *.DS_Store
