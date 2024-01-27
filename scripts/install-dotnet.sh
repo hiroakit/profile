@@ -18,6 +18,7 @@ if [ ! -f ${DOTNET_PKG} ]; then
 fi
 
 # Checksum
+echo "Checksum ..."
 if [ ! -f ${DOTNET_PKG}.sha512 ]; then
   echo "Checksum file not found."
   exit  
