@@ -5,6 +5,8 @@ readonly local DOTNET_PKG=`echo ${DOTNET_PKG_URL} | awk -F/ '{print $(NF-0)}'`
 readonly local WORK_DIR=./resources/mac/dotnet
 readonly local INSTALL_TARGET_DIR=/Volumes/Macintosh\ HD
 
+echo "dotnet installation start."
+
 if [ ! -d ${WORK_DIR} ]; then
   mkdir -p ${WORK_DIR}
 fi
