@@ -1,3 +1,3 @@
 [submodule "zaw"]
-	path = resources/.zsh/zaw
+	path = resources/zsh/.zsh/zaw
 	url = https://github.com/zsh-users/zaw
