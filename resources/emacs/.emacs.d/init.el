@@ -306,6 +306,12 @@
             ;; (cua-mode . t)
             ;; (cua-enable-cua-keys . nil)
             (auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
+
+(leaf files
+  :custom `((auto-save-file-name-transforms . '((".*" ,(locate-user-emacs-file "backup/") t)))
+            (backup-directory-alist . '((".*" . ,(locate-user-emacs-file "backup"))
+                                        (,tramp-file-name-regexp . nil)))))
+
 ;;-------------------------
 ;; Navigation
 ;;-------------------------
