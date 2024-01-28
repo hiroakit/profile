@@ -1,4 +1,17 @@
-## .zshrc
+#
+# .zshrc
+#
+readonly local ZSHRC_DEBUG_MODE=0
+
+function get_this_file_path {
+  local dir
+  dir=$(dirname 0)
+  echo ${dir%/}/.zshrc
+}
+
+if [ ${ZSHRC_DEBUG_MODE} -gt 0 ]; then
+    get_this_file_path 
+fi
 
 # # The Z Shell Manual v5.8
 # # http://zsh.sourceforge.net/Doc/zsh_us.pdf
@@ -9,8 +22,6 @@
 # # %S (%s)
 # # %{...%}
 # # %G
-
-# echo "hoge1"
 
 # export LSCOLORS=exfxcxdxbxegedabagaxex
 # #export LSCOLORS=gxfxcxdxbxegexabagacad
@@ -154,16 +165,10 @@ case "${OSTYPE}" in
         # Projectsディレクトリ
         export PROJ="${HOME}/Documents/Projects"
         export MYPJ="${PROJ}/Personal"
-        export BLOG="${MYPJ}/Blog"
+        export BLOG="${HOME}/proj/Blog"
         export TIPS="${MYPJ}/tips"
         export EDEV="${MYPJ}/emacs-on-apple"
         export MYP="${MYPJ}/profile"
-
-        ## Visual Studio Code
-        export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-
-        # node.js v12 for Azure Function Runtime
-        # export PATH="/usr/local/opt/node@12/bin:$PATH"
 esac
 
 #-------------------------------------------

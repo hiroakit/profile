@@ -1,12 +1,38 @@
+#
+# .zshenv
+#
+readonly local ZSHENV_DEBUG_MODE=0
+
+function get_this_file_path {
+  local dir
+  dir=$(dirname 0)
+  echo ${dir%/}/.zshenv
+}
+
+if [ ${ZSHENV_DEBUG_MODE} -gt 0 ]; then
+    get_this_file_path 
+fi
+
 export TERM='xterm-256color'
 export ZDOTDIR=$HOME/.zsh
 export LANG=ja_JP.UTF-8
 
 #------------------
-# Path config
+# Loading Path rules
 #
-# See also /etc/paths.d/
-#------------------ 
+# 1.  /etc/zshenv
+# 2.  $ZDOTDIR/.zshenv
+# 3.  /etc/zprofile
+#       On macOS, exec /usr/libexec/path_helper in /etc/zprofile
+#       See /etc/paths.d/
+# 4.  $ZDOTDIR/.zprofile
+# 5.  /etc/zshrc
+# 6.  $ZDOTDIR/.zshrc
+# 7.  /etc/zlogin
+# 8.  $ZDOTDIR/.zlogin
+# 9.  /etc/zlogout
+# 10. $ZDOTDIR/.zlogout
+#------------------
 
 #   typeset
 #    -U 重複パスを登録しない
@@ -22,25 +48,27 @@ export LANG=ja_JP.UTF-8
 #        /: ディレクトリのみ残す
 #        .: 通常のファイルのみ残す
 typeset -xU path cdpath fpath manpath
+typeset -U path PATH
+path=(
+  "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"(N-/)
+)
 
-# XQuartz
-if [ -d "/opt/X11/bin" ]; then
-    export PATH=$PATH:/opt/X11/bin
-fi
+# node.js v12 for Azure Function Runtime
+# export PATH="/usr/local/opt/node@12/bin:$PATH"
 
-# MySQL
-if [ -d "/usr/local/mysql/bin" ]; then
-    export PATH=/usr/local/mysql/bin:$PATH
-fi
-
-# Go
-if [ -d "$HOME/go/bin" ]; then
-    export GOPATH=$HOME/go
-    export PATH=$GOPATH/bin:$PATH
-fi
+# # MySQL
+# if [ -d "/usr/local/mysql/bin" ]; then
+#     export PATH=/usr/local/mysql/bin:$PATH
+# fi
+#  
+# # Go
+# if [ -d "$HOME/go/bin" ]; then
+#     export GOPATH=$HOME/go
+#     export PATH=$GOPATH/bin:$PATH
+# fi
 
 ## Flutter
-export PATH=$HOME/src/flutter/bin:$PATH
+# export PATH=$HOME/src/flutter/bin:$PATH
 
 ## Java
 # export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
@@ -54,8 +82,8 @@ export PATH=$HOME/src/flutter/bin:$PATH
 # export PATH="$ANDROID_HOME/tools:$PATH"
 
 ## Gtags - Global
-export GTAGSCONF=/usr/local/share/gtags/gtags.conf
-export GTAGSLABEL=exuberant-ctags
+# export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+# export GTAGSLABEL=exuberant-ctags
 
 ## Pixar RenderMan
 # export RMANTREE=/Applications/Pixar/RenderManProServer-19.0
@@ -64,16 +92,5 @@ export GTAGSLABEL=exuberant-ctags
 ## Maya
 # export MAYA_UI_LANGUAGE="en_US"
 
-## .NET (dotnet)
-export PATH=$PATH:$HOME/.dotnet/tools
 
-# pyenv
-if [ -d "$HOME/.pyenv" ]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
-
-# $HOME/dev ... my resouces
-export PATH="$HOME/dev/bin:$PATH"
 
