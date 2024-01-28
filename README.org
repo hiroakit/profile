@@ -11,7 +11,7 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 * Usage
 
 #+begin_src sh
-git clone https://github.com/hiroakit/profile --recursive && cd profile && sh install.sh
+/bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/hiroakit/xclt/HEAD/xclt.sh)" && git clone https://github.com/hiroakit/profile --recursive && cd profile && sh install.sh
 #+end_src
 
 * Requirements
