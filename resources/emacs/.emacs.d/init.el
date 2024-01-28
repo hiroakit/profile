@@ -263,6 +263,50 @@
 (global-set-key (kbd "M-RET") 'cua-rectangle-mark-mode)
 
 ;;-------------------------
+;; Startup Emacs
+;;-------------------------
+(leaf startup
+;;   :preface
+;;   (defun hiroakit/text-scale-up ()
+;;     (interactive)
+;;  (text-scale-increase 1))
+;;   (defun hiroakit/text-scale-down ()
+;;     (interactive)
+;;  (text-scale-decrease 1))
+;;   (defun hiroakit/text-scale-reset ()
+;;     (interactive)
+;;  (text-scale-set 0))
+;;   :hook
+;;   (emacs-startup-hook . (lambda ()
+;;                        (message "Run emacs-startup-hook")
+;;                        ;; Gen Shin Gothic Monospace
+;;                        ;; Myrica M
+;;                        ;; MotoyaLCedar
+;;                        ;; HackGen Console
+;;                        ;; Sarasa Mono J
+;; ;;						  (hiroakit/typeface "Sarasa Mono J" 14)))
+;;                        (hiroakit/typeface "MigMix 2M" 14)))
+;;   :bind
+;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
+;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
+;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
+;;    ("<C-mouse-5>" . hiroakit/text-scale-down)
+;;    ("M-0" . hiroakit/text-scale-reset)
+;;    ("C-j" . goto-line)
+;;    ("C-c t" . toggle-truncate-lines)
+;;    ("C-c r" . rename-file))
+  ;;:config
+  ;;(setq eol-mnemonic-dos "(CRLF)")
+  ;;(setq eol-mnemonic-mac "(CR)")
+  ;;(setq eol-mnemonic-unix "(LF)"))  
+  :custom `(;; (inhibit-startup-screen . t)
+            ;; (inhibit-startup-message . t)
+            ;; (inhibit-startup-echo-area-message . t)
+            ;; (initial-scratch-message . nil)
+            ;; (cua-mode . t)
+            ;; (cua-enable-cua-keys . nil)
+            (auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
+;;-------------------------
 ;; Navigation
 ;;-------------------------
 
@@ -815,49 +859,6 @@
 ;; `ACCOUNT' is user name."
 ;;   (let ((cmd (format "security find-generic-password -s %s -a %s -w" service account)))
 ;;  (shell-command-to-string cmd)))
-
-;; Startup Emacs
-;; (leaf startup
-;;   :preface
-;;   (defun hiroakit/text-scale-up ()
-;;     (interactive)
-;;  (text-scale-increase 1))
-;;   (defun hiroakit/text-scale-down ()
-;;     (interactive)
-;;  (text-scale-decrease 1))
-;;   (defun hiroakit/text-scale-reset ()
-;;     (interactive)
-;;  (text-scale-set 0))
-;;   :hook
-;;   (emacs-startup-hook . (lambda ()
-;;                        (message "Run emacs-startup-hook")
-;;                        ;; Gen Shin Gothic Monospace
-;;                        ;; Myrica M
-;;                        ;; MotoyaLCedar
-;;                        ;; HackGen Console
-;;                        ;; Sarasa Mono J
-;; ;;						  (hiroakit/typeface "Sarasa Mono J" 14)))
-;;                        (hiroakit/typeface "MigMix 2M" 14)))
-;;   :bind
-;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
-;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
-;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
-;;    ("<C-mouse-5>" . hiroakit/text-scale-down)
-;;    ("M-0" . hiroakit/text-scale-reset)
-;;    ("C-j" . goto-line)
-;;    ("C-c t" . toggle-truncate-lines)
-;;    ("C-c r" . rename-file))
-;;   :custom
-;;   ((inhibit-startup-screen . t)
-;;    (inhibit-startup-message . t)
-;;    (inhibit-startup-echo-area-message . t)
-;;    (initial-scratch-message . nil)
-;;    (cua-mode . t)
-;;    (cua-enable-cua-keys . nil))
-;;   :config
-;;   (setq eol-mnemonic-dos "(CRLF)")
-;;   (setq eol-mnemonic-mac "(CR)")
-;;   (setq eol-mnemonic-unix "(LF)"))
 
 ;; (leaf paren
 ;;   :doc "Highlighting the corresponding brackets"
