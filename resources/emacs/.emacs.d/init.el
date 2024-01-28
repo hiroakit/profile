@@ -728,7 +728,7 @@
   "Open init.el file."
   (interactive)
   (message "Open init.el.")
-  (find-file "~/.emacs.d/init.el"))
+  (find-file (locate-user-emacs-file "init.el")))
 
 (defmacro when-terminal-in-darwin (&rest body)
   "Running Emacs on terminal of macOS?"
