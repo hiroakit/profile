@@ -495,10 +495,14 @@
    ))
 
 (leaf org-capture
-   :require org-capture
-   :config
-   (add-to-list 'org-capture-templates `("a" "Add task" entry
-                                         (file+headline ,org-default-notes-file "INBOX") "** TODO %?\n")))
+  :require org-capture
+  :bind (("C-x c" . org-capture))
+  
+  :config
+  (add-to-list 'org-capture-templates `("a" "Add task" entry
+                                        (file+headline ,org-default-notes-file "INBOX") "** TODO %?\n"))
+  (add-to-list 'org-capture-templates `("j" "Journal" entry
+                                        (file+datetree ,org-default-notes-file "Journal") "** %U\n%?\n%i\n")))
 
 (leaf org-agenda
   :bind
