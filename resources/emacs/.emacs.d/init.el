@@ -366,8 +366,8 @@
 
 (leaf elisp-mode
   :bind ((emacs-lisp-mode-map
-          ("C-M-b" . eval-buffer)
-          ("C-M-r" . eval-region)))
+          ("C-c e b" . eval-buffer)
+          ("C-c e r" . eval-region)))
   :custom `((indent-tabs-mode . nil)
             (tab-width . 4)))
 
