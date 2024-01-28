@@ -1,29 +1,27 @@
 #+TITLE: Overview
 #+TEXT: Create: 2013-09-16
-#+TEXT: Last Update: 2022-02-06
+#+TEXT: Last Update: 2024-01-28
 #+STARTUP: showall
 #+OPTIONS: \n:t
 
 The script to automatically build my development environment.
 
-Keyword: macOS, Xcode, Homebrew, Emacs, Zsh, Ansible
+Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
+
+* Usage
+
+#+begin_src sh
+git clone https://github.com/hiroakit/profile --recursive
+#+end_src
 
 * Requirements
 
-Computer below system requirements
+- macOS
+- Command Line Tools for Xcode
+- .NET
+- Homebrew
 
-| system   | version          | note                            |
-|----------+------------------+---------------------------------|
-| Mac OS X | 10.8.5 and later | needed apple command line tools |
-| Windows  | 8.1              | maybe to run emacs              |
-
-* Installation
-
-#+BEGIN_SRC sh
-$ git clone https://github.com/hiroakit/profile --recursive
-#+END_SRC
-
-** Software dependencies
+** Software dependencies                                           :noexport:
 
 | software | version                               | source             |
 |----------+---------------------------------------+--------------------|
@@ -50,11 +48,11 @@ $ make install
 $ mv nextstep/Emacs.app /Applications/Emacs.app
 #+END_SRC
 
-* Emacs
+* Emacs                                                            :noexport:
 
 Plese see emacs.org file.
 
-* Zsh
+* Zsh                                                              :noexport:
 
 Dependency.
 
@@ -62,13 +60,13 @@ Dependency.
 |---------+-------------------------------|
 | zaw     | Emacs Anything like interface |
 
-* Profile for Terminal.app 
+* Profile for Terminal.app                                         :noexport:
 
 If you use profile, you need to get MigMix 2M.
 
 MigMixフォント : M+とIPAの合成フォント
 http://mix-mplus-ipa.osdn.jp/migmix/
 
-* PGP
+* PGP                                                              :noexport:
 
 In macOS, using MacGPG that is engine of [[https://gpgtools.org/][GPG Suite]] as PGP software.
