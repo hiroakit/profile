@@ -11,17 +11,16 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 * Usage
 
 #+begin_src sh
-git clone https://github.com/hiroakit/profile --recursive
-cd profile
-sh install.sh
+git clone https://github.com/hiroakit/profile --recursive && cd profile && sh install.sh
 #+end_src
 
 * Requirements
 
-- macOS
-- Command Line Tools for Xcode
-- .NET
-- Homebrew
+- macOS Sonoma v14.3
+- Command Line Tools for Xcode v15.1
+- .NET 6
+- Homebrew v4.1.25
+- GNU Stow v2.3.1
 
 # ** Software dependencies                                           :noexport:
 #  
