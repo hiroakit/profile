@@ -44,7 +44,4 @@ if [ $? -gt 0 ]; then
   exit
 fi
 
-if [ -x /usr/libexec/path_helper ]; then
-  eval `/usr/libexec/path_helper -s`
-fi
-
+eval `/usr/libexec/path_helper -s`
