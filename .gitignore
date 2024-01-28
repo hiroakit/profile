@@ -22,8 +22,6 @@ hp-org-mode-local-config.el
 .\#*
 
 # zsh
-# zaw via git submodle
-resources/zsh/.zsh/zaw
 .zsh_history
 resources/zsh/.zsh/.zsh_sessions
 resources/zsh/.zsh/.zcompdump
@@ -35,4 +33,5 @@ resources/zsh/.zsh/functions/completion/_ninja
 .python-environments
 
 # macOS
+*.pkg
 *.DS_Store

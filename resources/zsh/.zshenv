@@ -68,9 +68,11 @@ export GTAGSLABEL=exuberant-ctags
 export PATH=$PATH:$HOME/.dotnet/tools
 
 # pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if [ -d "$HOME/.pyenv" ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
 
 # $HOME/dev ... my resouces
 export PATH="$HOME/dev/bin:$PATH"
