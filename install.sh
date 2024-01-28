@@ -1,14 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
-echo "Check dotnet";
+echo "Checking dotnet";
 if !(type dotnet >/dev/null 2>&1); then
-  echo "dotnet doesn't exsist."
-  ./scripts/install-dotnet.sh  
+    echo "dotnet doesn't exsist."
+    ./scripts/install-dotnet.sh  
 fi
 
 if !(dotnet tool list -g | grep dotnet-script > /dev/null 2>&1); then
-  echo "Install dotnet-script";
-  dotnet tool install -g dotnet-script
+    echo "Install dotnet-script";
+    dotnet tool install -g dotnet-script
+fi
+
+echo "Checking Homebrew"
+if !(type brew > /dev/null); then
+    if [ ! -d /opt/homebrew/bin ]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 echo "Run installation scripts"
