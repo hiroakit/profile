@@ -12,6 +12,8 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 
 #+begin_src sh
 git clone https://github.com/hiroakit/profile --recursive
+cd profile
+sh install.sh
 #+end_src
 
 * Requirements
@@ -21,52 +23,52 @@ git clone https://github.com/hiroakit/profile --recursive
 - .NET
 - Homebrew
 
-** Software dependencies                                           :noexport:
-
-| software | version                               | source             |
-|----------+---------------------------------------+--------------------|
-| Emacs    | 24.3                                  | [[http://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-24&id=3a1ce0685f66f5fb162b07f6bf4a1d8e1ec75c06][git commit 3a1ce06]] |
-| Zsh      | zsh 5.0.2 (x86_64-apple-darwin12.4.0) | [[http://sourceforge.net/p/zsh/code/ci/zsh-5.0.2/tree/][git commit daa828b]] |
-| rbenv    | 0.4.0-89-g14bc162                     | [[https://github.com/sstephenson/rbenv/commit/14bc162ca606e0c61da8d82e1b99b0946d7be13f][git commit 14bc162]] |
-| iTerm2   | 1.0.0.20140421                        | [[https://github.com/gnachman/iTerm2/commit/4cf1808a903ca5f185f35c4d775f1bd7b4ac4e79][git commit 4cf1808]] |
-
-If you export a Libra-Office style's document by org-mode, you should install Libra-Office.
-
-*** How to build Emacs ?
-I will make build script for Emacs.
-This code was including inline-patch.
-#+BEGIN_SRC sh
-$ cd ~/your/working/dir
-$ git clone git://git.savannah.gnu.org/emacs.git
-$ svn co http://svn.sourceforge.jp/svnroot/macemacsjp/inline_patch/trunk inline_patch
-$ cd ~/~/your/working/dir/emacs
-$ ./autogen.sh 
-$ patch -p0 < ../inline_patch/emacs-inline.patch
-$ ./configure --with-ns --without-x --enable-locallisppath=/usr/local/share/emacs/site-lisp <-- may need --without-selinux option
-$ make bootstrap
-$ make install
-$ mv nextstep/Emacs.app /Applications/Emacs.app
-#+END_SRC
-
-* Emacs                                                            :noexport:
-
-Plese see emacs.org file.
-
-* Zsh                                                              :noexport:
-
-Dependency.
-
-| library | description                   |
-|---------+-------------------------------|
-| zaw     | Emacs Anything like interface |
-
-* Profile for Terminal.app                                         :noexport:
-
-If you use profile, you need to get MigMix 2M.
-
-MigMixフォント : M+とIPAの合成フォント
-http://mix-mplus-ipa.osdn.jp/migmix/
-
-* PGP                                                              :noexport:
-
-In macOS, using MacGPG that is engine of [[https://gpgtools.org/][GPG Suite]] as PGP software.
+# ** Software dependencies                                           :noexport:
+#  
+# | software | version                               | source             |
+# |----------+---------------------------------------+--------------------|
+# | Emacs    | 24.3                                  | [[http://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-24&id=3a1ce0685f66f5fb162b07f6bf4a1d8e1ec75c06][git commit 3a1ce06]] |
+# | Zsh      | zsh 5.0.2 (x86_64-apple-darwin12.4.0) | [[http://sourceforge.net/p/zsh/code/ci/zsh-5.0.2/tree/][git commit daa828b]] |
+# | rbenv    | 0.4.0-89-g14bc162                     | [[https://github.com/sstephenson/rbenv/commit/14bc162ca606e0c61da8d82e1b99b0946d7be13f][git commit 14bc162]] |
+# | iTerm2   | 1.0.0.20140421                        | [[https://github.com/gnachman/iTerm2/commit/4cf1808a903ca5f185f35c4d775f1bd7b4ac4e79][git commit 4cf1808]] |
+#  
+# If you export a Libra-Office style's document by org-mode, you should install Libra-Office.
+#  
+# *** How to build Emacs ?
+# I will make build script for Emacs.
+# This code was including inline-patch.
+# #+BEGIN_SRC sh
+# $ cd ~/your/working/dir
+# $ git clone git://git.savannah.gnu.org/emacs.git
+# $ svn co http://svn.sourceforge.jp/svnroot/macemacsjp/inline_patch/trunk inline_patch
+# $ cd ~/~/your/working/dir/emacs
+# $ ./autogen.sh 
+# $ patch -p0 < ../inline_patch/emacs-inline.patch
+# $ ./configure --with-ns --without-x --enable-locallisppath=/usr/local/share/emacs/site-lisp <-- may need --without-selinux option
+# $ make bootstrap
+# $ make install
+# $ mv nextstep/Emacs.app /Applications/Emacs.app
+# #+END_SRC
+#  
+# * Emacs                                                            :noexport:
+#  
+# Plese see emacs.org file.
+#  
+# * Zsh                                                              :noexport:
+#  
+# Dependency.
+#  
+# | library | description                   |
+# |---------+-------------------------------|
+# | zaw     | Emacs Anything like interface |
+#  
+# * Profile for Terminal.app                                         :noexport:
+#  
+# If you use profile, you need to get MigMix 2M.
+#  
+# MigMixフォント : M+とIPAの合成フォント
+# http://mix-mplus-ipa.osdn.jp/migmix/
+#  
+# * PGP                                                              :noexport:
+#  
+# In macOS, using MacGPG that is engine of [[https://gpgtools.org/][GPG Suite]] as PGP software.
