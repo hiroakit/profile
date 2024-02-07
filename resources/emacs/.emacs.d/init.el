@@ -74,8 +74,8 @@
 
 (eval-and-compile
   (customize-set-variable
-   'package-archives '(("melpa" . "http://melpa.org/packages/")
-                       ("gnu"   . "http://elpa.gnu.org/packages/")
+   'package-archives '(("melpa" . "https://melpa.org/packages/")
+                       ("gnu"   . "https://elpa.gnu.org/packages/")
                        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
 
