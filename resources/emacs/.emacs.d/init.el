@@ -482,6 +482,10 @@
 ;; Launguages Support
 ;;-------------------------
 
+(leaf yasnippet
+  :ensure t
+  :config (yas-global-mode t))
+
 ;; (leaf editorconfig
 ;;   :ensure t
 ;;   :init
