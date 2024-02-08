@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Daily Scrum Notes
+# key: dscrum
+# --
+- 昨日
+  - [ ] Task A
+  - [ ] Task B
+  - [ ] Task C
+- 本日
+  - [ ] Task A
+  - [ ] Task B
+  - [ ] Task C
