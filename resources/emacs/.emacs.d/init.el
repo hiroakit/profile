@@ -286,7 +286,9 @@
 ;;                        ;; Sarasa Mono J
 ;; ;;						  (hiroakit/typeface "Sarasa Mono J" 14)))
 ;;                        (hiroakit/typeface "MigMix 2M" 14)))
-;;   :bind
+  :bind (("C-x p l" . package-list-packages)
+         ("C-x w }" . maximize-window)
+         ("C-x w {" . minimize-window))
 ;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
 ;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
 ;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
