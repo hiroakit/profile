@@ -498,38 +498,43 @@
 (leaf org
   :ensure t
   :mode ("\\.org\\'")
-  :bind
-  ((:org-mode-map ("M-z x" . org-cut-special)
-                  ("M-z c" . org-copy-special)
-                  ("M-z v" . org-paste-special)
-                  ("C-c <up>" . org-backward-heading-same-level)
-                  ("C-c <down>" . org-forward-heading-same-level)                  
-                  ("C-x n t" . org-toggle-narrow-to-subtree)))
+  :bind (("C-c a o" . he-org-open-default-notes)
+         (:org-mode-map ("M-z x" . org-cut-special)
+                        ("M-z c" . org-copy-special)
+                        ("M-z v" . org-paste-special)                  
+                        ("C-c <up>" . org-backward-heading-same-level)
+                        ("C-c <down>" . org-forward-heading-same-level)                  
+                        ("C-x n t" . org-toggle-narrow-to-subtree)))
   
-  :hook
-  (org-mode-hook . (lambda ()
-                     ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
-                     (set-face-attribute 'org-table nil :family user-default-font-name)
-                     
-                     ;; org-modeでは補完機能を使わず文章を書きたい
-                     (company-mode nil)
-
-                     (visual-line-mode)
-
-                     ;; (flyspell-mode)
-                     ))
-  :custom
-  ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
-   (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
-
-   (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
-                             `((,(concat dir "main.org") :level . 1)
-                               (,(concat dir "private.org") :level . 1))))
-   
-   (org-src-fontify-natively . t)
-   (org-src-tab-acts-natively . t)
-   (org-src-preserve-indentation . t)
-   (org-edit-src-content-indentation . 0)
+  :hook ((org-mode-hook . (lambda ()
+                           ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+                           (set-face-attribute 'org-table nil :family user-default-font-name)
+                           
+                           ;; org-modeでは補完機能を使わず文章を書きたい
+                           (company-mode nil)
+                           
+                           (visual-line-mode)
+                           
+                           ;; (flyspell-mode)
+                           ))
+         (after-save-hook . (lambda ()
+                              (when (eq major-mode 'org-mode)
+                                (when (file-exists-p (concat (file-name-sans-extension (buffer-file-name)) ".html"))
+                                  ;; (message (format "%s" major-mode))
+                                  (message "Reload %s" (concat (file-name-sans-extension (buffer-file-name)) ".html"))
+                                  (org-open-file (org-html-export-to-html)))))))
+  
+  :custom ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
+           (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
+           
+           (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
+                                     `((,(concat dir "main.org") :level . 1)
+                                       (,(concat dir "private.org") :level . 1))))
+           
+           (org-src-fontify-natively . t)
+           (org-src-tab-acts-natively . t)
+           (org-src-preserve-indentation . t)
+           (org-edit-src-content-indentation . 0))
 ;;   (org-startup-folded . t)
 ;;   (org-startup-truncated . t)
 ;;   (org-return-follows-link . t)   
@@ -550,8 +555,12 @@
 ;;                       ("TALKING" . ?t)
 ;;                       ("Scheduling" . ?s)
 ;;                       ("Writting" . ?w)
-;;                       ("Payment")))))   
-   ))
+;;                       ("Payment")))))
+   :preface (defun he-org-open-default-notes ()
+              "Open `org-default-notes-file'."  
+              (interactive)
+              (message (format "Open %s" org-default-notes-file))
+              (find-file org-default-notes-file)))
 
 (leaf org-capture
   :require org-capture
@@ -568,7 +577,7 @@
 
 (leaf org-agenda
   :bind
-  (("C-c a" . org-agenda))
+  (("C-c a a" . org-agenda))
 
   :custom
   (org-agenda-files . `,(mapcar (lambda (x)
