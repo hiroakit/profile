@@ -506,6 +506,7 @@
                         ("M-z v" . org-paste-special)                  
                         ("C-c <up>" . org-backward-heading-same-level)
                         ("C-c <down>" . org-forward-heading-same-level)                  
+                        ("C-x C-h" . consult-org-heading)
                         ("C-x n t" . org-toggle-narrow-to-subtree)))
   
   :hook ((org-mode-hook . (lambda ()
