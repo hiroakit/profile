@@ -528,7 +528,9 @@
   
   :custom ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
            (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
-           
+           (org-todo-keywords . '((sequence "TODO(t)" "|" "DONE(d!)")
+                                  (sequence "WAITING(w@/!)" "|")
+                                  (sequence "|" "CANCELED(c@/!)")))
            (org-outline-path-complete-in-steps . nil)
            (org-refile-use-outline-path . 'file)
            (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
@@ -542,7 +544,7 @@
 ;;   (org-startup-folded . t)
 ;;   (org-startup-truncated . t)
 ;;   (org-return-follows-link . t)   
-;;    (org-todo-keywords . '((sequence "TODO(t)" "|" "DONE(d!)") (sequence "WAITING(w@/!)" "|") (sequence "|" "CANCELED(c@/!)")))
+    
 ;;    (org-tag-alist . '(("@HOME" . ?h)
 ;;                       ("@OFFICE" . ?o)
 ;;                       ("@TSUTAYA")
