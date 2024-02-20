@@ -529,9 +529,11 @@
   :custom ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
            (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
            
+           (org-outline-path-complete-in-steps . nil)
+           (org-refile-use-outline-path . 'file)
            (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
-                                     `((,(concat dir "main.org") :level . 1)
-                                       (,(concat dir "private.org") :level . 1))))
+                                     `((,(concat dir "main.org") :maxlevel . 2)
+                                       (,(concat dir "private.org") :maxlevel . 2))))
            
            (org-src-fontify-natively . t)
            (org-src-tab-acts-natively . t)
