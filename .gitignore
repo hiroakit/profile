@@ -14,6 +14,7 @@ resources/emacs/.emacs.d/request
 resources/emacs/.emacs.d/transient/
 resources/emacs/.emacs.d/undohist
 resources/emacs/.emacs.d/url
+resources/emacs/.emacs.d/org-persist
 hp-org-mode-local-config.el
 *.elc
 ~$*
