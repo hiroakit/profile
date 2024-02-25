@@ -246,25 +246,9 @@
 (set-default 'buffer-file-coding-system 'utf-8)
 
 ;;-------------------------
-;; 矩形選択
-;;-------------------------
-
-;; Emacs 24.4以降ではC-x SPCで矩形選択可
-;; https://www.emacswiki.org/emacs/RectangleMark
-;;
-;; C-x SPCで矩形選択可能だがcua-modeはテキストの加筆できるなど機能が豊富
-;; https://www.emacswiki.org/emacs/CuaMode
-;;
-;; cua-modeの矩形選択(cua-rectangle-mark-mode)をM-RETで開始する
-;; これはターミナルでEmacsを動かした場合にC-RETだとReturnのCR (ASCII 13)と解釈され改行されるためで
-;; M-RETを割り当て、GUI版EmacsとターミナルのEmacsでのキーバインドを統一した
-;; https://www.fromkk.com/posts/c-m-ret-and-return-key-in-emacs/
-(cua-mode t)
-(global-set-key (kbd "M-RET") 'cua-rectangle-mark-mode)
-
-;;-------------------------
 ;; Startup Emacs
 ;;-------------------------
+
 (leaf startup
 ;;   :preface
 ;;   (defun hiroakit/text-scale-up ()
@@ -301,12 +285,10 @@
   ;;(setq eol-mnemonic-dos "(CRLF)")
   ;;(setq eol-mnemonic-mac "(CR)")
   ;;(setq eol-mnemonic-unix "(LF)"))  
-  :custom `(;; (inhibit-startup-screen . t)
+  :custom `((inhibit-startup-screen . t)
             ;; (inhibit-startup-message . t)
             ;; (inhibit-startup-echo-area-message . t)
             ;; (initial-scratch-message . nil)
-            ;; (cua-mode . t)
-            ;; (cua-enable-cua-keys . nil)
             (auto-save-list-file-prefix . ,(locate-user-emacs-file "backup/.saves-"))))
 
 (leaf files
