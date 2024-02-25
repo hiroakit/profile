@@ -272,7 +272,10 @@
 ;;                        (hiroakit/typeface "MigMix 2M" 14)))
   :bind (("C-x p l" . package-list-packages)
          ("C-x w }" . maximize-window)
-         ("C-x w {" . minimize-window))
+         ("C-x w {" . minimize-window)
+         ("C-x t s" . text-scale-adjust)
+         ("C-x t g s" . global-text-scale-adjust)
+         ("C-x [" . cua-rectangle-mark-mode))
 ;;   (("C-<wheel-up>" . hiroakit/text-scale-up)
 ;;    ("C-<wheel-down>" . hiroakit/text-scale-down)
 ;;    ("<C-mouse-4>" . hiroakit/text-scale-up)
@@ -314,11 +317,12 @@
 
 (leaf consult
   :ensure t
-  :bind (("C-x C-x" . consult-buffer)
-           ("C-x r b" . consult-bookmark)
-           ("M-s f " . consult-find)
-           ;; ("C-x C-g" . consult-grep)
-           ("C-x C-r" . consult-recent-file)))
+  :bind (("C-x C-x"   . consult-buffer)
+         ("C-x 4 C-x" . consult-buffer-other-window)
+         ("C-x r b"   . consult-bookmark)
+         ("M-s f "    . consult-find)
+         ;; ("C-x C-g" . consult-grep)
+         ("C-x C-r"   . consult-recent-file)))
 
 (leaf orderless
   :ensure t
@@ -399,7 +403,8 @@
 ;;-------------------------
 
 (leaf elisp-mode
-  :bind ((emacs-lisp-mode-map
+  :bind (("C-x f" . leaf-find)
+         (:emacs-lisp-mode-map
           ("C-c e b" . eval-buffer)
           ("C-c e r" . eval-region)))
   :custom `((indent-tabs-mode . nil)
@@ -485,12 +490,13 @@
   :bind (("C-c a o" . he-org-open-default-notes)
          (:org-mode-map ("M-z x" . org-cut-special)
                         ("M-z c" . org-copy-special)
-                        ("M-z v" . org-paste-special)                  
+                        ("M-z v" . org-paste-special)
+                        ("M-z o i" . org-id-get-create)
+                        ("M-z h s" . org-insert-subheading)                        
                         ("C-c <up>" . org-backward-heading-same-level)
-                        ("C-c <down>" . org-forward-heading-same-level)                  
-                        ("C-x C-h" . consult-org-heading)
+                        ("C-c <down>" . org-forward-heading-same-level)
+                        ("C-x C-h" . consult-org-heading)                        
                         ("C-x n t" . org-toggle-narrow-to-subtree)))
-  
   :hook ((org-mode-hook . (lambda ()
                            ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
                            (set-face-attribute 'org-table nil :family user-default-font-name)
