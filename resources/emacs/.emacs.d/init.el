@@ -822,10 +822,10 @@
 ;; (global-set-key (kbd "C-c SPC") 'whitespace-cleanup)
 
 ;; Emacsの起動時間を計測したい時に使う
-(global-set-key (kbd "C-c C-t")
-                #'(lambda ()
-                    (interactive)
-                    (message (emacs-init-time))))
+;;(global-set-key (kbd "C-c C-t")
+;;                #'(lambda ()
+;;                    (interactive)
+;;                    (message (emacs-init-time))))
 
 (adjust-pos-and-size-of-current-frame-to-center)
 
