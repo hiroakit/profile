@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Clock Table for Today
+# key: clockday
+# --
+
+#+BEGIN: clocktable :scope file :maxlevel 3 :block ${1:2024-02-25}$0
+#+END:
+
