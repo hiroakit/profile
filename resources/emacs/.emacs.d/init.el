@@ -526,7 +526,8 @@
                                   ;; (message (format "%s" major-mode))
                                   (message "Reload %s" (concat (file-name-sans-extension (buffer-file-name)) ".html"))
                                   (org-open-file (org-html-export-to-html)))))))
-  
+
+  :config (add-to-list 'org-speed-commands '("j" call-interactively #'consult-org-heading))
   :custom ((org-directory . "~/Library/Mobile Documents/com~apple~CloudDocs/org")
            (org-default-notes-file . `,(concat (file-name-as-directory org-directory) (file-name-nondirectory "main.org")))
            (org-todo-keywords . '((sequence "TODO(t)" "|" "DONE(d!)")
@@ -537,7 +538,7 @@
            (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
                                      `((,(concat dir "main.org") :maxlevel . 2)
                                        (,(concat dir "private.org") :maxlevel . 2))))
-           
+           (org-use-speed-commands . t)
            (org-src-fontify-natively . t)
            (org-src-tab-acts-natively . t)
            (org-src-preserve-indentation . t)
