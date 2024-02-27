@@ -19,6 +19,11 @@ if [ -d /opt/homebrew/bin ]; then
    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# direnv
+if [ -d /opt/homebrew/bin/direnv ]; then
+    eval "$(direnv hook zsh)"
+fi
+
 ## rbenv
 export RBENV_ROOT=$HOME/.rbenv
 if [ -d ${RBENV_ROOT} ]; then
