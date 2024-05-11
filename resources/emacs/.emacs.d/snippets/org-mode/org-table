@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: org-table
+# key: orgtable
+# --
+#+CAPTION: 表のキャプション
+#+NAME: 
+|   |   |   |
+|---+---+---|
+|   |   |   |
+|   |   |   |
+|   |   |   |

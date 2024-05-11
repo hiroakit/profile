@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: org-book-property
+# key: orgbkpro
+# --
+:PROPERTIES:
+:BOOK_URL: 
+:BOOK_AUTHOR: 
+:BOOK_EDITION:
+:BOOK_MEDIA_TYPE: Kindle Paper
+:PURCHASE_DATE: 
+:ID: 
+:LOG_INTO_DRAWER: t
+:END:
