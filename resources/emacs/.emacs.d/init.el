@@ -569,7 +569,10 @@
                                        "* TODO %u Daily Scrum\nSCHEDULED: %t\n\n%?")
                                       ("j" "Journal" entry
                                        (file+datetree org-default-notes-file "Journal")
-                                       "** %U %?\n%i\n")))))
+                                       "** %U %?\n%i\n")
+                                      ("m" "Explore music" entry
+                                       (file+datetree org-default-notes-file "Journal")
+                                       "* %U 新しいアーティストと出会う - %^{Artist} %(org-set-tags-command)\n%?")))))
 
 (leaf org-agenda
   :bind
