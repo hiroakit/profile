@@ -630,23 +630,23 @@
 
 (leaf company
   :ensure t
-  :init
-  (global-company-mode 1)
-  :bind
-  (("<C-tab>" . company-complete)
-   (:company-active-map
-    :package company
-    ("<tab>" . company-complete-selection)
-    ("C-n" . company-select-next)
-    ("C-p" . company-select-previous))
-   (:company-search-map
-    :package company
-    ("C-n" . company-select-next)
-    ("C-p" . company-select-previous)))
+  :init (global-company-mode 1)
+  :bind (("<C-tab>" . company-complete)
+         ("<M-tab>" . company-yasnippet)
+         (:company-active-map
+          :package company
+          ("C-d"   . company-show-location)
+          ("<tab>" . company-complete-selection)
+          ("C-n"   . company-select-next)
+          ("C-p"   . company-select-previous)
+          ("SPC"   . company-show-doc-buffer))
+         (:company-search-map
+          :package company
+          ("C-n"   . company-select-next)
+          ("C-p"   . company-select-previous)))
   :config
   (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.2)
-)
+  (setq company-idle-delay 0.2))
 
 ;;------------------------------------
 ;; LSP - Language Server Protocol
