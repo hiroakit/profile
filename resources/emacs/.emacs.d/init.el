@@ -501,9 +501,14 @@
                            ;; org-tableの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
                            (set-face-attribute 'org-table nil :family user-default-font-name)
                            
-                           ;; org-modeでは補完機能を使わず文章を書きたい
-                           (company-mode nil)
-                           
+                           ;; 自動補完 (特にcompany-dabbrev-code) を使わずに文章を書く
+                           (set (make-local-variable 'company-backends)
+                                '((company-files
+                                   company-capf
+                                   company-yasnippet
+                                   company-ispell
+                                   company-abbrev)))
+
                            (visual-line-mode)
                            
                            ;; (flyspell-mode)
