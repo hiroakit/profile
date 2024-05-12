@@ -556,7 +556,12 @@
               "Open `org-default-notes-file'."  
               (interactive)
               (message (format "Open %s" org-default-notes-file))
-              (find-file org-default-notes-file)))
+              (find-file org-default-notes-file))
+
+   (leaf org-preview-html
+     :ensure t
+     :config (setq org-preview-html-viewer 'xwidget)
+             (setq org-preview-html-subtree-only t)))
 
 (leaf org-capture
   :require org-capture
