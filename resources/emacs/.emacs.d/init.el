@@ -498,7 +498,7 @@
                         ("C-x C-h" . consult-org-heading)                        
                         ("C-x n t" . org-toggle-narrow-to-subtree)))
   :hook ((org-mode-hook . (lambda ()
-                           ;; org-modeのテーブルの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
+                           ;; org-tableの縦棒にset-face-attribute 'defaultで指定したフォントが当たらないことがある
                            (set-face-attribute 'org-table nil :family user-default-font-name)
                            
                            ;; org-modeでは補完機能を使わず文章を書きたい
