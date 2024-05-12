@@ -631,6 +631,7 @@
 
 ;;------------------------------------
 ;; Company - Completion Framework
+;; https://elpa.gnu.org/devel/doc/company.html
 ;;------------------------------------
 
 (leaf company
