@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: orgclocktable
+# key: orgcktbl
+# --
+#+BEGIN: clocktable :scope subtree :maxlevel 4 :link t :formula %
+#+END:
