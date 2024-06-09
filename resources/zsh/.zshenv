@@ -50,6 +50,10 @@ export LANG=ja_JP.UTF-8
 typeset -xU path cdpath fpath manpath
 typeset -U path PATH
 path=(
+  "$HOME/.rbenv/bin"
+  "/opt/homebrew/bin"  
+  "/bin"    
+  "/usr/bin"  
   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"(N-/)
 )
 
@@ -92,5 +96,7 @@ path=(
 ## Maya
 # export MAYA_UI_LANGUAGE="en_US"
 
-
-
+# rbenv
+# export PATH=$HOME/.rbenv/bin:$PATH # zshのpathで指定しているため不要
+eval "$(rbenv init - zsh)"
+eval "$(nodenv init - zsh)"
