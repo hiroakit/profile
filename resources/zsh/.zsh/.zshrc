@@ -1,178 +1,99 @@
-#
-# .zshrc
-#
-readonly local ZSHRC_DEBUG_MODE=0
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-function get_this_file_path {
-  local dir
-  dir=$(dirname 0)
-  echo ${dir%/}/.zshrc
-}
+# Path to your oh-my-zsh installation.
+export ZSH="$ZDOTDIR/ohmyzsh"
 
-if [ ${ZSHRC_DEBUG_MODE} -gt 0 ]; then
-    get_this_file_path 
-fi
+# https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
-# # The Z Shell Manual v5.8
-# # http://zsh.sourceforge.net/Doc/zsh_us.pdf
-# #
-# # 13.2.5 Visual effects
-# # 理解できていないもの
-# # %E
-# # %S (%s)
-# # %{...%}
-# # %G
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="hiroakit"
 
-# export LSCOLORS=exfxcxdxbxegedabagaxex
-# #export LSCOLORS=gxfxcxdxbxegexabagacad
-# export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
-# autoload -Uz compinit && compinit
-# autoload -Uz colors && colors
-# [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
 
-# zstyle ':completion:*' list-colors "${LS_COLORS}"
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
-#-------------------------------------------
-# Common
-#-------------------------------------------
-setopt no_beep           # ビープ音を鳴らさない
-setopt ignore_eof        # ctr-d でログアウトしない
-setopt auto_cd           # ディレクトリ名の入力だけ移動可能にする
-setopt auto_pushd        # ディレクトリ移動時、自動でディレクトリスタックに追加する
-# setopt correct           # 入力したコマンドのミスを指摘する
-# setopt correct_all       # 入力内容全て(ファイル名含む)を判断対象とする
-setopt magic_equal_subst # = 以降でも補完できるようにする
-autoload zed             # zsh editorを読み込む
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
-#---------------------------------
-# シェルの標準設定
-# prompt設定(着色)
-#---------------------------------
-export TERM=xterm-256color
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
 
-autoload colors
-colors
-setopt prompt_subst
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
 
-case ${UID} in
-0)
-    PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %{${fg[red]}%}%n@%m%#%{${reset_color}%} "
-    PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
-    SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
-    RPROMPT="%{${fg[green]}%}[%~:%T]%{${reset_color}%}"
-    ;;
-*)
-    # %n : ユーザ名
-    # %m : 短いホスト名
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
 
-    PROMPT="%{${fg[cyan]}%}%n %# %{${reset_color}%}"
-    PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
-    SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-    RPROMPT="%{${fg_bold[white]}%}[%~ %T]%{${reset_color}%}"
-    [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-        PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
-    ;;
-esac
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-# ls
-# LSCOLORS: BSD ls
-# LS_COLORS: GNU ls
-export LSCOLORS=exfxcxdxbxegedabagaxex
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
 
-# プロンプトを表示する直前に呼ばれるHook関数
-precmd() {
-    # タイトル欄を user@hostname にする
-    echo -ne "\033]0;${USER}@${HOST%%.*}\007"
-}
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
 
-#-------------------------------------------
-# Complement
-#-------------------------------------------
-setopt auto_list         # 補完候補を一覧表示する
-setopt auto_menu         # TABで順に保管候補を切り替える
-setopt auto_param_slash  # 補完候補がディレクトリのとき、最後にスラッシュを追加する
-setopt auto_param_keys   # カッコの対応も補完する
-setopt list_packed       # 補完候補を詰めて表示する
-setopt list_types        # 補完候補にファイルの拡張子も含める
-setopt noautoremoveslash # パスの最後に付くスラッシュを自動で削除させない
-setopt nolistbeep        # 補完候補表示時にビープ音を鳴らさせない
-setopt print_eight_bit   # 補完時の日本語を正しく表示する
-setopt always_to_end     # 補完時に文字列末尾へカーソル移動
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# setopt extended_glob
-# unsetopt caseglob      # 大文字小文字の区別にファイルグロブを使わない
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
 
-zstyle ':completion:*:default' menu select=1        # 保管候補のカーソル選択を有効にする
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
-zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
 
-# 補完候補の増やすためのディレクトリをfpathに追加
-fpath=(${ZDOTDIR}/functions/completion ${fpath})
-autoload -U compinit; compinit
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git rails)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
 #-------------------------------------------
-# History
-#-------------------------------------------
-HISTFILE=${HOME}/.zsh_history # ヒストリの保存先
-HISTSIZE=10000                # historyコマンド(メモリ上)で表示する最大件数
-SAVEHIST=100000000            # HISTFILEで指定したファイルに保存する履歴の件数
-
-setopt append_history         # 履歴を追加する
-setopt extended_history       # 履歴を時刻も付けて保存する
-setopt inc_append_history     # コマンド実行後に履歴ファイルに保存する(標準はexit時)
-setopt hist_no_store          # historyコマンドは履歴ファイルに保存しない
-setopt hist_ignore_dups       # 直前と同じコマンドをヒストリに追加しない
-setopt share_history          # 履歴を共有する
-setopt hist_ignore_space      # 先頭がスペースで始まる履歴は保存対象外にする(厳密には履歴ファイルの中に記録したあとに整理され削除される仕組み)
-setopt hist_ignore_all_dups   # 重複するコマンドは古いものを削除して，新しい方を履歴ファイルに残す
-setopt hist_reduce_blanks     # 余分なスペースを削除してから履歴に保存
-setopt hist_verify            # ヒストリからコマンドを選んでも，すぐに実行しない
-
-function history-all { history -E 1 } # 全履歴の一覧を出力
-
-autoload history-search-end   # マッチしたコマンドのヒストリを検索する
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
-#-------------------------------------------
-# cdr
-#-------------------------------------------
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-add-zsh-hook chpwd chpwd_recent_dirs
-zstyle ':chpwd:*' recent-dirs-max 5000
-zstyle ':chpwd:*' recent-dirs-default yes
-zstyle ':completion:*' recent-dirs-insert both
-
-#-------------------------------------------
-# Specific settings of macOS (darwin)
-#-------------------------------------------
-case "${OSTYPE}" in
-    darwin*)
-        # Emacsが起動しており、M-x server-startを実行済みであると想定している
-        export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
-
-        # XcodeのDerivedDataディレクトリ
-        export XCODE_DERIVED_DATA="${HOME}/Library/Developer/Xcode/DerivedData"
-
-        # iOSシミュレーターのデータがあるディレクトリ
-        export XCODE_SIMULATOR_DATA="${HOME}/Library/Developer/CoreSimulator/Devices"
-
-        # 様々なバージョンのFBXのSDKが格納されるディレクトリ
-        export FBX_SDK_HOME="/Applications/Autodesk/FBX SDK"
-
-        # Projectsディレクトリ
-        export PROJ="${HOME}/Documents/Projects"
-        export MYPJ="${PROJ}/Personal"
-        export BLOG="${HOME}/proj/Blog"
-        export TIPS="${MYPJ}/tips"
-        export EDEV="${MYPJ}/emacs-on-apple"
-        export MYP="${MYPJ}/profile"
-esac
-
-#-------------------------------------------
-# MyZaw ; zaw custom
+# zaw
+# https://github.com/zsh-users/zaw
 #-------------------------------------------
 export ZAWZSH=${ZDOTDIR}/zaw/zaw.zsh
 if [ -r ${ZAWZSH} ]
@@ -185,25 +106,16 @@ then
    bindkey '^@'   zaw-gitdir
 fi
 
-#-----------------------------
-# Key binding (Emacs like)
-# How to check ? -> $ bindkey
-#-----------------------------
-bindkey -e
-bindkey "\e[Z" reverse-menu-complete               # 補完候補表示時、Shift-Tabでの移動を可能にする
-bindkey "^p" history-beginning-search-backward-end # ヒストリ検索時、Ctrl-pで戻る
-bindkey "^n" history-beginning-search-forward-end  # ヒストリ検索時、Ctrl-nで進む
 
-#--------------------------
-# Command aliases
-#--------------------------
-if [ -r $ZDOTDIR/.zalias ]
-then
-   source $ZDOTDIR/.zalias
-fi
-setopt complete_aliases
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-#------------------------------------------------------------
-# Local configuration if needed
-#------------------------------------------------------------
-[ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
