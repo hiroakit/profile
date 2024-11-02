@@ -20,8 +20,8 @@ if [ -d /opt/homebrew/bin ]; then
 fi
 
 # direnv
-if [ -d /opt/homebrew/bin/direnv ]; then
-    eval "$(direnv hook zsh)"
+if [ -e $(brew --prefix)/bin/direnv ]; then
+    eval "$(direnv hook zsh)"    
 fi
 
 # fzf
