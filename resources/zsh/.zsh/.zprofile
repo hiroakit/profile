@@ -14,9 +14,8 @@ if [ ${ZPROFILE_DEBUG_MODE} -gt 0 ]; then
 fi
 
 # Homebrew
-if [ -d /opt/homebrew/bin ]; then
-   export PATH="$RBENV_ROOT/bin:$PATH"
-   eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ -d $(brew --prefix)/bin ]; then
+   eval "$($(brew --prefix)/bin/brew shellenv)"
 fi
 
 # direnv
