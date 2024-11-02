@@ -24,6 +24,11 @@ if [ -d /opt/homebrew/bin/direnv ]; then
     eval "$(direnv hook zsh)"
 fi
 
+# fzf
+if [ -e $(brew --prefix)/bin/fzf ]; then
+    source <(fzf --zsh)
+fi
+
 ## rbenv
 export RBENV_ROOT=$HOME/.rbenv
 if [ -d ${RBENV_ROOT} ]; then
