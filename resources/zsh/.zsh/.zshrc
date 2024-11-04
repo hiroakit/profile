@@ -119,6 +119,13 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# fzf
+# .zprofileに設定するとCTRL-Rがbck-i-searchのままで
+# fzfのCTRL-Rが適用されないため.zshrcに記述した
+if [ -e $(brew --prefix)/bin/fzf ]; then
+    source <(fzf --zsh)
+fi
+
 #------------------------------------------------------------
 # Local configuration
 #------------------------------------------------------------
