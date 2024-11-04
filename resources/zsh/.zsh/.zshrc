@@ -102,8 +102,6 @@ then
 
    zstyle ':filter-select' case-insensitive yes
    bindkey '^h'   zaw-history # コマンド履歴一覧を表示
-   bindkey '^h^h' zaw-cdr     # 素早く押すとディレクトリ移動履歴一覧を表示
-   bindkey '^@'   zaw-gitdir
 fi
 
 
