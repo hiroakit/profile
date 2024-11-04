@@ -119,3 +119,7 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+#------------------------------------------------------------
+# Local configuration
+#------------------------------------------------------------
+[ -e ${ZDOTDIR}/.zshrc.mine ] && source ${ZDOTDIR}/.zshrc.mine

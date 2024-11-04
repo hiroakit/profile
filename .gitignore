@@ -24,6 +24,7 @@ hp-org-mode-local-config.el
 
 # zsh
 .zsh_history
+resources/zsh/.zsh/.zshrc.mine
 resources/zsh/.zsh/.zsh_sessions
 resources/zsh/.zsh/.zcompdump
 resources/zsh/.zsh/.chpwd-recent-dirs
