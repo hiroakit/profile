@@ -62,9 +62,9 @@
       darwinConfigurations.${hostConfig.darwinHost} =
         mkDarwin hostConfig.darwinSystem;
 
-      homeConfigurations.${username}@${hostConfig.wslHost} =
+      homeConfigurations."${username}@${hostConfig.wslHost}" =
         mkHome hostConfig.wslSystem;
-      homeConfigurations.${devcontainerHost.username}@${devcontainerHost.wslHost} =
+      homeConfigurations."${devcontainerHost.username}@${devcontainerHost.wslHost}" =
         mkHomeWith { system = devcontainerHost.wslSystem; hostCfg = devcontainerHost; };
 
       checks = lib.genAttrs
