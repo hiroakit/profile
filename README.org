@@ -25,6 +25,10 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
   #+begin_src sh
   ./scripts/nix-check.sh
   #+end_src
+- Devcontainer check (Linux): runs a disposable apply using the devcontainer host.
+  #+begin_src sh
+  ./scripts/devcontainer-check.sh
+  #+end_src
 
 ** Legacy (stow + dotnet-script)
 #+begin_src sh

@@ -17,6 +17,13 @@
       hostConfig = import ./nix/hosts.nix;
       username = hostConfig.username;
       lib = nixpkgs.lib;
+      devcontainerHost = {
+        username = "vscode";
+        darwinHost = "devcontainer";
+        darwinSystem = hostConfig.darwinSystem;
+        wslHost = "devcontainer";
+        wslSystem = hostConfig.wslSystem;
+      };
 
       mkPkgs = system:
         import nixpkgs {
@@ -24,12 +31,15 @@
           config.allowUnfree = true;
         };
 
-      mkHome = system:
+      mkHomeWith = { system, hostCfg }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = mkPkgs system;
-          extraSpecialArgs = { inherit inputs hostConfig; };
+          extraSpecialArgs = { inherit inputs; hostConfig = hostCfg; };
           modules = [ ./nix/home.nix ];
         };
+
+      mkHome = system:
+        mkHomeWith { inherit system; hostCfg = hostConfig; };
 
       mkDarwin = system:
         darwin.lib.darwinSystem {
@@ -54,12 +64,18 @@
 
       homeConfigurations.${username}@${hostConfig.wslHost} =
         mkHome hostConfig.wslSystem;
+      homeConfigurations.${devcontainerHost.username}@${devcontainerHost.wslHost} =
+        mkHomeWith { system = devcontainerHost.wslSystem; hostCfg = devcontainerHost; };
 
       checks = lib.genAttrs
         (lib.unique [ hostConfig.wslSystem hostConfig.darwinSystem ])
         (system:
           if system == hostConfig.darwinSystem
           then { darwin-config = (mkDarwin system).system; }
-          else { home-wsl = (mkHome system).activationPackage; });
+          else {
+            home-wsl = (mkHome system).activationPackage;
+            home-devcontainer =
+              (mkHomeWith { system = system; hostCfg = devcontainerHost; }).activationPackage;
+          });
     };
 }
