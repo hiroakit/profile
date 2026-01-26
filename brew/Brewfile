@@ -1,0 +1,122 @@
+tap "azure/bicep"
+tap "goreleaser/tap"
+tap "homebrew/services"
+# Library and utilities for processing GIFs
+brew "giflib"
+# Library for manipulating PNG images
+brew "libpng"
+# Zstandard is a real-time compression algorithm
+brew "zstd"
+# Automatic configure script builder
+brew "autoconf"
+# Tool for generating GNU Standards-compliant Makefiles
+brew "automake"
+# YAML Parser
+brew "libyaml"
+# Microsoft Azure CLI 2.0
+brew "azure-cli"
+# Generate compilation database for clang tooling
+brew "bear"
+# Cross-platform make
+brew "cmake"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# .NET Core
+brew "dotnet@8"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# GNU Emacs text editor
+brew "emacs"
+# Run arbitrary commands when files change
+brew "entr"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GitHub command-line tool
+brew "gh"
+# Audit git repos for secrets
+brew "gitleaks"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Deliver Go binaries as fast and easily as possible
+brew "goreleaser", link: false
+# GNU grep, egrep and fgrep
+brew "grep"
+# Configurable static site generator
+brew "hugo"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c@75"
+# C library for encoding, decoding, and manipulating JSON
+brew "jansson"
+# Image manipulation library
+brew "jpeg"
+# JIT library for the GNU compiler collection
+brew "libgccjit"
+# Library to render SVG files using Cairo
+brew "librsvg"
+# Open source relational database management system
+brew "mysql@8.0"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Install NodeJS versions
+brew "node-build"
+# Node.js version manager
+brew "nodenv"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@1.1"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.10"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+# Plugin and runtime library for using protobuf with Swift
+brew "swift-protobuf"
+# Tool to enforce Swift style and conventions
+brew "swiftlint"
+# Official documentation format of the GNU project
+brew "texinfo"
+# Tree command, improved
+brew "tre-command"
+# Bicep: next generation template language for Azure Resource Manager (ARM)
+brew "azure/bicep/bicep"
+# Release engineering, simplified
+cask "goreleaser/tap/goreleaser"
+# Command-line shell and scripting language
+cask "powershell"
+vscode "azurite.azurite"
+vscode "bierner.markdown-mermaid"
+vscode "castwide.solargraph"
+vscode "codelios.dartsass"
+vscode "eamodio.gitlens"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.remotehub"
+vscode "github.vscode-pull-request-github"
+vscode "golang.go"
+vscode "jcs090218.ellsp"
+vscode "jmrog.vscode-nuget-package-manager"
+vscode "koichisasada.vscode-rdbg"
+vscode "ms-azuretools.vscode-azurefunctions"
+vscode "ms-azuretools.vscode-azureresourcegroups"
+vscode "ms-azuretools.vscode-bicep"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-ceintl.vscode-language-pack-ja"
+vscode "ms-dotnettools.csdevkit"
+vscode "ms-dotnettools.csharp"
+vscode "ms-dotnettools.vscode-dotnet-runtime"
+vscode "ms-dotnettools.vscodeintellicode-csharp"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode.azure-repos"
+vscode "ms-vscode.makefile-tools"
+vscode "ms-vscode.remote-repositories"
+vscode "pbkit.vscode-pbkit"
+vscode "shopify.ruby-lsp"
+go "golang.org/x/tools/gopls"
+go "honnef.co/go/tools/cmd/staticcheck"
