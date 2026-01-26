@@ -13,7 +13,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Nix
+      - name: Install Nix (macOS)
+        if: runner.os == 'macOS'
+        uses: cachix/install-nix-action@v27
+        with:
+          install_options: --no-daemon
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Install Nix (Linux)
+        if: runner.os == 'Linux'
         uses: cachix/install-nix-action@v27
         with:
           extra_nix_config: |
