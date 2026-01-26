@@ -15,16 +15,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Nix (macOS)
         if: runner.os == 'macOS'
-        uses: cachix/install-nix-action@v27
-        with:
-          install_options: --no-daemon
-          extra_nix_config: |
-            experimental-features = nix-command flakes
+        run: |
+          set -euo pipefail
+          if [ -x /nix/var/nix/profiles/default/bin/nix ]; then
+            echo "/nix/var/nix/profiles/default/bin" >> "$GITHUB_PATH"
+            exit 0
+          fi
+          curl -fsSL https://install.determinate.systems/nix | sh -s -- install --no-confirm
+          echo "/nix/var/nix/profiles/default/bin" >> "$GITHUB_PATH"
       - name: Install Nix (Linux)
         if: runner.os == 'Linux'
         uses: cachix/install-nix-action@v27
-        with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
       - name: Nix flake check
+        env:
+          NIX_CONFIG: experimental-features = nix-command flakes
         run: nix flake check
