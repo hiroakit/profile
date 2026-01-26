@@ -16,6 +16,7 @@
     let
       hostConfig = import ./nix/hosts.nix;
       username = hostConfig.username;
+      lib = nixpkgs.lib;
 
       mkPkgs = system:
         import nixpkgs {
@@ -29,25 +30,36 @@
           extraSpecialArgs = { inherit inputs hostConfig; };
           modules = [ ./nix/home.nix ];
         };
+
+      mkDarwin = system:
+        darwin.lib.darwinSystem {
+          inherit system;
+          pkgs = mkPkgs system;
+          specialArgs = { inherit inputs hostConfig; };
+          modules = [
+            ./nix/darwin.nix
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
+              home-manager.users.${username} = import ./nix/home.nix;
+            }
+          ];
+        };
     in
     {
-      darwinConfigurations.${hostConfig.darwinHost} = darwin.lib.darwinSystem {
-        system = hostConfig.darwinSystem;
-        pkgs = mkPkgs hostConfig.darwinSystem;
-        specialArgs = { inherit inputs hostConfig; };
-        modules = [
-          ./nix/darwin.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
-            home-manager.users.${username} = import ./nix/home.nix;
-          }
-        ];
-      };
+      darwinConfigurations.${hostConfig.darwinHost} =
+        mkDarwin hostConfig.darwinSystem;
 
       homeConfigurations.${username}@${hostConfig.wslHost} =
         mkHome hostConfig.wslSystem;
+
+      checks = lib.genAttrs
+        (lib.unique [ hostConfig.wslSystem hostConfig.darwinSystem ])
+        (system:
+          if system == hostConfig.darwinSystem
+          then { darwin-config = (mkDarwin system).system; }
+          else { home-wsl = (mkHome system).activationPackage; });
     };
 }

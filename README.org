@@ -21,6 +21,10 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
   #+begin_src sh
   home-manager switch --flake .#<username>@<wslHost>
   #+end_src
+- Validate evaluation with flake checks.
+  #+begin_src sh
+  ./scripts/nix-check.sh
+  #+end_src
 
 ** Legacy (stow + dotnet-script)
 #+begin_src sh
