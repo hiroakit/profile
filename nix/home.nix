@@ -10,6 +10,8 @@ in
   imports = [
     ./modules/common.nix
     ./modules/macos.nix
+    ./modules/vscode.nix
+    ./modules/tmux.nix
     ./modules/wsl.nix
   ];
 
