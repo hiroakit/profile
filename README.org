@@ -30,6 +30,9 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
   ./scripts/devcontainer-check.sh
   #+end_src
 
+** CI
+- GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
+
 ** Legacy (stow + dotnet-script)
 #+begin_src sh
 /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/hiroakit/xcclt/HEAD/xcclt.sh)" && git clone https://github.com/hiroakit/profile --recursive && cd profile && sh install.sh

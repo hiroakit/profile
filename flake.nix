@@ -50,10 +50,14 @@
             ./nix/darwin.nix
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
-              home-manager.users.${username} = import ./nix/home.nix;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
+            home-manager.users.${username} = { ... }: {
+              imports = [ ./nix/home.nix ];
+              home.username = username;
+              home.homeDirectory = "/Users/${username}";
+            };
             }
           ];
         };
@@ -62,9 +66,9 @@
       darwinConfigurations.${hostConfig.darwinHost} =
         mkDarwin hostConfig.darwinSystem;
 
-      homeConfigurations.${username}@${hostConfig.wslHost} =
+      homeConfigurations."${username}@${hostConfig.wslHost}" =
         mkHome hostConfig.wslSystem;
-      homeConfigurations.${devcontainerHost.username}@${devcontainerHost.wslHost} =
+      homeConfigurations."${devcontainerHost.username}@${devcontainerHost.wslHost}" =
         mkHomeWith { system = devcontainerHost.wslSystem; hostCfg = devcontainerHost; };
 
       checks = lib.genAttrs
