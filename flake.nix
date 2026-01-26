@@ -50,10 +50,14 @@
             ./nix/darwin.nix
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
-              home-manager.users.${username} = import ./nix/home.nix;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs hostConfig; };
+            home-manager.users.${username} = { ... }: {
+              imports = [ ./nix/home.nix ];
+              home.username = username;
+              home.homeDirectory = "/Users/${username}";
+            };
             }
           ];
         };
