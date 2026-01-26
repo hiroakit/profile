@@ -9,13 +9,31 @@ The script to automatically build my development environment.
 Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 
 * Usage
+** Nix-based setup (macOS + WSL)
+- Update =nix/hosts.nix= for your username and host names.
+- Install Nix (flakes enabled).
+- macOS: install =nix-darwin= and apply the flake.
+  #+begin_src sh
+  darwin-rebuild switch --flake .#<darwinHost>
+  brew bundle --file brew/Brewfile
+  #+end_src
+- WSL (Ubuntu): install =home-manager= and apply the flake.
+  #+begin_src sh
+  home-manager switch --flake .#<username>@<wslHost>
+  #+end_src
 
+** Legacy (stow + dotnet-script)
 #+begin_src sh
 /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/hiroakit/xcclt/HEAD/xcclt.sh)" && git clone https://github.com/hiroakit/profile --recursive && cd profile && sh install.sh
 #+end_src
 
 * Requirements
+** Nix-based setup
+- Nix (flakes enabled)
+- nix-darwin (macOS)
+- home-manager (WSL)
 
+** Legacy (stow + dotnet-script)
 - macOS Sonoma v14.3
 - Command Line Tools for Xcode v15.1
 - .NET 6
