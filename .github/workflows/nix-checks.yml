@@ -28,5 +28,7 @@ jobs:
         uses: cachix/install-nix-action@v27
       - name: Nix flake check
         env:
-          NIX_CONFIG: experimental-features = nix-command flakes
-        run: nix flake check
+          NIX_CONFIG: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ github.token }}
+        run: nix flake check --accept-flake-config
