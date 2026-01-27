@@ -76,8 +76,6 @@
       darwinConfigurations.${hostConfig.darwinHost} =
         mkDarwin hostConfig.darwinSystem;
 
-      homeConfigurations."${username}@${hostConfig.wslHost}" =
-        mkHome hostConfig.wslSystem;
       homeConfigurations =
         {
           "${username}@${hostConfig.wslHost}" = mkHome hostConfig.wslSystem;
