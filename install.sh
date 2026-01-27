@@ -44,7 +44,14 @@ if is_linux; then
   fi
 
   echo "Applying Home Manager configuration..."
-  nix --accept-flake-config run nixpkgs#home-manager -- switch --flake "$ROOT_DIR#devcontainer@devcontainer"
+  current_user="$(id -un)"
+  target="${current_user}@devcontainer"
+  if nix --accept-flake-config run nixpkgs#home-manager -- switch --flake "$ROOT_DIR#${target}"; then
+    echo "Applied Home Manager for '$target'."
+  else
+    echo "WARNING: failed to apply '$target'; falling back to 'vscode@devcontainer'." >&2
+    nix --accept-flake-config run nixpkgs#home-manager -- switch --flake "$ROOT_DIR#vscode@devcontainer"
+  fi
 
   echo "Done."
   exit 0
