@@ -17,13 +17,23 @@
       hostConfig = import ./nix/hosts.nix;
       username = hostConfig.username;
       lib = nixpkgs.lib;
-      devcontainerHost = {
-        username = "vscode";
-        darwinHost = "devcontainer";
-        darwinSystem = hostConfig.darwinSystem;
-        wslHost = "devcontainer";
-        wslSystem = hostConfig.wslSystem;
-      };
+      devcontainerHosts = [
+        {
+          username = "vscode";
+          darwinHost = "devcontainer";
+          darwinSystem = hostConfig.darwinSystem;
+          wslHost = "devcontainer";
+          wslSystem = hostConfig.wslSystem;
+        }
+        # GitHub Codespaces often uses the "codespace" user (Dotfiles feature runs as the current user).
+        {
+          username = "codespace";
+          darwinHost = "devcontainer";
+          darwinSystem = hostConfig.darwinSystem;
+          wslHost = "devcontainer";
+          wslSystem = hostConfig.wslSystem;
+        }
+      ];
 
       mkPkgs = system:
         import nixpkgs {
@@ -66,10 +76,17 @@
       darwinConfigurations.${hostConfig.darwinHost} =
         mkDarwin hostConfig.darwinSystem;
 
-      homeConfigurations."${username}@${hostConfig.wslHost}" =
-        mkHome hostConfig.wslSystem;
-      homeConfigurations."${devcontainerHost.username}@${devcontainerHost.wslHost}" =
-        mkHomeWith { system = devcontainerHost.wslSystem; hostCfg = devcontainerHost; };
+      homeConfigurations =
+        {
+          "${username}@${hostConfig.wslHost}" = mkHome hostConfig.wslSystem;
+        }
+        // lib.listToAttrs (map
+          (dc:
+            {
+              name = "${dc.username}@${dc.wslHost}";
+              value = mkHomeWith { system = dc.wslSystem; hostCfg = dc; };
+            })
+          devcontainerHosts);
 
       checks = lib.genAttrs
         (lib.unique [ hostConfig.wslSystem hostConfig.darwinSystem ])
@@ -78,8 +95,10 @@
           then { darwin-config = (mkDarwin system).system; }
           else {
             home-wsl = (mkHome system).activationPackage;
-            home-devcontainer =
-              (mkHomeWith { system = system; hostCfg = devcontainerHost; }).activationPackage;
+            home-devcontainer-vscode =
+              (mkHomeWith { system = system; hostCfg = builtins.elemAt devcontainerHosts 0; }).activationPackage;
+            home-devcontainer-codespace =
+              (mkHomeWith { system = system; hostCfg = builtins.elemAt devcontainerHosts 1; }).activationPackage;
           });
     };
 }

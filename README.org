@@ -30,6 +30,19 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
   ./scripts/devcontainer-check.sh
   #+end_src
 
+** GitHub Codespaces
+- This repo includes a devcontainer definition at =.devcontainer/devcontainer.json=.
+- On first launch, Codespaces runs =./scripts/devcontainer-check.sh= which:
+  - runs =nix flake check=
+  - applies the Home Manager configuration for =vscode@devcontainer=
+- If you don't want your Codespace home directory dotfiles to be managed automatically, remove/disable =postCreateCommand= in =.devcontainer/devcontainer.json= and run the script manually when needed.
+
+** GitHub Codespaces Dotfiles
+- You can also use this repository as a Codespaces *Dotfiles* repository.
+- When configured in GitHub settings, Codespaces clones this repo and runs =./install.sh=.
+- On Linux (Codespaces), =install.sh= installs Nix (if needed) and applies the Home Manager configuration for the current user (e.g. =codespace@devcontainer=).
+- Note: this repo uses a git submodule (=resources/zsh/.zsh/zaw=). =install.sh= initializes submodules automatically, but your environment must allow fetching it.
+
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
 
