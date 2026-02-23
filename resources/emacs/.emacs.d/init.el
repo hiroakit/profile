@@ -527,6 +527,7 @@
            (org-todo-keywords . '((sequence "TODO(t)" "|" "DONE(d!)")
                                   (sequence "WAITING(w@/!)" "|")
                                   (sequence "|" "CANCELED(c@/!)")))
+           (org-log-done . 'time)
            (org-outline-path-complete-in-steps . nil)
            (org-refile-use-outline-path . 'file)
            (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
