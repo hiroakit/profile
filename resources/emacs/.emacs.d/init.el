@@ -484,6 +484,7 @@
 ;; org series
 ;;-------------------------
 
+(defvar neo-org-inbox-file "~/Library/Mobile Documents/com~apple~CloudDocs/neo-org/neo-main.org")
 (leaf org
   :ensure t
   :mode ("\\.org\\'")
@@ -530,7 +531,8 @@
            (org-refile-use-outline-path . 'file)
            (org-refile-targets . `,(let ((dir (file-name-as-directory (expand-file-name org-directory))))
                                      `((,(concat dir "main.org") :maxlevel . 2)
-                                       (,(concat dir "private.org") :maxlevel . 2))))
+                                       (,(concat dir "private.org") :maxlevel . 2)
+                                       (,(expand-file-name neo-org-inbox-file) :maxlevel . 2))))
            (org-use-speed-commands . t)
            (org-src-fontify-natively . t)
            (org-src-tab-acts-natively . t)
@@ -571,8 +573,11 @@
 (leaf org-capture
   :require org-capture
   :bind (("C-x c" . org-capture))
-  :custom ((org-capture-templates . '(("t" "Add Task" entry
+  :custom ((org-capture-templates . `(("t" "Add Task" entry
                                        (file+headline org-default-notes-file "Inbox")
+                                       "** TODO %?\n")
+                                      ("n" "Add Task to NeoOrg" entry
+                                       (file+headline ,neo-org-inbox-file "Inbox")
                                        "** TODO %?\n")
                                       ("d" "Add Daily Scrum Note" entry
                                        (file+olp org-default-notes-file "Projects" "Daily Scrum")
@@ -589,9 +594,10 @@
   (("C-c a a" . org-agenda))
 
   :custom
-  (org-agenda-files . `,(mapcar (lambda (x)
-                                  (concat (file-name-as-directory org-directory) x))
-                                '("main.org" "private.org")))
+  (org-agenda-files . `,(append (mapcar (lambda (x)
+                                          (concat (file-name-as-directory (expand-file-name org-directory)) x))
+                                        '("main.org" "private.org"))
+                                (list (expand-file-name neo-org-inbox-file))))
   (org-agenda-span . 'day)
   (org-agenda-format-date . "%Y/%m/%d (%a)")
   (org-agenda-start-on-weekday . 1)
