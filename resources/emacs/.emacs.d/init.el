@@ -583,10 +583,10 @@
                                        (file+olp org-default-notes-file "Projects" "Daily Scrum")
                                        "* TODO %u Daily Scrum\nSCHEDULED: %t\n\n%?")
                                       ("j" "Journal" entry
-                                       (file+datetree org-default-notes-file "Journal")
+                                       (file+olp+datetree ,neo-org-inbox-file "Journal")
                                        "** %U %?\n%i\n")
                                       ("m" "Explore music" entry
-                                       (file+datetree org-default-notes-file "Journal")
+                                       (file+olp+datetree ,neo-org-inbox-file "Journal")
                                        "* %U 新しいアーティストと出会う - %^{Artist} %(org-set-tags-command)\n%?")))))
 
 (leaf org-agenda
