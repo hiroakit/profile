@@ -66,10 +66,18 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
   | =^X^H= | zawで絞り込み (fzfが無い環境向け)                    |
 - 保存件数は =$CLAUDE_HISTSIZE= (既定20000件)。ファイルが8MiBを超えたら古い順に切り詰める。
 - 履歴ファイルはコマンドをそのまま保存するため =600= で作成される。
-- 注意: 既に =~/.claude/settings.json= がある場合、Home Managerは上書きを拒否して
-  activationに失敗する。既存の設定を =resources/claude/settings.json= にマージしてから
-  元ファイルを退避すること。逆に、この設定をNixで管理している間は =/config= 等からの
-  =~/.claude/settings.json= への書き込みもできない。
+- インストール
+  - zsh側 (=.zclaude=, =.zshenv=) は =resources/zsh= を配置すれば有効になる。
+  - Claude Code側は、Nix管理のホストなら =nix/modules/claude.nix= が
+    =~/.claude/settings.json= と =~/.claude/hooks/record-command-history.py= を配置する。
+  - *既に =~/.claude/settings.json= がある場合はリンクで置き換えないこと。*
+    Claude Code自身が =/config= などでこのファイルに書き込むため、読み取り専用の
+    シンボリックリンクにすると以後その書き込みが失敗する。既存ファイルは実体のまま残し、
+    =resources/claude/settings.json= の =PostToolUse= エントリだけをマージする。
+    フックスクリプトはリポジトリからリンクすればよい。
+    #+begin_src sh
+    ln -sfn "$PWD/resources/claude/hooks/record-command-history.py" ~/.claude/hooks/
+    #+end_src
 
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
