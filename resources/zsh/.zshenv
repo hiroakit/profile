@@ -57,6 +57,32 @@ path=(
   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"(N-/)
 )
 
+#------------------
+# Editor
+#
+# emacsを既定のエディタにする。
+# GUIを開かないように -nw (--no-window-system) を付与する。
+#------------------
+case "${OSTYPE}" in
+    darwin*)
+        emacs_bin="/Applications/Emacs.app/Contents/MacOS/Emacs"
+        ;;
+    *)
+        emacs_bin="/usr/bin/emacs"
+        ;;
+esac
+
+if [ ! -x "${emacs_bin}" ]; then
+    emacs_bin=$(command -v emacs 2>/dev/null)
+fi
+
+if [ -n "${emacs_bin}" ] && [ -x "${emacs_bin}" ]; then
+    export EDITOR="${emacs_bin} -nw"
+    export VISUAL="${EDITOR}"
+fi
+
+unset emacs_bin
+
 # node.js v12 for Azure Function Runtime
 # export PATH="/usr/local/opt/node@12/bin:$PATH"
 
