@@ -61,14 +61,18 @@ path=(
 # Editor
 #
 # emacsを既定のエディタにする。
+# 起動済みのEmacs (GUI/端末どちらでも可) のサーバーに繋ぎたいので
+# emacsclientを優先する。サーバーが無い時は -a '' でdaemonを起動する。
 # GUIを開かないように -nw (--no-window-system) を付与する。
 #------------------
 case "${OSTYPE}" in
     darwin*)
         emacs_bin="/Applications/Emacs.app/Contents/MacOS/Emacs"
+        emacsclient_bin="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
         ;;
     *)
         emacs_bin="/usr/bin/emacs"
+        emacsclient_bin="/usr/bin/emacsclient"
         ;;
 esac
 
@@ -76,12 +80,19 @@ if [ ! -x "${emacs_bin}" ]; then
     emacs_bin=$(command -v emacs 2>/dev/null)
 fi
 
-if [ -n "${emacs_bin}" ] && [ -x "${emacs_bin}" ]; then
+if [ ! -x "${emacsclient_bin}" ]; then
+    emacsclient_bin=$(command -v emacsclient 2>/dev/null)
+fi
+
+if [ -n "${emacsclient_bin}" ] && [ -x "${emacsclient_bin}" ]; then
+    export EDITOR="${emacsclient_bin} -nw -a ''"
+    export VISUAL="${EDITOR}"
+elif [ -n "${emacs_bin}" ] && [ -x "${emacs_bin}" ]; then
     export EDITOR="${emacs_bin} -nw"
     export VISUAL="${EDITOR}"
 fi
 
-unset emacs_bin
+unset emacs_bin emacsclient_bin
 
 # node.js v12 for Azure Function Runtime
 # export PATH="/usr/local/opt/node@12/bin:$PATH"

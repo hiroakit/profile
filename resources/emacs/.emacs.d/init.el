@@ -158,6 +158,33 @@
   (exec-path-from-shell-initialize))
 
 ;;-------------------------
+;; サーバー
+;;
+;; emacsclientから接続できるようにサーバーを起動する。
+;; GUI (Emacs.app) でもターミナル (emacs -nw) でも起動する。
+;; 先に起動したEmacsがサーバーを持っている時は何もしない。
+;;
+;; emacsclientの使い方:
+;;   emacsclient -n file   ... 起動済みのフレームでファイルを開く
+;;   emacsclient -c file   ... 新しいGUIフレームで開く
+;;   emacsclient -nw file  ... 端末内に新しいフレームを作って開く
+;;   emacs --daemon        ... フレームを持たないEmacsをサーバーとして起動する
+;;
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
+;;-------------------------
+
+(leaf server
+  :doc "Start the Emacs server for emacsclient"
+  :tag "builtin"
+  :require t
+  :hook (emacs-startup-hook . he-server-start-unless-running)
+  :preface
+  (defun he-server-start-unless-running ()
+    "Start the Emacs server unless another Emacs already serves it."
+    (unless (server-running-p)
+      (server-start))))
+
+;;-------------------------
 ;; 警告音
 ;;-------------------------
 
