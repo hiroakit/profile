@@ -27,8 +27,6 @@ brew "dotnet@8"
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
-# GNU Emacs text editor
-brew "emacs"
 # Run arbitrary commands when files change
 brew "entr"
 # Play, record, convert, and stream select audio and video codecs
@@ -85,6 +83,8 @@ brew "texinfo"
 brew "tre-command"
 # Bicep: next generation template language for Azure Resource Manager (ARM)
 brew "azure/bicep/bicep"
+# GNU Emacs text editor (/Applications/Emacs.app)
+cask "emacs"
 # Release engineering, simplified
 cask "goreleaser/tap/goreleaser"
 # Command-line shell and scripting language

@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# emacs -- コマンドラインからEmacs.appのEmacsを起動する
+#
+# Emacsは/Applications/Emacs.appに寄せているため、コマンドラインで
+# emacsと打った時もEmacs.app内のバイナリを使う。
+# emacsclientが -a '' でdaemonを起動する時もPATH上のemacsを探すので、
+# このラッパーがあるとEmacs.appのEmacsがサーバーになる。
+#
+# GUIで開きたくない時は -nw (--no-window-system) を付ける。
+#
+set -eu
+
+EMACS_BIN="/Applications/Emacs.app/Contents/MacOS/Emacs"
+
+if [ ! -x "${EMACS_BIN}" ]; then
+    echo "emacs: ${EMACS_BIN} が見つからない。brew install --cask emacs を実行する。" >&2
+    exit 127
+fi
+
+exec "${EMACS_BIN}" "$@"

@@ -55,12 +55,14 @@ path=(
   "/bin"    
   "/usr/bin"  
   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"(N-/)
+  "/Applications/Emacs.app/Contents/MacOS/bin"(N-/)
 )
 
 #------------------
 # Editor
 #
 # emacsを既定のエディタにする。
+# macOSではEmacsを/Applications/Emacs.appに寄せているため、そこを見る。
 # 起動済みのEmacs (GUI/端末どちらでも可) のサーバーに繋ぎたいので
 # emacsclientを優先する。サーバーが無い時は -a '' でdaemonを起動する。
 # GUIを開かないように -nw (--no-window-system) を付与する。
