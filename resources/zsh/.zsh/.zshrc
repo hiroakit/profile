@@ -124,7 +124,10 @@ if [ -e $(brew --prefix)/bin/fzf ]; then
     source <(fzf --zsh)
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+
 #------------------------------------------------------------
 # Local configuration
 #------------------------------------------------------------
 [ -e ${ZDOTDIR}/.zshrc.mine ] && source ${ZDOTDIR}/.zshrc.mine
+
