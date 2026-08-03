@@ -104,6 +104,13 @@ then
    bindkey '^h'   zaw-history # コマンド履歴一覧を表示
 fi
 
+#-------------------------------------------
+# Claude Code command history
+# Claudeが実行したコマンドの履歴を検索する
+# (zsh本来の履歴とは別ファイルで管理する)
+#-------------------------------------------
+[ -e ${ZDOTDIR}/.zclaude ] && source ${ZDOTDIR}/.zclaude
+
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"

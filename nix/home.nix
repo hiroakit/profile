@@ -13,6 +13,7 @@ in
     ./modules/vscode.nix
     ./modules/tmux.nix
     ./modules/wsl.nix
+    ./modules/claude.nix
   ];
 
   home.username = username;

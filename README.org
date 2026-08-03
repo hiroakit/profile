@@ -43,6 +43,34 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 - On Linux (Codespaces), =install.sh= installs Nix (if needed) and applies the Home Manager configuration for the current user (e.g. =codespace@devcontainer=).
 - Note: this repo uses a git submodule (=resources/zsh/.zsh/zaw=). =install.sh= initializes submodules automatically, but your environment must allow fetching it.
 
+** Claude Code command history
+- Claude Codeが実行したBashコマンドを記録し、zshから検索できるようにしている。
+- 記録先は =~/.claude/command-history.tsv= (=$CLAUDE_HISTFILE=)。
+  zsh本来の =$HISTFILE= には追記しないので、=^R= や =zaw-history= は汚れない。
+- 記録は =~/.claude/hooks/record-command-history.py= が行う。
+  =~/.claude/settings.json= の =PostToolUse= フック (matcher =Bash=) から呼ばれる。
+- 1行1コマンドのタブ区切り。コマンド中の改行・タブ・バックスラッシュは
+  =\n= =\t= =\\= にエスケープしてあるので、=grep= でもそのまま検索できる。
+  #+begin_src text
+  <epoch>	<session-id>	<cwd>	<command>
+  #+end_src
+- 検索方法 (=$ZDOTDIR/.zclaude= が定義)
+  #+begin_src sh
+  claude-history                 # 直近50件
+  claude-history -n 0            # 全件
+  claude-history -n 200 git push # 複数パターンはAND、大文字小文字は無視
+  #+end_src
+  | キー   | 動作                                                 |
+  |--------+------------------------------------------------------|
+  | =^X^R= | fzfで絞り込み、選んだコマンドを編集バッファに入れる  |
+  | =^X^H= | zawで絞り込み (fzfが無い環境向け)                    |
+- 保存件数は =$CLAUDE_HISTSIZE= (既定20000件)。ファイルが8MiBを超えたら古い順に切り詰める。
+- 履歴ファイルはコマンドをそのまま保存するため =600= で作成される。
+- 注意: 既に =~/.claude/settings.json= がある場合、Home Managerは上書きを拒否して
+  activationに失敗する。既存の設定を =resources/claude/settings.json= にマージしてから
+  元ファイルを退避すること。逆に、この設定をNixで管理している間は =/config= 等からの
+  =~/.claude/settings.json= への書き込みもできない。
+
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
 
