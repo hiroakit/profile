@@ -6,195 +6,333 @@
 #+STARTUP: hidestars
 
 * About this
+
 My customization note for Emacs.
-I use Emacs 24.3 now..., I'll change Emacs 25 !
+The configuration is written in =init.el= with [[https://github.com/conao3/leaf.el][leaf.el]], and packages are installed from MELPA / GNU ELPA / NonGNU ELPA by =package.el=.
+
+* Requirements
+
+#+CAPTION: Requirements
+| requirement               | note                                                                   |
+|---------------------------+------------------------------------------------------------------------|
+| GNU Emacs 29.1 or later   | =project-vc-extra-root-markers= is used, and it was added in Emacs 29  |
+| =/Applications/Emacs.app= | macOS only. Emacs is installed by hand, not by nix nor Homebrew        |
+| Cica                      | The default font. Another font is used when Cica is not installed      |
+| ripgrep                   | Used by deadgrep. =~/.ignore= is read by ripgrep to skip files         |
+| python3                   | Only when =treemacs-git-mode= is changed from ='simple= to ='deferred= |
+
+* Setup
+
+=~/.emacs.d= is linked to this directory by =nix/modules/emacs.nix= (Home Manager).
+The link is writable on macOS, so =elpa=, =custom.el= and =eln-cache= keep working.
+
+#+begin_src sh
+darwin-rebuild switch --flake .#<darwinHost>
+#+end_src
+
+Packages are not managed by nix. They are installed when Emacs starts for the first time:
+=exec-path-from-shell= and =leaf= are installed by =init.el= itself, and the rest are installed by the =:ensure t= of each =leaf= block.
+
+* Emacs server
+
+=init.el= starts the server on =emacs-startup-hook= unless another Emacs already serves it.
+It runs on both GUI (Emacs.app) and terminal (=emacs -nw=).
+
+#+CAPTION: emacsclient
+| command                | action                                       |
+|------------------------+----------------------------------------------|
+| =emacsclient -n file=  | Open the file in the running frame           |
+| =emacsclient -c file=  | Open the file in a new GUI frame             |
+| =emacsclient -nw file= | Open the file in a new frame inside terminal |
+| =emacs --daemon=       | Start Emacs as a server without a frame      |
+
+See also: [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html][Emacs Server - The Emacs Manual]]
+
+* Appearance
+
+#+CAPTION: Variables for appearance (M-x customize-group RET user-default-appearance)
+| variable                    | default                | description                                          |
+|-----------------------------+------------------------+------------------------------------------------------|
+| =user-default-custom-theme= | =modus-vivendi-tinted= | Fallback is =modus-vivendi= when it is not available |
+| =user-default-font-name=    | =Cica=                 | Applied only when the font family is installed       |
+| =user-default-font-size=    | =18=                   | Passed to =set-frame-font=                           |
+
+The menu bar and the tool bar are hidden in =early-init.el=.
+The frame is moved to the center of the display, and it is resized to 60% width and 80% height of the work area, on startup.
+
 * Operations Guide
 ** General
 
- #+CAPTION: Key bindings for general
- | action                 | function                     | command   | key map    |
- |------------------------+------------------------------+-----------+------------|
- | Show key bindings      | describe-bindings            | C-h b     | global-map |
- | Open current directory | hp-open-current-directory    | C-c f     | global-map |
- | Inset current date     | hp-insert-current-date-text  | C-c C-d c | global-map |
- | Inset current year     | hp-insert-current-year-text  | C-c C-d y | global-map |
- | Inset current month    | hp-insert-current-month-text | C-c C-d m | global-map |
- | Inset current day      | hp-insert-current-day-text   | C-c C-d d | global-map |
- | Cancel                 | ? (TBD)                      | C-g       | global-map |
+=M-z= is a prefix key. =zap-to-char= is not used, so it was replaced with =my-prefix-command=.
 
-*** Frame
+#+CAPTION: Key bindings for general
+| action            | function              | command | key map    |
+|-------------------+-----------------------+---------+------------|
+| Show key bindings | describe-bindings     | C-h b   | global-map |
+| Open init.el      | he-emacs-init-open    | C-c C-i | global-map |
+| Find leaf block   | leaf-find             | C-x f   | global-map |
+| Show package list | package-list-packages | C-x p l | global-map |
+| Cancel            | keyboard-quit         | C-g     | global-map |
 
- If you get frame size adjusted, these command help you. 
+*** Window and text scale
 
-  #+CAPTION: Key bindings for frame control
-  | action                     | function | command | key map    |
-  |----------------------------+----------+---------+------------|
-  | Turn on frame rizeing mode | -        | C-c C-r | global-map |
-  | Move line left             | -        | h       | -          |
-  | Move line right            | -        | l       | -          |
-  | Move line up               | -        | k       | -          |
-  | Move line down             | -        | j       | -          |
-  |                            |          |         |            |
+#+CAPTION: Key bindings for window and text scale
+| action                    | function                 | command   | key map    |
+|---------------------------+--------------------------+-----------+------------|
+| Maximize window           | maximize-window          | C-x w }   | global-map |
+| Minimize window           | minimize-window          | C-x w {   | global-map |
+| Scale text in the buffer  | text-scale-adjust        | C-x t s   | global-map |
+| Scale text in all buffers | global-text-scale-adjust | C-x t g s | global-map |
 
 *** Region
 
- If you get region, these command help you. 
-
- | action                   | function           | command             | key map    |
- |--------------------------+--------------------+---------------------+------------|
- | Go to region select mode | ? (TBD)            | C RET  (Ctrl + RET) | cua-mode   |
- | Expand region            | er/expand-region   | C-c r u             | global-map |
- | Contract region          | er/contract-region | C-c r d             | global-map |
+#+CAPTION: Key bindings for region
+| action           | function                | command | key map    |
+|------------------+-------------------------+---------+------------|
+| Rectangle select | cua-rectangle-mark-mode | C-x [   | global-map |
 
 *** Undo
 
- You can get Undo history by these command.
+undo-tree keeps the undo history. The history file is not saved (=undo-tree-auto-save-history= is nil).
 
- #+CAPTION: Key bindings
- | action         | function                  | command | key map    |
- |----------------+---------------------------+---------+------------|
- | Show undo tree | undo-tree-visualize       | C-x u   | global-map |
- | Exit undo tree | undo-tree-visualizer-quit | q       | ? (TBD)    |
+#+CAPTION: Key bindings for undo
+| action         | function                  | command  | key map                       |
+|----------------+---------------------------+----------+-------------------------------|
+| Undo           | undo                      | C-z      | global-map                    |
+| Redo           | redo                      | C-S-z    | global-map                    |
+| Show undo tree | undo-tree-visualize       | C-x u    | global-map                    |
+| Exit undo tree | undo-tree-visualizer-quit | ESC, RET | undo-tree-visualizer-mode-map |
 
-*** Flycheck
+** Navigation
 
-Flycheck catch error.
+Completion is built with vertico (UI), consult (commands) and orderless (matching style).
+Helm and auto-complete are no longer used.
 
- #+CAPTION: Key bindings for flycheck
- | action                  | function          | command | key map    |
- |-------------------------+-------------------+---------+------------|
- | Show error list         |                   | C-c C-l | global-map |
- | Jump to next error      |                   | C-c C-n | global-map |
- | Jump to  previous error |                   | C-c C-p | global-map |
+#+CAPTION: Key bindings for navigation
+| action                        | function                    | command   | key map    |
+|-------------------------------+-----------------------------+-----------+------------|
+| Switch buffer                 | consult-buffer              | C-x C-x   | global-map |
+| Switch buffer in other window | consult-buffer-other-window | C-x 4 C-x | global-map |
+| Open bookmark                 | consult-bookmark            | C-x r b   | global-map |
+| Find file by name             | consult-find                | M-s f     | global-map |
+| Show recent files             | consult-recent-file         | C-x C-r   | global-map |
 
-*** Snippets
+recentf-mode and bookmark are enabled. Bookmarks are saved every time they are changed.
 
-Snippet manage by yas.
+** Project
 
- #+CAPTION: Key bindings for snippets
- | action                 | function               | command | key map            |
- |------------------------+------------------------+---------+--------------------|
- | Insert snippet         | yas-insert-snippet     | C-x i i | yas-minor-mode-map |
- | Create snippet         | yas-new-snippet        | C-x i n | yas-minor-mode-map |
- | Edit registerd snippet | yas-visit-snippet-file | C-x i v | yas-minor-mode-map |
+=project.el= is built in Emacs 28 or later. The project root is detected by walking up to a VC directory such as =.git=.
+=.project=, =package.json=, =Cargo.toml=, =go.mod= and =pyproject.toml= are also treated as a project root.
 
-*** Completion
+#+CAPTION: Key bindings for project
+| action                     | function               | command | key map            |
+|----------------------------+------------------------+---------+--------------------|
+| Find file in project       | project-find-file      | C-x p f | project-prefix-map |
+| Grep in project            | project-find-regexp    | C-x p g | project-prefix-map |
+| Switch project             | project-switch-project | C-x p p | project-prefix-map |
+| Open project root by dired | project-dired          | C-x p d | project-prefix-map |
 
-Auto-complete take you some completion.
+*** Project tree
 
-  #+CAPTION: Key bindings
-  | action                         | command               | package       | key map                                 |
-  |--------------------------------+-----------------------+---------------+-----------------------------------------|
-  | Do completion                  | TAB                   | auto-complete | auto-complete-mode                      |
-  | Show completion menu           | TAB                   | auto-complete | auto-complete-mode                      |
-  | Hide completion menu           | ESC                   | auto-complete | ac-completing-map                       |
-  | Select up on completion menu   | C-p or up arrow key   | auto-complete | ac-menu-map                             |
-  | Select down on completion menu | C-n or down arrow key | auto-complete | ac-menu-map                             |
+treemacs shows the tree of the project in a sidebar.
+It follows the current file, watches file changes, and shows the git state of files by color.
 
-** Helm
+#+CAPTION: Key bindings for treemacs
+| action              | function               | command | key map           |
+|---------------------+------------------------+---------+-------------------|
+| Toggle tree         | treemacs               | C-c t   | global-map        |
+| Move cursor to tree | treemacs-select-window | C-c 0   | global-map        |
+| Show key bindings   | treemacs-helpful-hydra | ?       | treemacs-mode-map |
 
-Helm put you powerful searching feature.
+neotree is still configured, but its role overlaps with treemacs. It will be removed when it is not needed.
 
- #+CAPTION: Key bindings for helm
- | action                    | command | package | key map                                 |
- |---------------------------+---------+---------+-----------------------------------------|
- | Show recent               | C-x C-x | helm    | global-map                              |
- | Show command menu         | M-x     | helm    | global-map                              |
- | Show menu that find files | C-x C-f | helm    | global-map                              |
- | Show recent files         | C-x C-r | helm    | global-map                              |
- | Show kill ring            | M-y     | helm    | global-map                              |
- | Show helm imenu           | C-c i   | helm    | global-map                              |
- | Show buffers              | C-x C-b | helm    | global-map                              |
- | Show helm mini            | C-x C-m | helm    | global-map                              |
- | Show resumed helm         | M-r     | helm    | global-map                              |
- | Delete backword character | C-h     | helm    | helm-map, helm-find-files-map           |
- | Execute parsistent        | TAB     | helm    | helm-find-files-map, helm-read-file-map |
+#+CAPTION: Key bindings for neotree
+| action        | function       | command | key map          |
+|---------------+----------------+---------+------------------|
+| Toggle filer  | neotree-toggle | C-c n   | global-map       |
+| Open the node | neotree-enter  | RET     | neotree-mode-map |
 
-*** Helm Swoop
+** Grep
 
- Helm-Swoop launch when you put M-i in I-Search (C-s).
+deadgrep runs ripgrep. =--hidden= and =--follow= are added to the arguments, so hidden files are searched and symbolic links are followed.
+Write =.git/= in =~/.ignore= to keep the result readable.
+
+#+CAPTION: Key bindings for grep
+| action | function | command | key map    |
+|--------+----------+---------+------------|
+| Grep   | deadgrep | C-x C-g | global-map |
+
+** Completion
+
+company is the completion framework, and it is enabled globally.
+Completion starts after 2 characters and 0.2 second.
+
+#+CAPTION: Key bindings for company
+| action                         | function                   | command | key map                                |
+|--------------------------------+----------------------------+---------+----------------------------------------|
+| Do completion                  | company-complete           | C-TAB   | global-map                             |
+| Complete by snippet            | company-yasnippet          | M-TAB   | global-map                             |
+| Insert the selected candidate  | company-complete-selection | TAB     | company-active-map                     |
+| Select next candidate          | company-select-next        | C-n     | company-active-map, company-search-map |
+| Select previous candidate      | company-select-previous    | C-p     | company-active-map, company-search-map |
+| Show the location of candidate | company-show-location      | C-d     | company-active-map                     |
+| Show the document of candidate | company-show-doc-buffer    | SPC     | company-active-map                     |
+
+In org-mode, =company-backends= is set to =company-files=, =company-capf=, =company-yasnippet=, =company-ispell= and =company-abbrev=, to write text without code completion.
+
+** Snippets
+
+Snippets are managed by yasnippet, and =yas-global-mode= is enabled.
+The snippets are stored in =$HOME/.emacs.d/snippets= (html-mode, java-mode, js-mode, org-mode, sh-mode, typescript-mode).
+
+#+CAPTION: Key bindings for snippets
+| action                 | function               | command   | key map            |
+|------------------------+------------------------+-----------+--------------------|
+| Insert snippet         | yas-insert-snippet     | C-c & C-s | yas-minor-mode-map |
+| Create snippet         | yas-new-snippet        | C-c & C-n | yas-minor-mode-map |
+| Edit registerd snippet | yas-visit-snippet-file | C-c & C-v | yas-minor-mode-map |
+
+** Programming languages
+*** Emacs Lisp
+
+#+CAPTION: Key bindings for emacs-lisp-mode
+| action      | function    | command | key map             |
+|-------------+-------------+---------+---------------------|
+| Eval buffer | eval-buffer | C-c e b | emacs-lisp-mode-map |
+| Eval region | eval-region | C-c e r | emacs-lisp-mode-map |
+
+*** C++ and C#
+
+=.h= and =.cpp= are opened by c++-mode, and eglot is attached by =c++-mode-hook=.
+=.cs= and =.csx= are opened by csharp-mode. =CMakeLists.txt= and =.cmake= are opened by cmake-mode.
+
+#+CAPTION: Key bindings for c++-mode
+| action                   | function           | command | key map      |
+|--------------------------+--------------------+---------+--------------|
+| Switch header and source | ff-find-other-file | C-c C-o | c++-mode-map |
+
+*** LSP
+
+eglot is the LSP client. lsp-mode and lsp-ui are not used now.
 
 ** Org mode
 
-Org-mode will help you as R2-D2.
+=org-directory= is =~/Library/Mobile Documents/com~apple~CloudDocs/org= (iCloud Drive).
+=main.org=, =private.org= and the NeoOrg inbox (=~/Library/Mobile Documents/com~apple~CloudDocs/neo-org/neo-main.org=) are the agenda and the refile targets.
 
- #+CAPTION: Key bindings for org-mode
- | action                 | function                  | command | key map    |
- |------------------------+---------------------------+---------+------------|
- | Add task               | org-capture               | C-c o   | global-map |
- | Switch org buffer      | org-iswitchb              | C-c b   | global-map |
- | Show agenda menu       | org-agenda                | C-c a   | global-map |
- | Create temp org buffer | hp-create-temp-org-buffer | C-c t   | global-map |
+#+CAPTION: Key bindings for org-mode
+| action                      | function                        | command    | key map      |
+|-----------------------------+---------------------------------+------------+--------------|
+| Open the default notes file | he-org-open-default-notes       | C-c a o    | global-map   |
+| Show agenda                 | org-agenda                      | C-c a a    | global-map   |
+| Capture                     | org-capture                     | C-x c      | global-map   |
+| Cut subtree                 | org-cut-special                 | M-z x      | org-mode-map |
+| Copy subtree                | org-copy-special                | M-z c      | org-mode-map |
+| Paste subtree               | org-paste-special               | M-z v      | org-mode-map |
+| Create ID for the entry     | org-id-get-create               | M-z o i    | org-mode-map |
+| Insert subheading           | org-insert-subheading           | M-z h s    | org-mode-map |
+| Go to previous heading      | org-backward-heading-same-level | C-c <up>   | org-mode-map |
+| Go to next heading          | org-forward-heading-same-level  | C-c <down> | org-mode-map |
+| Jump to heading             | consult-org-heading             | C-x C-h    | org-mode-map |
+| Narrow / widen the subtree  | org-toggle-narrow-to-subtree    | C-x n t    | org-mode-map |
+
+Speed commands are enabled. Press =j= on a heading to jump by =consult-org-heading=.
+
+*** TODO keywords
+
+=TODO(t)= → =DONE(d!)=, =WAITING(w@/!)=, =CANCELED(c@/!)=.
+The closing time is recorded when a task is done (=org-log-done= is ='time=).
+
+*** Capture templates
+
+#+CAPTION: Capture templates (C-x c)
+| key | template             | target                                           |
+|-----+----------------------+--------------------------------------------------|
+| t   | Add Task             | Inbox of =org-default-notes-file=                |
+| d   | Add Daily Scrum Note | Projects/Daily Scrum of =org-default-notes-file= |
+| n   | Add Task to NeoOrg   | Inbox of the NeoOrg inbox                        |
+| j   | Journal              | Journal of the NeoOrg inbox (datetree)           |
+| m   | Explore music        | Journal of the NeoOrg inbox (datetree)           |
+
+*** Babel
+
+emacs-lisp, shell, csharp, ruby and python are loaded as babel languages.
+=ob-csharp.el= comes from org-contrib.
+
+*** Export and preview
+
+org-preview-html shows the preview in xwidget, and only the subtree is rendered.
+When an org file is saved and the HTML file of the same name exists, it is exported by =org-html-export-to-html= and opened again.
 
 *** Links
 
- If you need to get a org-headling linked, these command help you. 
+#+CAPTION: Key bindings for links
+| action    | function          | command | key map      |
+|-----------+-------------------+---------+--------------|
+| Add link  | org-insert-link   | C-c C-l | org-mode-map |
+| Open link | org-open-at-point | C-c C-o | org-mode-map |
 
-  #+CAPTION: Key bindings for links
-  | action            | function          | command   | key map    |
-  |-------------------+-------------------+-----------+------------|
-  | Add link          | org-insert-link   | C-c C-l   | global-map |
-  | Store link        | org-store-link    | C-c l     | global-map |
-  | Open link         | org-open-at-point | C-c C-o   | global-map |
+If you will get some more information, read this help.
+- [[https://orgmode.org/manual/Hyperlinks.html][Hyperlinks - The Org Manual]]
+  - [[https://orgmode.org/manual/External-Links.html][External links - The Org Manual]]
+  - [[https://orgmode.org/manual/Handling-Links.html][Handling links - The Org Manual]]
 
- If you will get some more information, read this help.
- - [[http://orgmode.org/manual/Hyperlinks.html#Hyperlinks][Hyperlinks - The Org Manual]]
-   - [[http://orgmode.org/manual/External-links.html][External links - The Org Manual]]
-   - [[http://orgmode.org/manual/Handling-links.html][Handling links - The Org Manual]]
 * Using packages
 
 #+CAPTION: Using packages
-| package         | source                                         |
-|-----------------+------------------------------------------------|
-| auto-install    | http://www.emacswiki.org/emacs/auto-install.el |
-| auto-complete   | ELPA                                           |
-| cmake-mode      | ELPA                                           |
-| cua-mode        | Built in                                       |
-| csharp-mode     | ELPA                                           |
-| flycheck        | ELPA                                           |
-| foreign-regexp  | ELPA                                           |
-| helm            | ELPA                                           | 
-| helm-swoop      | ELPA                                           |  
-| init-loader     | ELPA                                           |
-| js2-mode        | ELPA                                           |
-| neotree         | ELPA                                           |
-| org-mode        | [[http://orgmode.org/ja/][org 8.3.2]]                                      |
-| ruby-additional | ELPA                                           |
-| ruby-block      | ELPA                                           |
-| ruby-mode       | ELPA                                           |
-| swift-mode      | ELPA                                           |
-| undo-tree       | ELPA                                           |
-| undohist        | ELPA                                           |
-| web-mode        | ELPA                                           |
-| yasnippet       | ELPA                                           |
+| package              | source   | description                                 |
+|----------------------+----------+---------------------------------------------|
+| blackout             | ELPA     | Hide minor modes from the mode line         |
+| cmake-mode           | ELPA     | CMakeLists.txt and .cmake                   |
+| company              | ELPA     | Completion framework                        |
+| consult              | ELPA     | Search and navigation commands              |
+| csharp-mode          | ELPA     | C#                                          |
+| deadgrep             | ELPA     | Frontend of ripgrep                         |
+| doom-modeline        | ELPA     | Mode line (icons are turned off)            |
+| eglot                | ELPA     | LSP client                                  |
+| el-get               | ELPA     | Package installer for leaf-keywords         |
+| exec-path-from-shell | ELPA     | Copy PATH from the login shell (macOS)      |
+| hydra                | ELPA     | Key binding helper for leaf-keywords        |
+| leaf                 | ELPA     | Configuration macro                         |
+| leaf-convert         | ELPA     | Convert existing config into leaf           |
+| leaf-keywords        | ELPA     | Extra keywords for leaf                     |
+| leaf-tree            | ELPA     | Sidebar of leaf blocks (M-x leaf-tree-mode) |
+| neotree              | ELPA     | Filer (overlaps with treemacs)              |
+| orderless            | ELPA     | Completion style                            |
+| org                  | ELPA     | Org mode                                    |
+| org-contrib          | ELPA     | Contributed org packages (ob-csharp.el)     |
+| org-preview-html     | ELPA     | Preview org as HTML                         |
+| review-mode          | ELPA     | Re:VIEW                                     |
+| treemacs             | ELPA     | Project tree sidebar                        |
+| undo-tree            | ELPA     | Undo history                                |
+| vertico              | ELPA     | Vertical completion UI                      |
+| yasnippet            | ELPA     | Snippets                                    |
+| bookmark             | Built in | Bookmarks                                   |
+| cua-mode             | Built in | Rectangle selection                         |
+| project              | Built in | Project management                          |
+| recentf              | Built in | Recent files                                |
+| server               | Built in | Server for emacsclient                      |
 
 * Resources path
 
 #+CAPTION: Resources path
-| resource                                    | path (finished setup.sh)         |
-|---------------------------------------------+----------------------------------|
-| Dictionary files for auto-complete          | $HOME/.emacs.d/dict/ac-dict      |
-| User defined dictionaries for auto-complete | $HOME/.emacs.d/dict/ac-user-dict |
-| Snippet for yasnippet                       | $HOME/.emacs.d/snippets          |
+| resource                                | path                     |
+|-----------------------------------------+--------------------------|
+| Snippets for yasnippet                  | $HOME/.emacs.d/snippets  |
+| Local elisp files                       | $HOME/.emacs.d/site-lisp |
+| Installed packages                      | $HOME/.emacs.d/elpa      |
+| Backup files and auto save files        | $HOME/.emacs.d/backup    |
+| Dictionaries for auto-complete (unused) | $HOME/.emacs.d/dict      |
 
 * Config files
 
 #+CAPTION: Config files
-| config for                           | path (finished setup.sh)                     |
-|--------------------------------------+----------------------------------------------|
-| for init-loader and expand load-path | $HOME/.emacs.d/init.el                       |
-| Font and more                        | $HOME/.emacs.d/inits/00-common.el            |
-| for auto-install.el                  | $HOME/.emacs.d/inits/03-auto-install.el      |
-| for cmake-mode                       | $HOME/.emacs.d/inits/04-cmake.el             |
-| for package.el                       | $HOME/.emacs.d/inits/20-package.el           |
-| for helm-mode                        | $HOME/.emacs.d/inits/21-helm.el              |
-| for auto-complete-mode               | $HOME/.emacs.d/inits/25-auto-complete.el     |
-| for org-mode                         | $HOME/.emacs.d/inits/30-org.el               |
-| for yasnippet                        | $HOME/.emacs.d/inits/35-yasnippet.el         |
-| for ruby-mode                        | $HOME/.emacs.d/inits/40-ruby.el              |
-| for javascript-mode and j2-mode      | $HOME/.emacs.d/inits/41-javascript.el        |
-| for scala2-mode                      | $HOME/.emacs.d/inits/71-scala.el             |
-| for web-mode (including asp)         | $HOME/.emacs.d/inits/72-web-mode.el          |
-| for csharp-mode                      | $HOME/.emacs.d/inits/73-csharp.el            |
-| Global key assign                    | $HOME/.emacs.d/inits/99-global-keybinding.el |
+| config for                                | path                         |
+|-------------------------------------------+------------------------------|
+| Frame parameters and theme before startup | $HOME/.emacs.d/early-init.el |
+| All settings                              | $HOME/.emacs.d/init.el       |
+| Settings written by M-x customize         | $HOME/.emacs.d/custom.el     |
+| Link of ~/.emacs.d and the emacs wrapper  | nix/modules/emacs.nix        |
 
+=init-hiroakit.el= is the old configuration for Emacs 24 (init-loader, helm, auto-complete).
+It is not loaded by =init.el=, and it is kept only for reference.
