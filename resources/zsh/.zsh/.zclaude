@@ -11,8 +11,8 @@
 # searchable from the shell.
 #
 #   claude-history [-n COUNT] [PATTERN...]  一覧表示 (新しいものが下)
-#   ^X^R                                    fzfでインクリメンタル検索
-#   ^X^H                                    zawでインクリメンタル検索
+#   Ctrl-x Ctrl-r                            fzfでインクリメンタル検索
+#   Ctrl-x Ctrl-h                            zawでインクリメンタル検索
 #
 # Record format, one per line, tab separated:
 #   <epoch> <session-id> <cwd> <command with \\, \t, \r, \n escaped>

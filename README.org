@@ -44,40 +44,9 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 - Note: this repo uses a git submodule (=resources/zsh/.zsh/zaw=). =install.sh= initializes submodules automatically, but your environment must allow fetching it.
 
 ** Claude Code command history
-- Claude Codeが実行したBashコマンドを記録し、zshから検索できるようにしている。
-- 記録先は =~/.claude/command-history.tsv= (=$CLAUDE_HISTFILE=)。
-  zsh本来の =$HISTFILE= には追記しないので、=^R= や =zaw-history= は汚れない。
-- 記録は =~/.claude/hooks/record-command-history.py= が行う。
-  =~/.claude/settings.json= の =PostToolUse= フック (matcher =Bash=) から呼ばれる。
-- 1行1コマンドのタブ区切り。コマンド中の改行・タブ・バックスラッシュは
-  =\n= =\t= =\\= にエスケープしてあるので、=grep= でもそのまま検索できる。
-  #+begin_src text
-  <epoch>	<session-id>	<cwd>	<command>
-  #+end_src
-- 検索方法 (=$ZDOTDIR/.zclaude= が定義)
-  #+begin_src sh
-  claude-history                 # 直近50件
-  claude-history -n 0            # 全件
-  claude-history -n 200 git push # 複数パターンはAND、大文字小文字は無視
-  #+end_src
-  | キー   | 動作                                                 |
-  |--------+------------------------------------------------------|
-  | =^X^R= | fzfで絞り込み、選んだコマンドを編集バッファに入れる  |
-  | =^X^H= | zawで絞り込み (fzfが無い環境向け)                    |
-- 保存件数は =$CLAUDE_HISTSIZE= (既定20000件)。ファイルが8MiBを超えたら古い順に切り詰める。
-- 履歴ファイルはコマンドをそのまま保存するため =600= で作成される。
-- インストール
-  - zsh側 (=.zclaude=, =.zshenv=) は =resources/zsh= を配置すれば有効になる。
-  - Claude Code側は、Nix管理のホストなら =nix/modules/claude.nix= が
-    =~/.claude/settings.json= と =~/.claude/hooks/record-command-history.py= を配置する。
-  - *既に =~/.claude/settings.json= がある場合はリンクで置き換えないこと。*
-    Claude Code自身が =/config= などでこのファイルに書き込むため、読み取り専用の
-    シンボリックリンクにすると以後その書き込みが失敗する。既存ファイルは実体のまま残し、
-    =resources/claude/settings.json= の =PostToolUse= エントリだけをマージする。
-    フックスクリプトはリポジトリからリンクすればよい。
-    #+begin_src sh
-    ln -sfn "$PWD/resources/claude/hooks/record-command-history.py" ~/.claude/hooks/
-    #+end_src
+- Records Bash commands Claude Code runs so they can be searched from zsh
+  (kept in a separate file from zsh's own =$HISTFILE=, so =^R= / zaw-history stay clean).
+- See =resources/zsh/.zsh/zsh.org= for usage, key bindings, file format, and install steps.
 
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
