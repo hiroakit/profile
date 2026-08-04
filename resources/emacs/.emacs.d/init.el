@@ -357,7 +357,63 @@
           ("RET" . undo-tree-visualizer-quit))))
 
 ;;-------------------------
+;; PROJECT
+;;
+;; project.el は Emacs 28 以降に同梱されているプロジェクト管理機能
+;; プロジェクトのルートは .git などのVCディレクトリを遡って自動判定される
+;;
+;;   C-x p f   プロジェクト内のファイルを開く
+;;   C-x p g   プロジェクト内をgrep
+;;   C-x p p   別のプロジェクトに切り替える
+;;   C-x p d   プロジェクトルートをdiredで開く
+;;-------------------------
+
+(leaf project
+  :doc "Project management (built-in)"
+  ;; project-vc-extra-root-markers は Emacs 29 で追加された
+  :when (version<= "29.1" emacs-version)
+  :custom `((project-vc-extra-root-markers . '(".project"
+                                               "package.json"
+                                               "Cargo.toml"
+                                               "go.mod"
+                                               "pyproject.toml"))))
+
+;;-------------------------
+;; PROJECT TREE
+;;
+;; treemacs はプロジェクトのフォルダ構成をサイドバーにツリー表示する
+;;
+;;   C-c t   ツリーの表示/非表示
+;;   C-c 0   ツリーのウィンドウにカーソルを移す
+;;   ?       ツリー上でキーバインド一覧を表示
+;;-------------------------
+
+(leaf treemacs
+  :doc "Project tree sidebar"
+  :ensure t
+  :bind (("C-c t" . treemacs)
+         ("C-c 0" . treemacs-select-window))
+  :custom ((treemacs-width . 35)
+           (treemacs-indentation . 2)
+           ;; 画像アイコンを使わず文字でツリーを描く (doom-modelineの設定に合わせる)
+           (treemacs-no-png-images . t)
+           ;; ツリーが横に長いときに追従して見える位置までスクロールする
+           (treemacs-recenter-after-file-follow . 'on-distance))
+  :config
+  ;; 開いているファイルに追従してツリーの選択位置を動かす
+  (treemacs-follow-mode t)
+
+  ;; ファイルの追加や削除を検知してツリーを自動更新する
+  (treemacs-filewatch-mode t)
+
+  ;; gitの変更状態をファイル名の色で表示する
+  ;; 'simple はファイルのみ。ディレクトリの状態も見たい場合は 'deferred にするが python3 が必要
+  (treemacs-git-mode 'simple))
+
+;;-------------------------
 ;; NEOTREE
+;;
+;; treemacsを導入したため役割が重複している。不要になったらこのブロックごと削除する
 ;;-------------------------
 
 (leaf neotree
