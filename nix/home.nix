@@ -9,6 +9,7 @@ in
 {
   imports = [
     ./modules/common.nix
+    ./modules/emacs.nix
     ./modules/macos.nix
     ./modules/vscode.nix
     ./modules/tmux.nix

@@ -27,8 +27,6 @@ brew "dotnet@8"
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
-# GNU Emacs text editor
-brew "emacs"
 # Run arbitrary commands when files change
 brew "entr"
 # Play, record, convert, and stream select audio and video codecs

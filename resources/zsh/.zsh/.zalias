@@ -24,7 +24,8 @@ case "${OSTYPE}" in
         alias ll="ls -laTopgh"
 
         alias lg="lazygit"
-        alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+        # emacsは~/.local/bin/emacs (= /Applications/Emacs.app) を指す
+        alias emacs="emacs -nw"
         ;;
     linux*)
         alias su="su -l"
