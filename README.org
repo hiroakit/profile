@@ -46,6 +46,11 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 - On Linux (Codespaces), =install.sh= installs Nix (if needed) and applies the Home Manager configuration for the current user (e.g. =codespace@devcontainer=).
 - Note: this repo uses a git submodule (=resources/zsh/.zsh/zaw=). =install.sh= initializes submodules automatically, but your environment must allow fetching it.
 
+** Claude Code command history
+- Records Bash commands Claude Code runs so they can be searched from zsh
+  (kept in a separate file from zsh's own =$HISTFILE=, so =^R= / zaw-history stay clean).
+- See =resources/zsh/.zsh/zsh.org= for usage, key bindings, file format, and install steps.
+
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
 

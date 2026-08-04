@@ -17,6 +17,11 @@ export TERM='xterm-256color'
 export ZDOTDIR=$HOME/.zsh
 export LANG=ja_JP.UTF-8
 
+# Claude Codeが実行したコマンドの履歴。
+# ~/.claude/hooks/record-command-history.py が追記し、$ZDOTDIR/.zclaude が読む。
+# zsh本来の$HISTFILEには混ぜないため、別ファイルにしている。
+export CLAUDE_HISTFILE=$HOME/.claude/command-history.tsv
+
 #------------------
 # Loading Path rules
 #

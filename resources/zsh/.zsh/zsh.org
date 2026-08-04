@@ -1,0 +1,66 @@
+#+TITLE: Operations Guide for My Zsh
+#+AUTHOR: Hiroaki Endoh
+#+LANGUAGE: ja
+#+OPTIONS: \n:nil
+#+STARTUP: overview
+#+STARTUP: hidestars
+
+* About this
+My customization note for Zsh (=$ZDOTDIR= = =resources/zsh/.zsh=).
+
+* Claude Code command history
+
+Claude Codeが実行したBashコマンドを記録し、zshから検索できるようにしている。
+記録先は zsh本来の =$HISTFILE= とは別ファイルなので、通常の =↑= / =Ctrl-R= /
+zaw-history はClaudeが実行したコマンドで汚れない。
+
+** 仕組み
+- 記録: =~/.claude/hooks/record-command-history.py= （=resources/claude/hooks/= からのシンボリックリンク）。
+  Claude Codeの =PostToolUse= フック（matcher =Bash=、=~/.claude/settings.json= に登録）から、
+  実行のたびに呼ばれる。
+- 保存先: =$CLAUDE_HISTFILE=（既定 =~/.claude/command-history.tsv=、=.zshenv= で export）。
+- 読み出し: =.zclaude= が定義する =claude-history= 関数とキーバインド（本ファイルで後述）。
+
+** ファイル形式
+1行1コマンドのタブ区切り。コマンド中の改行・タブ・バックスラッシュは
+=\n= =\t= =\\= にエスケープしてあるので、=grep= でもそのまま検索できる。
+
+#+begin_src text
+<epoch>	<session-id>	<cwd>	<command>
+#+end_src
+
+- 保存件数は =$CLAUDE_HISTSIZE=（既定20000件）。ファイルが8MiBを超えたら古い順に切り詰める。
+- 履歴ファイルはコマンドをそのまま保存するため =600= で作成される。
+
+** 使い方
+
+#+begin_src sh
+claude-history                 # 直近50件
+claude-history -n 0            # 全件
+claude-history -n 200 git push # 複数パターンはAND、大文字小文字は無視
+#+end_src
+
+#+CAPTION: Key bindings for Claude Code command history
+| action                                             | function             | command         | key map |
+|-----------------------------------------------------+----------------------+-----------------+---------|
+| fzfで絞り込み、選んだコマンドを編集バッファに入れる  | claude-history-fzf   | Ctrl-x Ctrl-r   | -       |
+| zawで絞り込み（fzfが無い環境向け）                   | zaw-claude-history   | Ctrl-x Ctrl-h   | zaw     |
+
+** Config files
+
+#+CAPTION: Config files
+| config for                          | path                                            |
+|--------------------------------------+-------------------------------------------------|
+| claude-history関数・キーバインド定義 | =$ZDOTDIR/.zclaude=（=.zshrc= からsource）       |
+| =$CLAUDE_HISTFILE= のexport          | =$ZDOTDIR/../.zshenv=（=resources/zsh/.zshenv=） |
+| 記録フック本体                       | =resources/claude/hooks/record-command-history.py= |
+| Claude Codeフック登録                | =resources/claude/settings.json=（=~/.claude/settings.json= へマージ） |
+
+** 注意
+- =~/.claude/settings.json= は既にあるファイルをシンボリックリンクで置き換えないこと。
+  Claude Code自身がこのファイルへ書き込むため、リンクにすると書き込みが失敗する。
+  既存ファイルは実体のまま残し、=resources/claude/settings.json= の =PostToolUse=
+  エントリだけをマージする。フックスクリプト本体はリポジトリからリンクすればよい。
+  #+begin_src sh
+  ln -sfn "$PWD/resources/claude/hooks/record-command-history.py" ~/.claude/hooks/
+  #+end_src

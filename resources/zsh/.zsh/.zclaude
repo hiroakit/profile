@@ -1,0 +1,223 @@
+#
+# .zclaude
+#
+# Claude Code command history for zsh, called by .zshrc
+# This file is original. NOT definition by zsh
+#
+# Claude Code appends every Bash command it runs to ${CLAUDE_HISTFILE} through
+# the PostToolUse hook at ~/.claude/hooks/record-command-history.py.  That file
+# is deliberately separate from ${HISTFILE}: Claude's commands never mix into
+# zsh's own history, ^R and zaw-history stay clean, yet the commands remain
+# searchable from the shell.
+#
+#   claude-history [-n COUNT] [PATTERN...]  一覧表示 (新しいものが下)
+#   Ctrl-x Ctrl-r                            fzfでインクリメンタル検索
+#   Ctrl-x Ctrl-h                            zawでインクリメンタル検索
+#
+# Record format, one per line, tab separated:
+#   <epoch> <session-id> <cwd> <command with \\, \t, \r, \n escaped>
+
+: ${CLAUDE_HISTFILE:=$HOME/.claude/command-history.tsv}
+
+zmodload -i zsh/datetime 2> /dev/null
+
+#------------------------------------------------------------
+# Helpers
+#------------------------------------------------------------
+
+# Decode the escapes the hook writes, so a command can be put back on the
+# command line exactly as Claude ran it.
+function _claude_history_unescape {
+    emulate -L zsh
+
+    local text="$1" decoded="" char
+    local -i index=1
+
+    while (( index <= ${#text} )); do
+        char="$text[index]"
+        if [[ "$char" == '\' ]] && (( index < ${#text} )); then
+            (( index++ ))
+            case "$text[index]" in
+                n) decoded+=$'\n' ;;
+                t) decoded+=$'\t' ;;
+                r) decoded+=$'\r' ;;
+                '\') decoded+='\' ;;
+                *) decoded+="\\$text[index]" ;;
+            esac
+        else
+            decoded+="$char"
+        fi
+        (( index++ ))
+    done
+
+    print -r -- "$decoded"
+}
+
+# Print the raw records containing every PATTERN (case insensitive, AND), in
+# the order they were recorded.  Returns non zero when nothing matches.
+function _claude_history_filter {
+    emulate -L zsh
+
+    [[ -r "$CLAUDE_HISTFILE" ]] || return 1
+
+    local records pattern
+    records="$(< "$CLAUDE_HISTFILE")" || return 1
+
+    for pattern in "$@"; do
+        records="$(print -r -- "$records" | grep -i -- "$pattern")" || return 1
+    done
+
+    [[ -n "$records" ]] || return 1
+    print -r -- "$records"
+}
+
+# Render one raw record into $REPLY as "<date>SEPARATOR<cwd>SEPARATOR<command>".
+# SEPARATOR defaults to a tab.  Returns non zero for a malformed record.
+function _claude_history_render {
+    emulate -L zsh
+
+    local record="$1" separator="$2" stamp
+    local -a fields
+
+    # $'\t' is not expanded inside ${2:-...}, so default it here.
+    [[ -n "$separator" ]] || separator=$'\t'
+
+    fields=( "${(@ps:\t:)record}" )
+    (( ${#fields} >= 4 )) || return 1
+
+    stamp="$fields[1]"
+    if (( $+builtins[strftime] )); then
+        strftime -s stamp '%Y-%m-%d %H:%M:%S' "$fields[1]" 2> /dev/null ||
+            stamp="$fields[1]"
+    fi
+
+    REPLY="${stamp}${separator}${fields[3]/#$HOME/~}${separator}${fields[4]}"
+}
+
+# Render the raw records read on stdin, one line each.
+function _claude_history_format {
+    emulate -L zsh
+
+    local record
+    while IFS= read -r record; do
+        _claude_history_render "$record" "$1" && print -r -- "$REPLY"
+    done
+}
+
+#------------------------------------------------------------
+# claude-history
+#------------------------------------------------------------
+
+function claude-history {
+    emulate -L zsh
+
+    local option
+    local -i count=50
+
+    while getopts 'n:h' option; do
+        case "$option" in
+            n) count="$OPTARG" ;;
+            *) print -u2 -- 'usage: claude-history [-n COUNT] [PATTERN...]'
+               return 1 ;;
+        esac
+    done
+    shift $(( OPTIND - 1 ))
+
+    if [[ ! -r "$CLAUDE_HISTFILE" ]]; then
+        print -u2 -- "claude-history: cannot read ${CLAUDE_HISTFILE}"
+        return 1
+    fi
+
+    local records
+    records="$(_claude_history_filter "$@")" || return 1
+    if (( count > 0 )); then
+        records="$(print -r -- "$records" | tail -n "$count")"
+    fi
+
+    print -r -- "$records" | _claude_history_format
+}
+
+#------------------------------------------------------------
+# fzf
+#------------------------------------------------------------
+
+function claude-history-fzf {
+    emulate -L zsh
+
+    if (( ! $+commands[fzf] )); then
+        zle -M 'claude-history: fzf is not available'
+        return 1
+    fi
+
+    local -a records
+    records=( ${(f)"$(_claude_history_filter)"} )
+    if (( ! ${#records} )); then
+        zle -M "claude-history: no history in ${CLAUDE_HISTFILE}"
+        return 1
+    fi
+
+    local selected
+    selected="$(print -rl -- "${(@Oa)records}" | _claude_history_format |
+        fzf --no-sort --tiebreak=index \
+            --prompt='claude history> ' --query="$BUFFER")"
+    if [[ -z "$selected" ]]; then
+        zle redisplay
+        return 0
+    fi
+
+    local -a fields
+    fields=( "${(@ps:\t:)selected}" )
+    BUFFER="$(_claude_history_unescape "$fields[3]")"
+    CURSOR="${#BUFFER}"
+    zle redisplay
+}
+
+zle -N claude-history-fzf
+bindkey '^x^r' claude-history-fzf
+
+#------------------------------------------------------------
+# zaw
+# https://github.com/zsh-users/zaw
+#------------------------------------------------------------
+
+if (( $+functions[zaw-register-src] )); then
+    function zaw-callback-claude-history-replace-buffer {
+        BUFFER="$(_claude_history_unescape "${(j:; :)@}")"
+        CURSOR="${#BUFFER}"
+    }
+
+    function zaw-callback-claude-history-append-to-buffer {
+        LBUFFER="${BUFFER}$(_claude_history_unescape "${(j:; :)@}")"
+    }
+
+    function zaw-src-claude-history {
+        local record
+        local -a records fields
+
+        records=( ${(f)"$(_claude_history_filter)"} )
+        candidates=()
+        cand_descriptions=()
+
+        # Newest first, matching how zaw-src-history presents zsh's history.
+        # filter-select shows a tab as a literal "\t", so separate the columns
+        # with spaces here.
+        for record in "${(@Oa)records}"; do
+            _claude_history_render "$record" '  ' || continue
+            fields=( "${(@ps:\t:)record}" )
+            candidates+=( "$fields[4]" )
+            cand_descriptions+=( "$REPLY" )
+        done
+
+        actions=(
+            zaw-callback-claude-history-replace-buffer
+            zaw-callback-claude-history-append-to-buffer
+        )
+        act_descriptions=(
+            'replace edit buffer'
+            'append to edit buffer'
+        )
+    }
+
+    zaw-register-src -n claude-history zaw-src-claude-history
+    bindkey '^x^h' zaw-claude-history
+fi
