@@ -43,8 +43,6 @@ using (Cd($"{resourcesDir}"))
     await "stow -v 2 -t ~/ vim";
     await "stow -v 2 -t ~/ git";
     await "stow -v 2 -t ~/ zsh";
-    await "stow -v 2 -t ~/ emacs";
 
-    // ~/.local/bin は他のツールも使うため、ディレクトリごとリンクしないようにする
-    await "stow -v 2 --no-folding -t ~/ bin";
+    // Emacs (~/.emacs.d と ~/.local/bin/emacs) は nix/modules/emacs.nix が管理する
 }

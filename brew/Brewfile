@@ -83,8 +83,6 @@ brew "texinfo"
 brew "tre-command"
 # Bicep: next generation template language for Azure Resource Manager (ARM)
 brew "azure/bicep/bicep"
-# GNU Emacs text editor (/Applications/Emacs.app)
-cask "emacs"
 # Release engineering, simplified
 cask "goreleaser/tap/goreleaser"
 # Command-line shell and scripting language

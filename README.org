@@ -10,13 +10,16 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 
 * Usage
 ** Nix-based setup (macOS + WSL)
-- Update =nix/hosts.nix= for your username and host names.
+- Update =nix/hosts.nix= for your username, host names and =dotfilesDir= (where you cloned this repository).
 - Install Nix (flakes enabled).
 - macOS: install =nix-darwin= and apply the flake.
   #+begin_src sh
   darwin-rebuild switch --flake .#<darwinHost>
   brew bundle --file brew/Brewfile
   #+end_src
+- Emacs is not installed by Nix or Homebrew. Install GNU Emacs into =/Applications/Emacs.app= yourself.
+  =nix/modules/emacs.nix= links =~/.emacs.d= to =<dotfilesDir>/resources/emacs/.emacs.d= (writable, so
+  =elpa= and =custom.el= keep working) and installs =~/.local/bin/emacs=, a wrapper for the app binary.
 - WSL (Ubuntu): install =home-manager= and apply the flake.
   #+begin_src sh
   home-manager switch --flake .#<username>@<wslHost>
