@@ -1,12 +1,12 @@
 #+TITLE: Overview
 #+TEXT: Create: 2013-09-16
-#+TEXT: Last Update: 2024-01-28
+#+TEXT: Last Update: 2026-08-05
 #+STARTUP: showall
 #+OPTIONS: \n:t
 
 The script to automatically build my development environment.
 
-Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
+Keyword: macOS, Xcode, Homebrew, Emacs, Zsh, tart
 
 * Usage
 ** Nix-based setup (macOS + WSL)
@@ -50,6 +50,59 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh
 - Records Bash commands Claude Code runs so they can be searched from zsh
   (kept in a separate file from zsh's own =$HISTFILE=, so =^R= / zaw-history stay clean).
 - See =resources/zsh/.zsh/zsh.org= for usage, key bindings, file format, and install steps.
+
+** macOS VM (tart)
+- Disposable macOS VMs, driven entirely from the CLI, for verifying changes in a clean environment.
+- Uses [[https://tart.run/][tart]] on top of Apple's Virtualization.framework. Apple Silicon only, and at most two macOS guests can run at the same time.
+
+*** Install
+#+begin_src sh
+brew tap openai/tools
+brew trust --formula openai/tools/tart
+brew trust --formula openai/tools/softnet
+brew install openai/tools/tart
+#+end_src
+
+- *tart 2.35.0 and later do not run on a macOS 15 (Sequoia) host.* They link =libswiftCompatibilitySpan.dylib= without the weak flag, and that library only ships with macOS 26 (Tahoe), so the binary aborts with a dyld error. Until the host is upgraded, install 2.34.0 from a local tap and pin it.
+#+begin_src sh
+brew tap-new <user>/local --no-git
+git -C "$(brew --repository openai/tools)" show 7b09f7c:Formula/tart.rb \
+  > "$(brew --repository <user>/local)/Formula/tart.rb"
+brew install <user>/local/tart
+brew pin <user>/local/tart
+#+end_src
+
+*** Base image
+- Pull an image whose build matches the host, so guest and host stay in sync.
+#+begin_src sh
+tart clone ghcr.io/cirruslabs/macos-sequoia-vanilla:15.7.7 sequoia-base
+#+end_src
+- Credentials are =admin= / =admin=. Install a dedicated key once into the base image; every clone inherits it. The =ssh= below still asks for the password.
+#+begin_src sh
+ssh-keygen -t ed25519 -f ~/.ssh/tart_vm -N "" -C tart-vm-access
+tart run --no-graphics sequoia-base &
+ssh admin@$(tart ip sequoia-base) \
+  "mkdir -p ~/.ssh && chmod 700 ~/.ssh && echo '$(cat ~/.ssh/tart_vm.pub)' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+tart stop sequoia-base
+#+end_src
+- *Do not boot the base image after this.* Running it writes logs and caches into the guest, so it stops being a clean baseline. Always clone first.
+
+*** Daily use
+- Throwaway VM. =tart clone= is an APFS copy-on-write clone, so it finishes in about a second and consumes almost no disk.
+#+begin_src sh
+tart clone sequoia-base scratch
+tart run --no-graphics scratch &
+ssh -i ~/.ssh/tart_vm admin@$(tart ip scratch) 'sw_vers'
+tart stop scratch && tart delete scratch
+#+end_src
+- For a GUI, drop =--no-graphics=. Clone first here as well.
+#+begin_src sh
+tart clone sequoia-base gui
+tart run gui         # window
+tart run --vnc gui   # Screen Sharing, so clipboard and drag and drop work
+#+end_src
+- Other commands: =tart list=, =tart ip <name>=, =tart get <name>=, =tart delete <name>=.
+- VMs and the pulled images live under =~/.tart= (override with =TART_HOME=).
 
 ** CI
 - GitHub Actions runs =nix flake check= on Ubuntu and macOS for every push and PR.
