@@ -62,7 +62,8 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小�
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 
 # https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+# HOMEBREW_PREFIX は .zprofile の brew shellenv が設定する。
+FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:${FPATH}"
 fpath=(${ZDOTDIR}/functions/completion ${fpath})
 
 autoload -Uz compinit && compinit
@@ -109,6 +110,25 @@ zstyle ':chpwd:*' recent-dirs-default yes
 zstyle ':completion:*' recent-dirs-insert both
 
 #-------------------------------------------
+# Version managers
+#
+# rbenv init などは1回あたり40〜50ms かかる。初回に呼ばれるまで先送りし、
+# 呼ばれた時点で本来の init に差し替える。
+#
+# shims は .zshenv で PATH に通してあるので、遅延させても ruby/python/node
+# はバージョン管理下のものが起動直後から使われる。ここで遅らせているのは
+# init が用意する補完と `rbenv shell` などのサブコマンドだけ。
+#-------------------------------------------
+rbenv()  { unfunction rbenv;  eval "$(command rbenv init - zsh)";  rbenv "$@" }
+pyenv()  { unfunction pyenv;  eval "$(command pyenv init - zsh)";  pyenv "$@" }
+nodenv() { unfunction nodenv; eval "$(command nodenv init - zsh)"; nodenv "$@" }
+
+#-------------------------------------------
+# Functions
+#-------------------------------------------
+[ -r ${ZDOTDIR}/functions/showpath.zsh ] && source ${ZDOTDIR}/functions/showpath.zsh
+
+#-------------------------------------------
 # Aliases
 #-------------------------------------------
 [ -r ${ZDOTDIR}/.zalias ] && source ${ZDOTDIR}/.zalias
@@ -149,11 +169,22 @@ bindkey "^n" history-beginning-search-forward-end  # ヒストリ検索時、Ctr
 # .zprofileに設定するとCTRL-Rがbck-i-searchのままで
 # fzfのCTRL-Rが適用されないため.zshrcに記述した
 #-------------------------------------------
-if [ -e $(brew --prefix)/bin/fzf ]; then
+if [ -x "${HOMEBREW_PREFIX}/bin/fzf" ]; then
     source <(fzf --zsh)
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
+#-------------------------------------------
+# PATH
+#
+# /etc/zprofile の path_helper が PATH を組み直すとき、.zshenv で並べた
+# 順序は保たれず、環境によっては落ちる。優先させたいものは起動シーケンスの
+# 最後であるここで積み直す。
+#
+# shims を通しておくことで、バージョン管理ツールの init を遅延させても
+# ruby/python/node は起動直後から管理下のものが使われる。
+#-------------------------------------------
+path=($my_path_head $path $my_path_tail)
+typeset -U path PATH
 
 #------------------------------------------------------------
 # Local configuration

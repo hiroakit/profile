@@ -54,13 +54,47 @@ export CLAUDE_HISTFILE=$HOME/.claude/command-history.tsv
 #        .: 通常のファイルのみ残す
 typeset -xU path cdpath fpath manpath
 typeset -U path PATH
-path=(
-  "$HOME/.rbenv/bin"
-  "/opt/homebrew/bin"  
-  "/bin"    
-  "/usr/bin"  
+#
+# 自分で優先させたいパスの定義。ここを唯一の定義元とする。
+#
+# /etc/zprofile の path_helper が PATH を組み直すとき、ここで並べた順序は
+# 保たれず、環境によっては落ちる。そのため .zshrc でも $my_path を使って
+# 積み直している。この配列を .zshrc から参照するので -g で残す。
+#
+# shims は各バージョン管理ツールの init が足すものだが、init 自体は
+# .zshrc で遅延ロードしている。ruby/python/node の解決を起動直後から
+# 効かせたいので、shims はここで明示的に通す。
+#
+# システムのパスより優先させたいもの。
+typeset -ga my_path_head
+my_path_head=(
+  "$HOME/.local/bin"(N-/)
+  "$HOME/.nodenv/shims"(N-/)
+  "$HOME/.pyenv/shims"(N-/)
+  "$HOME/.pyenv/bin"(N-/)
+  "$HOME/.rbenv/shims"(N-/)
+  "$HOME/.rbenv/bin"(N-/)
+  "/opt/homebrew/bin"(N-/)
+  "/opt/homebrew/sbin"(N-/)
+  "/opt/homebrew/opt/mysql@8.0/bin"(N-/)
+)
+
+# アプリケーションバンドル内のコマンド。
+# ここを前に出すと Emacs.app の ctags/etags/emacsclient が
+# /usr/bin や Homebrew のものより優先されてしまうため、後ろに置く。
+typeset -ga my_path_tail
+my_path_tail=(
+  "/Library/TeX/texbin"(N-/)
   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"(N-/)
   "/Applications/Emacs.app/Contents/MacOS/bin"(N-/)
+)
+
+path=(
+  $my_path_head
+  "/usr/local/bin"
+  "/bin"
+  "/usr/bin"
+  $my_path_tail
 )
 
 #------------------
@@ -140,7 +174,5 @@ unset emacs_bin emacsclient_bin
 ## Maya
 # export MAYA_UI_LANGUAGE="en_US"
 
-# rbenv
-# export PATH=$HOME/.rbenv/bin:$PATH # zshのpathで指定しているため不要
-eval "$(rbenv init - zsh)"
-eval "$(nodenv init - zsh)"
+# rbenv / nodenv / pyenv の init は .zshrc で遅延ロードしている。
+# ここで eval すると .zprofile と二重に走り、その分だけ起動が遅くなる。
