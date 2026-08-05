@@ -27,7 +27,7 @@ hp-org-mode-local-config.el
 .zsh_history
 resources/zsh/.zsh/.zshrc.mine
 resources/zsh/.zsh/.zsh_sessions
-resources/zsh/.zsh/.zcompdump
+resources/zsh/.zsh/.zcompdump*
 resources/zsh/.zsh/.chpwd-recent-dirs
 resources/zsh/.zcompcache
 resources/zsh/.zsh/functions/completion/_ninja
