@@ -164,6 +164,24 @@ bindkey "\e[Z" reverse-menu-complete               # 補完候補表示時、Shi
 bindkey "^p" history-beginning-search-backward-end # ヒストリ検索時、Ctrl-pで戻る
 bindkey "^n" history-beginning-search-forward-end  # ヒストリ検索時、Ctrl-nで進む
 
+# 空行での Ctrl-D を握り潰す。
+#
+# ignore_eof はログアウトこそ防ぐが、代わりに毎回
+# "zsh: use 'logout' to logout." を出す。この文言だけを黙らせる
+# オプションは zsh に無いため、EOF がシェルへ届く前に ZLE 側で捨てる。
+# ignore_eof 自体は、この widget が効かない経路への保険として残す。
+#
+# 入力中の Ctrl-D は既定の delete-char-or-list に流し、
+# 前方削除と補完候補表示をそのまま使えるようにする。
+function ignore-eof-silently {
+    if [[ -n $BUFFER ]]; then
+        zle delete-char-or-list
+    fi
+    return 0
+}
+zle -N ignore-eof-silently
+bindkey "^d" ignore-eof-silently
+
 #-------------------------------------------
 # Claude Code command history
 # Claudeが実行したコマンドの履歴を検索する
