@@ -146,7 +146,14 @@ then
    zstyle ':filter-select' case-insensitive yes
    bindkey '^h'   zaw-history # コマンド履歴一覧を表示
    bindkey '^h^h' zaw-cdr     # 素早く押すとディレクトリ移動履歴一覧を表示
-   bindkey '^@'   zaw-gitdir  # gitリポジトリ内のディレクトリ一覧を表示
+
+   # 全ソースの一覧から選ぶ。git-status や process などはここから辿る。
+   # zaw-select-src は選ばせるだけで実行しないので、zaw を割り当てる。
+   #
+   # 既定の accept-line-and-down-history を潰しているが、履歴を順に
+   # 実行し直す用途で使っていないため。^@ (Ctrl+Space) は macOS の
+   # 入力ソース切り替えと取り合いになるので避けた。
+   bindkey '^o'   zaw
 fi
 
 #-------------------------------------------
