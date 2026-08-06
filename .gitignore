@@ -6,6 +6,7 @@ resources/emacs/.emacs.d/bookmarks
 resources/emacs/.emacs.d/custom.el
 resources/emacs/.emacs.d/dired-history
 resources/emacs/.emacs.d/el-get
+resources/emacs/.emacs.d/eln-cache
 resources/emacs/.emacs.d/elpa
 resources/emacs/.emacs.d/eshell
 resources/emacs/.emacs.d/lsp-cache
