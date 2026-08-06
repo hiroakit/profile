@@ -118,6 +118,45 @@
 (setq vc-follow-symlinks t)
 
 ;;-------------------------
+;; 日本語入力
+;;
+;; M-xのミニバッファでは半角英数だけを受け付けるようにする。
+;; コマンド名に日本語を打つことはないので、日本語入力が有効なまま
+;; M-xを押して入力し直す手間をなくす。
+;;
+;; 抜けたら元の状態に戻す。日本語を書いている途中でM-xを挟んでも、
+;; 戻ってきたときにそのまま書き続けられるようにするため。
+;;
+;; mac-ime-activate / mac-ime-deactivate / mac-ime-active-p は
+;; ns-inline-patchが提供する。emacs-mac版のmac-auto-ascii-modeは
+;; このビルドには無い。パッチの無い環境では何もしない。
+;;
+;; 対象をM-xに絞っているのは、find-fileやisearchでは日本語を打つため。
+;;-------------------------
+
+(defvar he-ime-active-before-minibuffer nil
+  "M-xに入る直前に日本語入力が有効だったか。")
+
+(defun he-ime-deactivate-for-execute-extended-command ()
+  "M-xのミニバッファに入るとき、日本語入力を切る。"
+  (when (and (fboundp 'mac-ime-active-p)
+             (memq this-command '(execute-extended-command
+                                  execute-extended-command-for-buffer)))
+    (setq he-ime-active-before-minibuffer (mac-ime-active-p))
+    (when he-ime-active-before-minibuffer
+      (mac-ime-deactivate))))
+
+(defun he-ime-restore-after-execute-extended-command ()
+  "M-xのミニバッファを抜けるとき、日本語入力を元に戻す。"
+  (when he-ime-active-before-minibuffer
+    (setq he-ime-active-before-minibuffer nil)
+    (when (fboundp 'mac-ime-activate)
+      (mac-ime-activate))))
+
+(add-hook 'minibuffer-setup-hook #'he-ime-deactivate-for-execute-extended-command)
+(add-hook 'minibuffer-exit-hook #'he-ime-restore-after-execute-extended-command)
+
+;;-------------------------
 ;; フレームサイズ調整
 ;;
 ;; https://m13o.net/202006052311
