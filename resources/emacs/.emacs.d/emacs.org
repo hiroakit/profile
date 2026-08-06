@@ -333,6 +333,3 @@ If you will get some more information, read this help.
 | All settings                              | $HOME/.emacs.d/init.el       |
 | Settings written by M-x customize         | $HOME/.emacs.d/custom.el     |
 | Link of ~/.emacs.d and the emacs wrapper  | nix/modules/emacs.nix        |
-
-=init-hiroakit.el= is the old configuration for Emacs 24 (init-loader, helm, auto-complete).
-It is not loaded by =init.el=, and it is kept only for reference.
