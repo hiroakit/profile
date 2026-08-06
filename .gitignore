@@ -1,5 +1,6 @@
 # Emacs
 resources/emacs/.emacs.d/.cache
+resources/emacs/.emacs.d/.dap-breakpoints
 resources/emacs/.emacs.d/.lsp-session-v1
 resources/emacs/.emacs.d/auto-save-list
 resources/emacs/.emacs.d/bookmarks
