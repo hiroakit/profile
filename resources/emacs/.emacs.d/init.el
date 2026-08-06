@@ -482,6 +482,28 @@
 (advice-add 'deadgrep--arguments :filter-return #'deadgrep--include-args)
 
 ;;-------------------------
+;; Terminal
+;;
+;; 端末エミュレーションをCのlibvtermに任せるため、term/ansi-termより大幅に速い。
+;; これらはエミュレーションをElispでやるので出力が多いと目に見えて遅くなる。
+;; eshellやM-x shellと違い本物のTTYなので、TUIアプリもそのまま動く。
+;;
+;; モジュールのビルドにcmakeとlibvtermが要る。CMakeLists.txtの
+;; USE_SYSTEM_LIBVTERMが既定ONなので、Homebrewのlibvtermを使う。これが無いと
+;; 同梱版のビルドにフォールバックし、GNU libtool (glibtool) を要求して失敗する。
+;; macOSの/usr/bin/libtoolは同名の別物なので代用できない。
+;;
+;;   brew install cmake libvterm
+;;
+;; Emacs本体が --with-modules 付きでビルドされている必要もある。
+;;-------------------------
+
+(leaf vterm
+  :ensure t
+  :custom ((vterm-always-compile-module . t)
+           (vterm-max-scrollback . 10000)))
+
+;;-------------------------
 ;; Lisp
 ;;-------------------------
 
