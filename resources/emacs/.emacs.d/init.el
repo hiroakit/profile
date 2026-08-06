@@ -482,6 +482,40 @@
 (advice-add 'deadgrep--arguments :filter-return #'deadgrep--include-args)
 
 ;;-------------------------
+;; Terminal
+;;
+;; 端末エミュレーションをCのlibvtermに任せるため、term/ansi-termより大幅に速い。
+;; これらはエミュレーションをElispでやるので出力が多いと目に見えて遅くなる。
+;; eshellやM-x shellと違い本物のTTYなので、TUIアプリもそのまま動く。
+;;
+;; モジュールのビルドにcmakeとlibvtermが要る。CMakeLists.txtの
+;; USE_SYSTEM_LIBVTERMが既定ONなので、Homebrewのlibvtermを使う。これが無いと
+;; 同梱版のビルドにフォールバックし、GNU libtool (glibtool) を要求して失敗する。
+;; macOSの/usr/bin/libtoolは同名の別物なので代用できない。
+;;
+;;   brew install cmake libvterm
+;;
+;; Emacs本体が --with-modules 付きでビルドされている必要もある。
+;;-------------------------
+
+;; vterm-keymap-exceptionsに挙げたキーはvterm-mode-mapから外され、Emacs側の
+;; コマンドが動く。ここに無いキーはvterm--self-insertとして端末へ送られる。
+;; 既定値から"C-g"だけを抜き、端末側に渡すようにした。シェルやTUIアプリの
+;; 中断にC-gを使いたいため。
+;;
+;; vterm-mode-mapはメジャーモードのキーマップなので、ミニバッファ入力中は
+;; 適用されない。プロンプトをC-gで抜ける操作はこれまで通り効く。
+;;
+;; この変数は:setでキーマップを組み直すため、setqではなくcustomize経由で
+;; 設定する必要がある。leafの:customはcustomize-set-variableを使う。
+(leaf vterm
+  :ensure t
+  :custom ((vterm-always-compile-module . t)
+           (vterm-max-scrollback . 10000)
+           (vterm-keymap-exceptions . '("C-c" "C-x" "C-u" "C-h" "C-l"
+                                        "M-x" "M-o" "C-y" "M-y"))))
+
+;;-------------------------
 ;; Lisp
 ;;-------------------------
 
