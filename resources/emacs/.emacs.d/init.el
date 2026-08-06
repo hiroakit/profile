@@ -805,6 +805,33 @@
 ;;  (add-to-list 'eglot-server-programs '(python-mode "pylsp"))
   (add-hook 'c++-mode-hook 'eglot-ensure))
 
+;;------------------------------------
+;; dap-mode - デバッガー
+;;------------------------------------
+
+;; lldb-dap(Homebrew LLVM)をDAPサーバーとして使うC++/Pythonデバッガー。
+;; プロジェクト固有のデバッグ対象(プログラム・引数・環境変数)は各プロジェクトの
+;; .dir-locals.elでdap-register-debug-templateを呼んで登録する
+;; (例: proj/OpenUSD/.dir-locals.el)。ここではdap-mode自体の有効化と
+;; lldb-dapバイナリの場所だけを設定する。
+(leaf dap-mode
+  :ensure t
+  :config
+  (require 'dap-lldb)
+  ;; dap-lldb.elの provider名は "lldb-vscode" のままだが、実体は
+  ;; lldb-vscodeの後継である lldb-dap (Homebrew llvm formulaに同梱) を指す。
+  (setq dap-lldb-debug-program (list "/opt/homebrew/opt/llvm/bin/lldb-dap"))
+  (dap-mode 1)
+  (dap-ui-mode 1)
+  (define-key global-map (kbd "C-c d d") 'dap-debug)             ;; テンプレートを選んでデバッグ開始
+  (define-key global-map (kbd "C-c d b") 'dap-breakpoint-toggle) ;; ブレークポイントの設置/解除
+  (define-key global-map (kbd "C-c d q") 'dap-disconnect)        ;; デバッグセッション終了
+  ;; ステップ系はVS Code/Visual Studioと同じF5/F10/F11に寄せる(連打しやすいので).
+  (define-key global-map (kbd "<f5>") 'dap-continue)             ;; 次のブレークポイントまで実行
+  (define-key global-map (kbd "<f10>") 'dap-next)                ;; ステップオーバー
+  (define-key global-map (kbd "<f11>") 'dap-step-in)             ;; ステップイン
+  (define-key global-map (kbd "S-<f11>") 'dap-step-out))         ;; ステップアウト
+
 ;;(leaf python-mode
 ;;  :ensure t
 ;;  :hook
