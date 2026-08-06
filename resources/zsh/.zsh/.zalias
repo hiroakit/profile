@@ -24,8 +24,20 @@ case "${OSTYPE}" in
         alias ll="ls -laTopgh"
 
         alias lg="lazygit"
-        # emacsは~/.local/bin/emacs (= /Applications/Emacs.app) を指す
-        alias emacs="emacs -nw"
+        # emacsは/Applications/Emacs.appを指す。
+        #
+        # 以前は~/.local/bin/emacsのシンボリックリンク経由で参照していたが、
+        # リンクが失われるとPATH上のHomebrew版(/opt/homebrew/bin/emacs)に
+        # 黙って切り替わる。実際にそうなっていたため、絶対パスで明示する。
+        #
+        # PATHには/Applications/Emacs.app/Contents/MacOS/binも通してあるが、
+        # そこに入っているのはctags/ebrowse/emacsclient/etagsだけで、
+        # emacs本体は含まれない。PATH経由では解決できない。
+        if [ -x "/Applications/Emacs.app/Contents/MacOS/Emacs" ]; then
+            alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+        else
+            alias emacs="emacs -nw"
+        fi
         ;;
     linux*)
         alias su="su -l"
