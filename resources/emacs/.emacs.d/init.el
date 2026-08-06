@@ -555,6 +555,50 @@
                                         "M-x" "M-o" "C-y" "M-y"))))
 
 ;;-------------------------
+;; ウィンドウの構成
+;;
+;; treemacsを左、ソースを中央、vtermをその下に置く。
+;; vtermのウィンドウが他のバッファに奪われないようにする。
+;;
+;; display-buffer-alistは、どのバッファをどこに表示するかの規則。
+;; vtermをサイドウィンドウとして登録すると、find-fileなどの通常の表示先
+;; として選ばれなくなる。treemacsも同じ仕組みで左に出ている
+;; (treemacs-display-in-side-window)。
+;;
+;; window-sides-verticalをtにすると左右のサイドウィンドウが全高を取り、
+;; 上下は残りの幅だけを占める。nilのままだと上下が全幅を取るので、
+;; vtermがtreemacsの下まで伸びてしまう。
+;;
+;; サイドウィンドウにしただけではC-x 1 (delete-other-windows) で消える。
+;; 残すにはno-delete-other-windowsパラメータが要る。
+;;
+;; 意図的に消すときは、vtermのウィンドウでC-x 0 (delete-window)。
+;; C-x w s (window-toggle-side-windows) でも消せるが、こちらはtreemacsも
+;; 含めた全サイドウィンドウが対象になる。
+;;
+;; winner-modeはウィンドウ構成の変更を元に戻す (C-c left / C-c right)。
+;; 誤ってレイアウトを潰したときの復帰用。
+;;-------------------------
+
+(setq window-sides-vertical t)
+
+(add-to-list 'display-buffer-alist
+             '("^\\*vterm\\*"
+               (display-buffer-in-side-window)
+               (side . bottom)
+               (slot . 0)
+               (window-height . 0.3)
+               (dedicated . t)
+               (preserve-size . (nil . t))
+               (window-parameters . ((no-delete-other-windows . t)))))
+
+(leaf winner
+  :doc "Restore old window configurations"
+  :tag "builtin"
+  :require t
+  :config (winner-mode 1))
+
+;;-------------------------
 ;; Lisp
 ;;-------------------------
 
