@@ -37,6 +37,9 @@ resources/zsh/.zsh/functions/completion/_ninja
 # Python
 .python-environments
 
+# Codex
+.codex/environments/environment.toml
+
 # macOS
 *.pkg
 *.DS_Store
