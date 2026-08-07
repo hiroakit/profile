@@ -215,6 +215,49 @@ The snippets are stored in =$HOME/.emacs.d/snippets= (html-mode, java-mode, js-m
 
 eglot is the LSP client. lsp-mode and lsp-ui are not used now.
 
+**** OpenUSD
+
+OpenUSD uses the Apple clangd at =/usr/bin/clangd= through eglot.
+Opening a =.h= or =.cpp= file starts =c++-mode=, and =c++-mode-hook= connects eglot automatically.
+
+The compilation database is built outside the source tree, so the OpenUSD clone needs =~/git/OpenUSD/.clangd=:
+
+#+begin_src yaml
+CompileFlags:
+  CompilationDatabase: /Users/hiroakit/proj/OpenUSD
+#+end_src
+
+Without this file, clangd walks up from the source file but cannot find =compile_commands.json=.
+=build-usd.sh= updates =~/proj/OpenUSD/compile_commands.json= as a symbolic link to the selected build, so the path in =.clangd= does not need to change when the build configuration changes.
+The =.clangd= file is listed in =~/git/OpenUSD/.git/info/exclude= because it is specific to this clone and must not be added to the upstream repository.
+
+Open source files through their real path under =~/git/OpenUSD/pxr/...=.
+Do not open them through the =~/proj/OpenUSD= symbolic-link path because the =file= entries in =compile_commands.json= use the real path.
+For example, open =~/git/OpenUSD/pxr/base/tf/initConfig.cpp= and wait for the initial background index to finish.
+The database contains about 2,400 entries, so cross-file navigation may become available gradually during the first indexing run.
+
+#+CAPTION: Key bindings for OpenUSD code navigation
+| action                     | function              | command |
+|----------------------------+-----------------------+---------|
+| Go to definition           | xref-find-definitions | M-.     |
+| Return from a definition   | xref-go-back          | M-,     |
+| Find references            | xref-find-references  | M-?     |
+| Show completion candidates | company-complete      | C-TAB   |
+
+Eldoc shows the symbol help in the echo area when point is on a function.
+Definition navigation, help, completion and reference search were verified with eglot connected to clangd.
+
+Keep the Apple clangd instead of switching this project to Homebrew clangd.
+The database is generated for =/usr/bin/c++= and includes a Clang 16 =-resource-dir=, which matches Apple clangd 16 but not Homebrew clangd 22.
+
+If navigation does not work, check the following in order:
+
+1. Confirm that the file was opened from =~/git/OpenUSD/pxr/...= and that its major mode is =c++-mode=.
+2. Confirm that =~/git/OpenUSD/.clangd= still points to =~/proj/OpenUSD=.
+3. Confirm that =~/proj/OpenUSD/compile_commands.json= points to the intended build.
+4. Run =M-x eglot-reconnect= after changing the build or =.clangd=.
+5. Inspect =M-x eglot-events-buffer= if clangd still does not connect or reports a compilation-database error.
+
 ** Org mode
 
 =org-directory= is =~/Library/Mobile Documents/com~apple~CloudDocs/org= (iCloud Drive).
