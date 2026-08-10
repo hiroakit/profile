@@ -156,6 +156,7 @@ neotree is still configured, but its role overlaps with treemacs. It will be rem
 
 deadgrep runs ripgrep. =--hidden= and =--follow= are added to the arguments, so hidden files are searched and symbolic links are followed.
 Write =.git/= in =~/.ignore= to keep the result readable.
+The Tools menu entries for grep and recursive grep also run deadgrep.
 
 #+CAPTION: Key bindings for grep
 | action | function | command | key map    |

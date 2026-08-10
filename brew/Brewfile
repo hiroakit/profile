@@ -69,6 +69,8 @@ brew "openssl@1.1"
 brew "pinentry-mac"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.10"
 # Interpreted, interactive, object-oriented programming language
