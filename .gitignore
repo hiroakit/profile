@@ -11,6 +11,7 @@ resources/emacs/.emacs.d/eln-cache
 resources/emacs/.emacs.d/elpa
 resources/emacs/.emacs.d/eshell
 resources/emacs/.emacs.d/lsp-cache
+resources/emacs/.emacs.d/projects
 resources/emacs/.emacs.d/recentf
 resources/emacs/.emacs.d/request
 resources/emacs/.emacs.d/transient/
