@@ -508,7 +508,17 @@
 
 (leaf deadgrep
   :ensure t
-  :bind ("C-x C-g" . deadgrep))  
+  :bind ("C-x C-g" . deadgrep)
+  :init
+  ;; Toolsメニューのgrepとrgrepもdeadgrepを起動する。
+  ;; deadgrepの遅延ロード前にメニューを差し替えるため:initで設定する。
+  ;; 項目の位置はそのままにし、実際に使う検索エンジンを名前にも示す。
+  (define-key global-map [menu-bar tools grep]
+              '(menu-item "Search Files (Deadgrep)..." deadgrep
+                          :help "Search files recursively with ripgrep via deadgrep"))
+  (define-key global-map [menu-bar tools rgrep]
+              '(menu-item "Recursive Search (Deadgrep)..." deadgrep
+                          :help "Search files recursively with ripgrep via deadgrep")))
 
 ;; deadgrepがripgrepに与える実行時引数を変える
 (defun deadgrep--include-args (rg-args)
