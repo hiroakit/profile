@@ -87,6 +87,8 @@ brew "tre-command"
 brew "azure/bicep/bicep"
 # Release engineering, simplified
 cask "goreleaser/tap/goreleaser"
+# Fast, native terminal emulator with truecolor support
+cask "ghostty"
 # Command-line shell and scripting language
 cask "powershell"
 vscode "azurite.azurite"
