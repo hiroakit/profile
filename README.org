@@ -1,6 +1,6 @@
 #+TITLE: Overview
 #+TEXT: Create: 2013-09-16
-#+TEXT: Last Update: 2026-08-05
+#+TEXT: Last Update: 2026-08-11
 #+STARTUP: showall
 #+OPTIONS: \n:t
 
@@ -50,6 +50,11 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh, tart
 - Records Bash commands Claude Code runs so they can be searched from zsh
   (kept in a separate file from zsh's own =$HISTFILE=, so =^R= / zaw-history stay clean).
 - See =resources/zsh/.zsh/zsh.org= for usage, key bindings, file format, and install steps.
+
+** Terminal emulator (Ghostty)
+- Install [[https://ghostty.org/][Ghostty]] through =brew/Brewfile=.
+- A truecolor-capable terminal became necessary because Apple Terminal misinterprets 24-bit RGB SGR sequences emitted by applications running in Herdr panes. In this setup, Codex diff lines had unreadable yellow backgrounds, while Ghostty rendered the same diff correctly.
+- The behavior and reproduction environment are documented in [[https://github.com/herdrdev/herdr/issues/2610][Herdr issue #2610]].
 
 ** macOS VM (tart)
 - Disposable macOS VMs, driven entirely from the CLI, for verifying changes in a clean environment.
