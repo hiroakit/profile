@@ -55,6 +55,7 @@ Keyword: macOS, Xcode, Homebrew, Emacs, Zsh, tart
 - Install [[https://ghostty.org/][Ghostty]] through =brew/Brewfile=.
 - A truecolor-capable terminal became necessary because Apple Terminal misinterprets 24-bit RGB SGR sequences emitted by applications running in Herdr panes. In this setup, Codex diff lines had unreadable yellow backgrounds, while Ghostty rendered the same diff correctly.
 - The behavior and reproduction environment are documented in [[https://github.com/herdrdev/herdr/issues/2610][Herdr issue #2610]].
+- The Ghostty configuration keeps its embedded font for Latin text and maps Japanese characters to =MigMix 2M=. Apply it with =darwin-rebuild switch --flake .#<darwinHost>=, then reload Ghostty with =Cmd+Shift+,=.
 
 ** macOS VM (tart)
 - Disposable macOS VMs, driven entirely from the CLI, for verifying changes in a clean environment.
