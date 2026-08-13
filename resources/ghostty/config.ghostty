@@ -1,0 +1,2 @@
+# Keep Ghostty's embedded font for Latin text and use MigMix 2M for Japanese.
+font-codepoint-map = U+3000-U+30FF,U+31F0-U+31FF,U+3400-U+4DBF,U+4E00-U+9FFF,U+F900-U+FAFF,U+FF00-U+FFEF=MigMix 2M
