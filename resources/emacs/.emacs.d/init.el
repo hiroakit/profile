@@ -242,6 +242,9 @@
 ;; バッファ
 ;;-------------------------
 
+;; 選択範囲が有効な状態で文字を入力したら、その範囲を置き換える
+(delete-selection-mode 1)
+
 ;; このバッファは消えると不便に思えたから消せないようにする
 (with-current-buffer "*scratch*"
   (emacs-lock-mode 'kill))
