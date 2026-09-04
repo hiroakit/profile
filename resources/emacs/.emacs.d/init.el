@@ -864,15 +864,16 @@
           ("C-d"   . company-show-location)
           ("<tab>" . company-complete-selection)
           ("C-n"   . company-select-next)
-          ("C-p"   . company-select-previous)
-          ("SPC"   . company-show-doc-buffer))
+          ("C-p"   . company-select-previous))
          (:company-search-map
           :package company
           ("C-n"   . company-select-next)
           ("C-p"   . company-select-previous)))
   :config
   (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.2))
+  (setq company-idle-delay 0.2)
+  ;; 長い候補を折り返さず、候補一覧のレイアウトを維持する
+  (setq company-tooltip-maximum-width 80))
 
 ;;------------------------------------
 ;; LSP - Language Server Protocol
