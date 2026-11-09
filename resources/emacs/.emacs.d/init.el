@@ -890,7 +890,7 @@
 ;; dap-mode - デバッガー
 ;;------------------------------------
 
-;; lldb-dap(Homebrew LLVM)をDAPサーバーとして使うC++/Pythonデバッガー。
+;; lldb-dap(Xcode)をDAPサーバーとして使うC++/Pythonデバッガー。
 ;; プロジェクト固有のデバッグ対象(プログラム・引数・環境変数)は各プロジェクトの
 ;; .dir-locals.elでdap-register-debug-templateを呼んで登録する
 ;; (例: proj/OpenUSD/.dir-locals.el)。ここではdap-mode自体の有効化と
@@ -900,8 +900,9 @@
   :config
   (require 'dap-lldb)
   ;; dap-lldb.elの provider名は "lldb-vscode" のままだが、実体は
-  ;; lldb-vscodeの後継である lldb-dap (Homebrew llvm formulaに同梱) を指す。
-  (setq dap-lldb-debug-program (list "/opt/homebrew/opt/llvm/bin/lldb-dap"))
+  ;; lldb-vscodeの後継である lldb-dap (Xcodeに同梱) を指す。
+  (setq dap-lldb-debug-program
+        (list "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-dap"))
   (dap-mode 1)
   (dap-ui-mode 1)
   (define-key global-map (kbd "C-c d d") 'dap-debug)             ;; テンプレートを選んでデバッグ開始
