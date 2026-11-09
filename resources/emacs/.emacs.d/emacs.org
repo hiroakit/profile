@@ -144,14 +144,6 @@ It follows the current file, watches file changes, and shows the git state of fi
 | Move cursor to tree | treemacs-select-window | C-c 0   | global-map        |
 | Show key bindings   | treemacs-helpful-hydra | ?       | treemacs-mode-map |
 
-neotree is still configured, but its role overlaps with treemacs. It will be removed when it is not needed.
-
-#+CAPTION: Key bindings for neotree
-| action        | function       | command | key map          |
-|---------------+----------------+---------+------------------|
-| Toggle filer  | neotree-toggle | C-c n   | global-map       |
-| Open the node | neotree-enter  | RET     | neotree-mode-map |
-
 ** Grep
 
 deadgrep runs ripgrep. =--hidden= and =--follow= are added to the arguments, so hidden files are searched and symbolic links are followed.
@@ -341,7 +333,6 @@ If you will get some more information, read this help.
 | leaf-convert         | ELPA     | Convert existing config into leaf           |
 | leaf-keywords        | ELPA     | Extra keywords for leaf                     |
 | leaf-tree            | ELPA     | Sidebar of leaf blocks (M-x leaf-tree-mode) |
-| neotree              | ELPA     | Filer (overlaps with treemacs)              |
 | orderless            | ELPA     | Completion style                            |
 | org                  | ELPA     | Org mode                                    |
 | org-contrib          | ELPA     | Contributed org packages (ob-csharp.el)     |

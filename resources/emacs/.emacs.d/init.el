@@ -479,22 +479,6 @@
   ;; 'simple はファイルのみ。ディレクトリの状態も見たい場合は 'deferred にするが python3 が必要
   (treemacs-git-mode 'simple))
 
-;;-------------------------
-;; NEOTREE
-;;
-;; treemacsを導入したため役割が重複している。不要になったらこのブロックごと削除する
-;;-------------------------
-
-(leaf neotree
-  :doc "Filer"
-  :ensure t
-  :bind (("C-c n" . neotree-toggle)
-         (:neotree-mode-map
-          ("RET" . neotree-enter)))
-  :custom  ((neo-smart-open . t)
-            ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
-            (neo-create-file-auto-open . t)))
-
 (defvar my/delayed-priority-low-configurations '())
 (defmacro with-delayed-execution (&rest body)
   (declare (indent 0))
