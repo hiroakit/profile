@@ -242,6 +242,9 @@
 ;; バッファ
 ;;-------------------------
 
+;; 選択範囲が有効な状態で文字を入力したら、その範囲を置き換える
+(delete-selection-mode 1)
+
 ;; このバッファは消えると不便に思えたから消せないようにする
 (with-current-buffer "*scratch*"
   (emacs-lock-mode 'kill))
@@ -475,22 +478,6 @@
   ;; gitの変更状態をファイル名の色で表示する
   ;; 'simple はファイルのみ。ディレクトリの状態も見たい場合は 'deferred にするが python3 が必要
   (treemacs-git-mode 'simple))
-
-;;-------------------------
-;; NEOTREE
-;;
-;; treemacsを導入したため役割が重複している。不要になったらこのブロックごと削除する
-;;-------------------------
-
-(leaf neotree
-  :doc "Filer"
-  :ensure t
-  :bind (("C-c n" . neotree-toggle)
-         (:neotree-mode-map
-          ("RET" . neotree-enter)))
-  :custom  ((neo-smart-open . t)
-            ;;(neo-theme . (if (display-graphic-p) 'icons 'arrow))
-            (neo-create-file-auto-open . t)))
 
 (defvar my/delayed-priority-low-configurations '())
 (defmacro with-delayed-execution (&rest body)
@@ -861,15 +848,16 @@
           ("C-d"   . company-show-location)
           ("<tab>" . company-complete-selection)
           ("C-n"   . company-select-next)
-          ("C-p"   . company-select-previous)
-          ("SPC"   . company-show-doc-buffer))
+          ("C-p"   . company-select-previous))
          (:company-search-map
           :package company
           ("C-n"   . company-select-next)
           ("C-p"   . company-select-previous)))
   :config
   (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.2))
+  (setq company-idle-delay 0.2)
+  ;; 長い候補を折り返さず、候補一覧のレイアウトを維持する
+  (setq company-tooltip-maximum-width 80))
 
 ;;------------------------------------
 ;; LSP - Language Server Protocol
