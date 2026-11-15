@@ -21,8 +21,6 @@ brew "bear"
 brew "cmake"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# .NET Core
-brew "dotnet@8"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
