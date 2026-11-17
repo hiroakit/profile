@@ -27,6 +27,18 @@
 ;; this enables this running method
 ;;   emacs -q -l path/to/your/.emacs.d/init.el
 
+;; ネイティブコンパイル時にmacOS SDKのシステムライブラリを参照する。
+(when (eq system-type 'darwin)
+  (with-eval-after-load 'comp
+    (when-let* ((sdk (car (process-lines "/usr/bin/xcrun"
+                                       "--sdk" "macosx" "--show-sdk-path"))))
+      (add-to-list 'native-comp-driver-options
+                   (concat "-Wl,-syslibroot," sdk)))))
+
+;; Org 9.7 のネイティブコンパイルによる invalid-function エラーを回避する。
+(with-eval-after-load 'comp-run
+  (add-to-list 'native-comp-jit-compilation-deny-list ".*org-element.*"))
+
 ;;------------------------------------
 ;; 設定の変数
 ;;------------------------------------
