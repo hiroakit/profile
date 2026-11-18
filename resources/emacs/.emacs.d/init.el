@@ -628,6 +628,11 @@
   :bind ((:c++-mode-map
           ("C-c C-o" . ff-find-other-file))))
 
+(leaf csv-mode
+  :ensure t
+  :mode ("\\.csv\\'" . csv-mode)
+  :hook (csv-mode-hook . csv-align-mode))
+
 (leaf cmake-mode
   :ensure t
   :mode ("CMakeLists\\.txt\\'"
